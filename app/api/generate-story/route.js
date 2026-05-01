@@ -45,13 +45,8 @@ async function callGroq(key, prompt, length) {
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
     signal: AbortSignal.timeout(30000),
     body: JSON.stringify({
-      model,
-      temperature: 0.9,
-      max_tokens: maxTokens,
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: prompt },
-      ],
+      model, temperature: 0.9, max_tokens: maxTokens,
+      messages: [{ role: 'system', content: SYSTEM_PROMPT }, { role: 'user', content: prompt }],
     }),
   })
   if (!response.ok) {
@@ -86,21 +81,17 @@ export async function POST(request) {
 
     const prompt = body?.prompt
     const length = body?.length
-    if (!prompt?.trim()) {
-      return NextResponse.json({ error: 'Prompt is required' }, { status: 400 })
-    }
+    if (!prompt?.trim()) return NextResponse.json({ error: 'Prompt is required' }, { status: 400 })
 
-    const currentQuota = getQuota(email, TOOL)
+    // ── AWAIT added ──
+    const currentQuota = await getQuota(email, TOOL)
     if (currentQuota.remaining <= 0) {
       return NextResponse.json({ error: 'Daily limit reached', quota: currentQuota }, { status: 429 })
     }
 
     const slot = tryAcquire(TOOL)
     if (!slot.allowed) {
-      return NextResponse.json({
-        error: 'Server is busy right now. Please try again in a moment.',
-        code: 'SERVER_BUSY',
-      }, { status: 503 })
+      return NextResponse.json({ error: 'Server is busy right now. Please try again in a moment.', code: 'SERVER_BUSY' }, { status: 503 })
     }
     slotId = slot.id
 
@@ -112,10 +103,9 @@ export async function POST(request) {
         const result = await callGemini(key, prompt.trim(), length)
         if (!result.text.trim()) throw new Error('Empty response from Gemini')
         const parsed = extractTitle(result.text.trim())
-        return NextResponse.json({ ...parsed, model: result.model, quota: incrementQuota(email, TOOL) })
-      } catch (err) {
-        errors.push(err.message)
-      }
+        // ── AWAIT added ──
+        return NextResponse.json({ ...parsed, model: result.model, quota: await incrementQuota(email, TOOL) })
+      } catch (err) { errors.push(err.message) }
     }
 
     for (let i = 0; i < GROQ_KEYS.length; i++) {
@@ -125,10 +115,9 @@ export async function POST(request) {
         const result = await callGroq(key, prompt.trim(), length)
         if (!result.text.trim()) throw new Error('Empty response from Groq')
         const parsed = extractTitle(result.text.trim())
-        return NextResponse.json({ ...parsed, model: result.model, quota: incrementQuota(email, TOOL) })
-      } catch (err) {
-        errors.push(err.message)
-      }
+        // ── AWAIT added ──
+        return NextResponse.json({ ...parsed, model: result.model, quota: await incrementQuota(email, TOOL) })
+      } catch (err) { errors.push(err.message) }
     }
 
     console.error('[generate-story] all providers failed', errors)

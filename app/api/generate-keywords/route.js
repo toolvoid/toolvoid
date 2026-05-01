@@ -3,7 +3,6 @@ import { auth } from '../../../auth';
 import { getQuota, incrementQuota } from '../../../lib/quotaStore';
 import { tryAcquire, release } from '../../../lib/concurrentStore';
 
-// ─── Key Rotation ─────────────────────────────────────────────────────────────
 function getTodayPT() {
   return new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' });
 }
@@ -26,10 +25,8 @@ function getActiveKey() {
 }
 function bumpKey(which) { if (which === 1) keyStore.key1_count++; else keyStore.key2_count++; }
 
-// ─── Groq API Call ────────────────────────────────────────────────────────────
 async function callGroq(apiKey, topic, contentType, audience, country, seed, attempt = 1) {
   const seedPart = seed ? `Seed keyword: ${seed}` : '';
-
   const prompt = `You are an expert SEO keyword researcher.
 Generate keywords for ${contentType} about: ${topic}
 Target audience: ${audience}
@@ -38,18 +35,10 @@ ${seedPart}
 
 Return ONLY this exact JSON, nothing else. No markdown, no explanation:
 {
-  "short_tail": [
-    {"keyword": "example keyword", "volume": "High", "difficulty": "Easy", "intent": "Informational"}
-  ],
-  "long_tail": [
-    {"keyword": "long tail example keyword phrase", "volume": "Medium", "difficulty": "Easy", "intent": "Commercial"}
-  ],
-  "lsi_keywords": [
-    {"keyword": "related lsi term", "volume": "Medium", "difficulty": "Medium", "intent": "Informational"}
-  ],
-  "questions": [
-    {"keyword": "how to example question", "volume": "Medium", "difficulty": "Easy", "intent": "Informational"}
-  ],
+  "short_tail": [{"keyword": "example keyword", "volume": "High", "difficulty": "Easy", "intent": "Informational"}],
+  "long_tail": [{"keyword": "long tail example keyword phrase", "volume": "Medium", "difficulty": "Easy", "intent": "Commercial"}],
+  "lsi_keywords": [{"keyword": "related lsi term", "volume": "Medium", "difficulty": "Medium", "intent": "Informational"}],
+  "questions": [{"keyword": "how to example question", "volume": "Medium", "difficulty": "Easy", "intent": "Informational"}],
   "related_topics": ["related niche 1", "related niche 2", "related niche 3", "related niche 4", "related niche 5"]
 }
 
@@ -70,10 +59,7 @@ Rules:
   try {
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
       signal: controller.signal,
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
@@ -96,30 +82,21 @@ Rules:
     let parsed;
     try { parsed = JSON.parse(clean); }
     catch {
-      if (attempt < 2) {
-        await new Promise(r => setTimeout(r, 1000));
-        return callGroq(apiKey, topic, contentType, audience, country, seed, 2);
-      }
+      if (attempt < 2) { await new Promise(r => setTimeout(r, 1000)); return callGroq(apiKey, topic, contentType, audience, country, seed, 2); }
       throw new Error('Invalid AI response, please try again');
     }
 
-    // Validate structure
     if (!parsed.short_tail || !parsed.long_tail || !parsed.lsi_keywords || !parsed.questions) {
       throw new Error('Unexpected response format, please try again');
     }
-
     return parsed;
   } catch (err) {
     clearTimeout(timer);
-    if (err.name === 'AbortError' && attempt < 2) {
-      await new Promise(r => setTimeout(r, 3000));
-      return callGroq(apiKey, topic, contentType, audience, country, seed, 2);
-    }
+    if (err.name === 'AbortError' && attempt < 2) { await new Promise(r => setTimeout(r, 3000)); return callGroq(apiKey, topic, contentType, audience, country, seed, 2); }
     throw err;
   }
 }
 
-// ─── Route Handler ────────────────────────────────────────────────────────────
 export async function POST(req) {
   const tool = 'keyword-generator';
   let slotId = null;
@@ -136,46 +113,36 @@ export async function POST(req) {
     if (!topic?.trim()) return NextResponse.json({ error: 'Please enter a topic first' }, { status: 400 });
     if (topic.trim().length > 200) return NextResponse.json({ error: 'Topic must be under 200 characters' }, { status: 400 });
 
-    const quotaStatus = getQuota(email, tool);
+    // ── AWAIT added ──
+    const quotaStatus = await getQuota(email, tool);
     if (quotaStatus.remaining <= 0) {
       return NextResponse.json({ error: 'rate_limit', quota: quotaStatus, remaining: 0, reset: quotaStatus.reset }, { status: 429 });
     }
 
     const slot = tryAcquire(tool);
     if (!slot.allowed) {
-      return NextResponse.json({
-        error: 'Server is busy right now. Please try again in a moment.',
-        code: 'SERVER_BUSY',
-      }, { status: 503 });
+      return NextResponse.json({ error: 'Server is busy right now. Please try again in a moment.', code: 'SERVER_BUSY' }, { status: 503 });
     }
     slotId = slot.id;
 
     const activeKey = getActiveKey();
     if (!activeKey) {
       const keysExist = process.env.GROQ_KEY_KEYWORDS_1 || process.env.GROQ_KEY_KEYWORDS_2;
-      if (!keysExist) return NextResponse.json({ error: 'API key not configured — add GROQ_KEY_KEYWORDS_1 to .env.local' }, { status: 503 });
+      if (!keysExist) return NextResponse.json({ error: 'API key not configured' }, { status: 503 });
       return NextResponse.json({ error: 'Service busy, try in a few minutes' }, { status: 503 });
     }
 
-    const keywords = await callGroq(
-      activeKey.key,
-      topic.trim(),
-      contentType || 'Blog Post',
-      audience    || 'General Public',
-      country     || 'India',
-      seed?.trim() || ''
-    );
+    const keywords = await callGroq(activeKey.key, topic.trim(), contentType || 'Blog Post', audience || 'General Public', country || 'India', seed?.trim() || '');
 
     bumpKey(activeKey.which);
-    const quota = incrementQuota(email, tool);
+    // ── AWAIT added ──
+    const quota = await incrementQuota(email, tool);
 
     return NextResponse.json({ success: true, keywords, remaining: quota.remaining, reset: quota.reset, quota });
 
   } catch (err) {
     console.error('[generate-keywords]', err);
-    if (err.name === 'TypeError' || err.message?.includes('fetch')) {
-      return NextResponse.json({ error: 'Connection failed, please retry' }, { status: 502 });
-    }
+    if (err.name === 'TypeError' || err.message?.includes('fetch')) return NextResponse.json({ error: 'Connection failed, please retry' }, { status: 502 });
     return NextResponse.json({ error: err.message || 'Something went wrong' }, { status: 500 });
   } finally {
     if (slotId) release(tool, slotId);

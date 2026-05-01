@@ -486,11 +486,11 @@ export default function HashtagPage() {
       if (!state.topic.trim()) { showError('Please enter a topic first'); return; }
       if (!state.authenticated) { showError('Connect your account to use Hashtag Generator'); return; }
       if (state.quota.remaining <= 0) { showModalDialog(); return; }
-
+    
       clearError();
       setLoading(true);
       startMsgCycle();
-
+    
       try {
         const res = await fetch('/api/generate-hashtags', {
           method: 'POST',
@@ -502,17 +502,24 @@ export default function HashtagPage() {
             count: state.count,
           }),
         });
-
+    
         const data = await res.json();
-
+    
         if (res.status === 401 || data.requiresAuth) {
           state.authenticated = false;
           await refreshQuota();
           throw new Error(data.error || 'Connect your account to use this tool');
         }
         if (res.status === 429 || data.error === 'rate_limit') {
-          if (data.quota) state.quota = data.quota;
-          state.resetTime = data.reset || '';
+          // Update quota from server response
+          if (data.quota) {
+            state.quota = data.quota;
+          } else {
+            // Force remaining to 0 if server says rate limited
+            state.quota = { ...state.quota, remaining: 0 };
+          }
+          state.resetTime = data.reset || state.resetTime;
+          updateTries();
           showModalDialog();
           return;
         }
@@ -521,17 +528,29 @@ export default function HashtagPage() {
           return;
         }
         if (!res.ok) throw new Error(data.error || 'Something went wrong');
-
+    
         state.results = data.hashtags;
+    
+        // ── QUOTA UPDATE (with local fallback) ──────────────────
         if (data.quota) {
+          // Server returned updated quota - use it
           state.quota = data.quota;
-          state.resetTime = data.quota.reset;
+          state.resetTime = data.quota.reset || state.resetTime;
+        } else {
+          // Server didn't return quota - decrement locally
+          state.quota = {
+            ...state.quota,
+            used: (state.quota.used || 0) + 1,
+            remaining: Math.max(0, (state.quota.remaining ?? state.quota.limit) - 1),
+          };
         }
+        // ────────────────────────────────────────────────────────
+    
         updateTries();
         saveHistory({ topic: state.topic.trim(), platform: state.platform, category: state.category });
         renderHistory();
         renderResults();
-
+    
       } catch (err) {
         showError(err.message || 'Connection failed, please retry');
         showPlaceholder();
@@ -540,6 +559,7 @@ export default function HashtagPage() {
         setLoading(false);
       }
     }
+
 
     // ─── Loading Cycle ────────────────────────────────────────────────────────
     function startMsgCycle() {

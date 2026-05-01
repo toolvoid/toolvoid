@@ -3,7 +3,6 @@ import { auth } from '../../../auth';
 import { getQuota, incrementQuota } from '../../../lib/quotaStore';
 import { tryAcquire, release } from '../../../lib/concurrentStore';
 
-// ─── Gemini Key Rotation ──────────────────────────────────────────────────────
 function getTodayPT() {
   return new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' });
 }
@@ -29,7 +28,6 @@ function getActiveKey() {
 
 function bumpKey(which) { if (which === 1) keyStore.key1_count++; else keyStore.key2_count++; }
 
-// ─── Gemini API Call ──────────────────────────────────────────────────────────
 async function callGemini(apiKey, topic, platform, category, count, attempt = 1) {
   const perGroup  = Math.floor(count / 3);
   const remainder = count - perGroup * 3;
@@ -96,7 +94,6 @@ Return ONLY this exact JSON, nothing else:
   }
 }
 
-// ─── Route Handler ────────────────────────────────────────────────────────────
 export async function POST(req) {
   const tool = 'hashtag-generator';
   let slotId = null;
@@ -113,17 +110,15 @@ export async function POST(req) {
     if (!topic?.trim()) return NextResponse.json({ error: 'Please enter a topic first' }, { status: 400 });
     if (topic.trim().length > 200) return NextResponse.json({ error: 'Topic must be under 200 characters' }, { status: 400 });
 
-    const quotaStatus = getQuota(email, tool);
+    // ── AWAIT added ──
+    const quotaStatus = await getQuota(email, tool);
     if (quotaStatus.remaining <= 0) {
       return NextResponse.json({ error: 'rate_limit', quota: quotaStatus, remaining: 0, reset: quotaStatus.reset }, { status: 429 });
     }
 
     const slot = tryAcquire(tool);
     if (!slot.allowed) {
-      return NextResponse.json({
-        error: 'Server is busy right now. Please try again in a moment.',
-        code: 'SERVER_BUSY',
-      }, { status: 503 });
+      return NextResponse.json({ error: 'Server is busy right now. Please try again in a moment.', code: 'SERVER_BUSY' }, { status: 503 });
     }
     slotId = slot.id;
 
@@ -133,7 +128,8 @@ export async function POST(req) {
     const hashtags = await callGemini(activeKey.key, topic.trim(), platform || 'Instagram', category || 'General', Number(count) || 30);
 
     bumpKey(activeKey.which);
-    const quota = incrementQuota(email, tool);
+    // ── AWAIT added ──
+    const quota = await incrementQuota(email, tool);
 
     return NextResponse.json({ success: true, hashtags, remaining: quota.remaining, reset: quota.reset, quota });
 
