@@ -1,7 +1,3 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  // Fix: multiple lockfiles warning
-  outputFileTracingRoot: '/home/sparsh/toolsite',
-};
-
+const nextConfig = {};
 module.exports = nextConfig;
