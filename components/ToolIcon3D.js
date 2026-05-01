@@ -312,47 +312,45 @@ export default function ToolIcon3D({ href, hovered, mouseX, mouseY }) {
       ctx.scale(dpr, dpr);
       let t = 0;
       let raf = null;
-      const loop = () => {
+      const mobileLoop = () => {
         t += 0.022;
         ctx.clearRect(0, 0, 72, 72);
         drawToolIcon2D(ctx, href, 36, 36, 72, t, hovered, color);
-        raf = requestAnimationFrame(loop);
+        raf = requestAnimationFrame(mobileLoop);
       };
-      loop();
+      mobileLoop();
       return () => { if (raf) cancelAnimationFrame(raf); };
     }
 
+    // Desktop: shared renderer (single WebGL context for all icons)
     canvas.width = 72;
     canvas.height = 72;
-    const renderer = createMobileRenderer(canvas);
-    const tool = createToolScene(href, color);
-    localStateRef.current = { renderer, tool, raf: null };
+    canvas.style.width = '72px';
+    canvas.style.height = '72px';
 
-    const loop = () => {
-      const state = localStateRef.current;
-      if (!state) return;
-      updateToolScene(state.tool);
-      try { state.renderer.render(state.tool.scene, state.tool.camera); } catch (e) { state.raf = null; return; }
-      state.raf = requestAnimationFrame(loop);
-    };
-    loop();
+    const tool = createToolScene(href, color);
+    tool.canvas = canvas;
+    const key = href + '_' + Math.random().toString(36).slice(2);
+    localStateRef.current = { key };
+    toolScenes.set(key, tool);
+    getRenderer();
 
     return () => {
-      const state = localStateRef.current;
-      if (state?.raf) cancelAnimationFrame(state.raf);
-      if (state?.renderer) { try { state.renderer.dispose(); } catch (e) {} }
+      if (localStateRef.current?.key) toolScenes.delete(localStateRef.current.key);
       localStateRef.current = null;
     };
   }, [href]);
 
   useEffect(() => {
-    const localTool = localStateRef.current?.tool;
-    if (localTool) localTool.hovered = hovered;
+    if (!localStateRef.current?.key) return;
+    const tool = toolScenes.get(localStateRef.current.key);
+    if (tool) tool.hovered = hovered;
   }, [hovered, href]);
 
   useEffect(() => {
-    const localTool = localStateRef.current?.tool;
-    if (localTool) { localTool.mouseX = mouseX || 0; localTool.mouseY = mouseY || 0; }
+    if (!localStateRef.current?.key) return;
+    const tool = toolScenes.get(localStateRef.current.key);
+    if (tool) { tool.mouseX = mouseX || 0; tool.mouseY = mouseY || 0; }
   }, [mouseX, mouseY, href]);
 
   return (
