@@ -39,7 +39,7 @@ function getRenderer() {
     antialias: !isMobile,
     alpha: true,
     powerPreference: isMobile ? 'low-power' : 'high-performance',
-    preserveDrawingBuffer: false,
+    preserveDrawingBuffer: true,
   });
   sharedRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
   sharedRenderer.setSize(72, 72);
@@ -273,7 +273,7 @@ function createMobileRenderer(canvas) {
     antialias: false,
     alpha: true,
     powerPreference: 'low-power',
-    preserveDrawingBuffer: false,
+    preserveDrawingBuffer: true,
   });
   renderer.setPixelRatio(1);
   renderer.setSize(72, 72, false);
