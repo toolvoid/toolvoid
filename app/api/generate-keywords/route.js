@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '../../../auth';
 import { getQuota, incrementQuota } from '../../../lib/quotaStore';
 import { tryAcquire, release } from '../../../lib/concurrentStore';
+import { checkRPM } from '../../../lib/rpmLimiter';
 
 function getTodayPT() {
   return new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' });
@@ -113,7 +114,10 @@ export async function POST(req) {
     if (!topic?.trim()) return NextResponse.json({ error: 'Please enter a topic first' }, { status: 400 });
     if (topic.trim().length > 200) return NextResponse.json({ error: 'Topic must be under 200 characters' }, { status: 400 });
 
-    // ── AWAIT added ──
+    // ── RPM check ──
+    const rpm = checkRPM(tool);
+    if (!rpm.allowed) return NextResponse.json({ error: 'Too many requests, please wait a moment and try again.' }, { status: 429 });
+
     const quotaStatus = await getQuota(email, tool);
     if (quotaStatus.remaining <= 0) {
       return NextResponse.json({ error: 'rate_limit', quota: quotaStatus, remaining: 0, reset: quotaStatus.reset }, { status: 429 });
@@ -135,7 +139,6 @@ export async function POST(req) {
     const keywords = await callGroq(activeKey.key, topic.trim(), contentType || 'Blog Post', audience || 'General Public', country || 'India', seed?.trim() || '');
 
     bumpKey(activeKey.which);
-    // ── AWAIT added ──
     const quota = await incrementQuota(email, tool);
 
     return NextResponse.json({ success: true, keywords, remaining: quota.remaining, reset: quota.reset, quota });

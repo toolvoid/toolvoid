@@ -3,6 +3,7 @@ import { auth } from '../../../auth'
 import { getQuota, incrementQuota } from '../../../lib/quotaStore'
 import { tryAcquire, release } from '../../../lib/concurrentStore'
 import { getNextGeminiKey, getNextGroqKey, GEMINI_KEYS, GROQ_KEYS } from '../../../lib/storyKeys'
+import { checkRPM } from '../../../lib/rpmLimiter'
 
 const TOOL = 'story-generator'
 
@@ -83,7 +84,10 @@ export async function POST(request) {
     const length = body?.length
     if (!prompt?.trim()) return NextResponse.json({ error: 'Prompt is required' }, { status: 400 })
 
-    // ── AWAIT added ──
+    // ── RPM check ──
+    const rpm = checkRPM(TOOL)
+    if (!rpm.allowed) return NextResponse.json({ error: 'Too many requests, please wait a moment and try again.' }, { status: 429 })
+
     const currentQuota = await getQuota(email, TOOL)
     if (currentQuota.remaining <= 0) {
       return NextResponse.json({ error: 'Daily limit reached', quota: currentQuota }, { status: 429 })
@@ -103,7 +107,6 @@ export async function POST(request) {
         const result = await callGemini(key, prompt.trim(), length)
         if (!result.text.trim()) throw new Error('Empty response from Gemini')
         const parsed = extractTitle(result.text.trim())
-        // ── AWAIT added ──
         return NextResponse.json({ ...parsed, model: result.model, quota: await incrementQuota(email, TOOL) })
       } catch (err) { errors.push(err.message) }
     }
@@ -115,7 +118,6 @@ export async function POST(request) {
         const result = await callGroq(key, prompt.trim(), length)
         if (!result.text.trim()) throw new Error('Empty response from Groq')
         const parsed = extractTitle(result.text.trim())
-        // ── AWAIT added ──
         return NextResponse.json({ ...parsed, model: result.model, quota: await incrementQuota(email, TOOL) })
       } catch (err) { errors.push(err.message) }
     }

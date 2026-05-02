@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '../../../auth';
 import { getQuota, incrementQuota } from '../../../lib/quotaStore';
 import { tryAcquire, release } from '../../../lib/concurrentStore';
+import { checkRPM } from '../../../lib/rpmLimiter';
 
 let activeImageGens = 0;
 const MAX_CONCURRENT_IMAGES = 5;
@@ -87,46 +88,20 @@ async function callPollinationsImage(prompt, ratio = '1:1') {
     try {
       const response = await fetch(url, { headers: { 'Accept': 'image/*', 'User-Agent': 'toolsite-imagegen/1.0' }, signal: AbortSignal.timeout(60000), cache: 'no-store' });
       if (response.status === 429) {
-        if (attempt < 3) {
-          const delay = attempt * 4000 + Math.random() * 2000; // 4s → 8s
-          await sleep(delay);
-          continue;
-        }
-        lastError = 'Pollinations busy, please try again in a moment';
+        if (attempt < 4) { await sleep(attempt * 4000 + Math.random() * 2000); continue; }
+        lastError = 'Image server busy, please try again in 30 seconds';
         break;
       }
-      if (!response.ok) { lastError = `Pollinations error: ${response.status}`; continue; }
+      if (!response.ok) { lastError = `Image error: ${response.status}`; continue; }
       const contentType = response.headers.get('content-type') || '';
-      if (!contentType.startsWith('image/')) { lastError = 'Pollinations returned non-image response'; continue; }
+      if (!contentType.startsWith('image/')) { lastError = 'Invalid image response'; continue; }
       const blob = await response.blob();
       const buffer = await blob.arrayBuffer();
       return { base64: Buffer.from(buffer).toString('base64'), source: 'pollinations' };
     } catch (err) {
-      lastError = err?.name === 'TimeoutError' ? 'Pollinations request timed out' : (err?.message || 'Pollinations request failed');
-      if (attempt < 3) await sleep(attempt * 1500);
+      lastError = err?.name === 'TimeoutError' ? 'Image generation timed out, please retry' : (err?.message || 'Image request failed');
+      if (attempt < 4) await sleep(attempt * 1500);
     }
-  }
-  throw new Error(lastError);
-}
-
-async function callGeminiImagen(prompt, ratio = '1:1') {
-  const model = process.env.GEMINI_IMAGE_MODEL || 'imagen-4.0-generate-001';
-  const keyCount = GEMINI_IMAGE_KEYS.length;
-  let lastError = 'Gemini image generation failed';
-  for (let attempt = 0; attempt < keyCount; attempt++) {
-    const key = getNextGeminiImageKey();
-    if (!key) break;
-    try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:predict`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key }, signal: AbortSignal.timeout(60000),
-        body: JSON.stringify({ instances: [{ prompt }], parameters: { sampleCount: 1, aspectRatio: ['1:1','4:3','16:9','9:16'].includes(ratio) ? ratio : '1:1', personGeneration: 'allow_adult' } }),
-      });
-      if (!response.ok) { const err = await response.json().catch(() => ({})); lastError = err?.error?.message || `Gemini Imagen error: ${response.status}`; continue; }
-      const data = await response.json();
-      const base64 = data?.predictions?.[0]?.bytesBase64Encoded || data?.predictions?.[0]?.image?.bytesBase64Encoded || data?.generatedImages?.[0]?.image?.imageBytes;
-      if (!base64) { lastError = 'Gemini Imagen returned empty image'; continue; }
-      return { base64, source: model };
-    } catch (err) { lastError = err?.name === 'TimeoutError' ? 'Gemini Imagen timed out' : (err?.message || 'Gemini Imagen failed'); }
   }
   throw new Error(lastError);
 }
@@ -169,6 +144,10 @@ export async function POST(request) {
 
   if (!prompt) return NextResponse.json({ error: 'Prompt is required' }, { status: 400 });
 
+  // ── RPM check ──
+  const rpm = checkRPM(tool);
+  if (!rpm.allowed) return NextResponse.json({ error: 'Too many requests, please wait a moment and try again.' }, { status: 429 });
+
   if (isEnhance) {
     const enhancementPrompt = `Rewrite the following description into a more vivid, detailed image generation prompt. Keep the same concept and style, make it easier for an AI image model to imagine, and do not add anything unrelated.\n\nDescription: ${prompt}`;
     const keyInfo = getActiveKey(false);
@@ -181,7 +160,6 @@ export async function POST(request) {
     } catch (err) { return NextResponse.json({ error: err.message || 'Prompt enhancement failed' }, { status: 500 }); }
   }
 
-  // ── AWAIT added ──
   let quotaStatus = null;
   if (isImageGen) {
     quotaStatus = await getQuota(email, tool);
@@ -200,17 +178,14 @@ export async function POST(request) {
         const promptText = [prompt.trim(), body.style && `Style: ${body.style}`, body.mood && `Mood: ${body.mood}`, body.negPrompt && `Exclude: ${body.negPrompt}`, body.variation && body.variationSeed ? `Variation seed: ${body.variationSeed}` : undefined].filter(Boolean).join(', ');
         const { base64, source } = await generateImage(promptText, body.ratio);
         if (!base64) throw new Error('Empty image response');
-        // ── AWAIT added ──
         const quota = await incrementQuota(email, tool);
-        return NextResponse.json({ imageBase64: base64, generator: source === 'pollinations' ? 'pollinations' : 'gemini-imagen', model: source, remaining: quota.remaining, reset: quota.reset, quota });
+        return NextResponse.json({ imageBase64: base64, generator: 'pollinations', model: source, remaining: quota.remaining, reset: quota.reset, quota });
       } finally {
         activeImageGens--;
         if (slotId) { release(slotTool, slotId); slotId = null; slotTool = null; }
       }
     }
 
-    // ── Story Generation ──
-    // ── AWAIT added ──
     quotaStatus = await getQuota(email, tool);
     if (quotaStatus.remaining <= 0) return NextResponse.json({ error: 'rate_limit', quota: quotaStatus, remaining: 0, reset: quotaStatus.reset }, { status: 429 });
 
@@ -229,7 +204,6 @@ export async function POST(request) {
     if (!rawText?.trim()) throw new Error('Empty response from AI');
 
     const { title, story } = extractTitle(rawText.trim(), prompt.match(/\w+ story/i)?.[0]?.replace(' story', ''));
-    // ── AWAIT added ──
     const quota = await incrementQuota(email, tool);
 
     return NextResponse.json({ story, title, model: keyInfo.model, keyType: keyInfo.type, remaining: quota.remaining, reset: quota.reset, quota });
@@ -241,7 +215,6 @@ export async function POST(request) {
         const fallbackText = await callGroq(process.env.GROQ_KEY_STORY_1, 'llama-3.3-70b-versatile', SYSTEM_PROMPT, prompt, maxTokens);
         usage.groq1++;
         const { title, story } = extractTitle(fallbackText.trim(), '');
-        // ── AWAIT added ──
         const quota = await incrementQuota(email, tool);
         return NextResponse.json({ story, title, model: 'llama-3.3-70b (fallback)', quota });
       } catch (fallbackErr) { console.error('[Fallback Error]', fallbackErr.message); }
