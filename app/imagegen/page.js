@@ -305,7 +305,7 @@ const RATIOS = [
   { id:'9:16', label:'9:16', sub:'Portrait',   icon:'▮' },
   { id:'4:3',  label:'4:3',  sub:'Standard',   icon:'🟫' },
 ];
-const LOAD_MSGS = ['🎨 Starting generation…','✨ Adding details…','🖌️ Applying style…','🔮 Almost done…'];
+const LOAD_MSGS = ['🎨 Starting generation…','✨ Adding details…','🖌️ Applying style…','🔮 Almost there — image servers can be slow…'];
 const HIST_KEY  = 'ig_history_v1';
 const TRIES_KEY = 'ig_tries_v1';
 const POOLINATION_FREE_LIMIT = 6;
@@ -384,15 +384,6 @@ export default function ImageGenPage() {
 
     function getActiveGenerator() { return 'poolinations'; }
 
-    function syncGeneratorUI() {
-      const note = G('ig-generator-note');
-      if (note) {
-        note.textContent = `AI Poolination gives you up to ${POOLINATION_FREE_LIMIT} images per day. Daily limits reset at midnight.`;
-      }
-    }
-
-    // ─── Init ─────────────────────────────────────────────────────────────────
-    syncGeneratorUI();
     refreshQuota();
     renderHistory();
 
@@ -702,6 +693,7 @@ export default function ImageGenPage() {
     function startMsgCycle() {
       state.msgIdx=0;
       if(shimmerTxt) shimmerTxt.textContent=LOAD_MSGS[0];
+      if(shimmerWait) shimmerWait.textContent = 'This may take 20–30 seconds…'; // ← ye add karo
       state.msgTimer = setInterval(()=>{
         state.msgIdx=(state.msgIdx+1)%LOAD_MSGS.length;
         if(shimmerTxt) shimmerTxt.textContent=LOAD_MSGS[state.msgIdx];
@@ -744,6 +736,7 @@ export default function ImageGenPage() {
       if(genTimeEl) genTimeEl.textContent=`${elapsed}s`;
       if(overlayInfo) {
         overlayInfo.innerHTML=`<span>AI Poolination</span><span>Style: ${state.style}</span><span>${elapsed}s</span><span title="${escHtml(state.prompt)}">${state.prompt.slice(0,40)}${state.prompt.length>40?'…':''}</span>`;
+        
       }
     }
 
@@ -957,14 +950,6 @@ export default function ImageGenPage() {
                 </div>
               </div>
 
-              <div>
-                <label className="ig-ctrl-label">Generation Engine</label>
-                <div className="ig-select" style={{display:'flex',alignItems:'center',minHeight:'44px'}}>AI Poolination</div>
-                <p id="ig-generator-note" style={{ marginTop:'0.65rem', fontSize:'0.82rem', color:'var(--text-muted)', lineHeight:1.5 }}>
-                  AI Poolination powers every image on this page. You get 6 free images per day, and Premium packs extend the same engine.
-                </p>
-              </div>
-
               {/* Aspect Ratio */}
               <div>
                 <label className="ig-ctrl-label">Aspect Ratio</label>
@@ -1074,12 +1059,12 @@ export default function ImageGenPage() {
           <p className="ig-sub">Everything you need to generate stunning visuals — fast, free, and private.</p>
           <div className="ig-features-grid">
             {[
-              { icon:'🤖', title:'Smart Engine Powered', desc:'Uses a powerful image generation engine for high-quality, detailed visuals across all art styles.' },
+              { icon:'🤖', title:'Pollinations Powered', desc:'Images are generated using Pollinations AI — a free, open image engine that creates high-quality visuals from your text descriptions.' },
               { icon:'🎨', title:'10 Art Styles',        desc:'From photorealistic renders to anime, oil paintings, watercolors, sketches and cinematic shots — one tool covers all.' },
               { icon:'💡', title:'Prompt Enhancer',      desc:'Type a basic idea and let AI expand it into a detailed, optimized prompt for dramatically better results.' },
               { icon:'📐', title:'4 Aspect Ratios',      desc:'Square, landscape, portrait, and standard — optimized for Instagram, YouTube, TikTok, and desktop wallpapers.' },
               { icon:'⬇', title:'Instant Download',     desc:'Download your generated image as a high-quality PNG instantly with one click. No watermarks, ever.' },
-              { icon:'🔒', title:'Private by Default',   desc:'Your prompts and images are never stored on our servers. Everything stays in your browser session.' },
+              { icon:'🔒', title:'Private by Default', desc:'Your prompts are never stored on our servers. Generated images are saved only in your browser locally for history.' },
             ].map((f,i)=>(
               <article className="ig-feat-card" key={i}>
                 <div className="ig-feat-icon">{f.icon}</div>
@@ -1190,13 +1175,13 @@ export default function ImageGenPage() {
       <div id="ig-modal" className="ig-modal-bg" style={{display:'none'}}>
         <div className="ig-modal" onClick={e=>e.stopPropagation()}>
           <div className="ig-modal-icon">🔒</div>
-          <h3 id="ig-modal-title">Get Premium</h3>
-          <p id="ig-modal-text">You have used all 6 free uses for today. Come back tomorrow for more!</p>
-          <p className="ig-modal-reset" id="ig-modal-reset" />
+          <h3 id="ig-modal-title">Daily Limit Reached</h3>
+          <p id="ig-modal-text">You have used all 6 free images for today.</p>
+          <p className="ig-modal-reset">Resets daily at 5:30 AM IST (midnight UTC)</p>
           <div className="ig-modal-btns">
-            <button id="ig-modal-buy10" className="ig-modal-cancel">Got it</button>
-            <button id="ig-modal-buy40" className="ig-modal-cancel">Close</button>
-            <button id="ig-modal-cancel" className="ig-modal-cancel">🔄 Come back later</button>
+            <button id="ig-modal-cancel" className="ig-modal-upgrade">Got it, come back tomorrow</button>
+            <button id="ig-modal-buy10" style={{display:'none'}} />
+            <button id="ig-modal-buy40" style={{display:'none'}} />
           </div>
         </div>
       </div>
