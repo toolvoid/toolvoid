@@ -81,12 +81,20 @@ async function callPollinationsImage(prompt, ratio = '1:1') {
   const encodedPrompt = encodeURIComponent(prompt);
   let lastError = 'Pollinations failed';
 
-  for (let attempt = 1; attempt <= 3; attempt++) {
+  for (let attempt = 1; attempt <= 4; attempt++) {
     const seed = Math.floor(Math.random() * 1_000_000_000);
     const url = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&nologo=true&enhance=true&seed=${seed}`;
     try {
       const response = await fetch(url, { headers: { 'Accept': 'image/*', 'User-Agent': 'toolsite-imagegen/1.0' }, signal: AbortSignal.timeout(60000), cache: 'no-store' });
-      if (response.status === 429) { if (attempt < 3) { await sleep(attempt * 2000 + Math.random() * 1000); continue; } lastError = 'Pollinations rate limit reached'; break; }
+      if (response.status === 429) {
+        if (attempt < 3) {
+          const delay = attempt * 4000 + Math.random() * 2000; // 4s → 8s
+          await sleep(delay);
+          continue;
+        }
+        lastError = 'Pollinations busy, please try again in a moment';
+        break;
+      }
       if (!response.ok) { lastError = `Pollinations error: ${response.status}`; continue; }
       const contentType = response.headers.get('content-type') || '';
       if (!contentType.startsWith('image/')) { lastError = 'Pollinations returned non-image response'; continue; }
