@@ -8,7 +8,7 @@ export const metadata = {
   title: 'ResumeForge - Free Resume Builder',
   description: 'Build stunning professional resumes for free.',
   verification: {
-    google: "8zo7zLx7ChrzzglQIXzZX4M06tJzwe3RcGY0wHTx8DA",
+    google: "rbqEJHRr7nYPOzcpX-joYrhKKHOXN43MzVU-L-LjaL8",
   }
 };
 
