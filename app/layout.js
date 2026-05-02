@@ -7,6 +7,9 @@ import Script from 'next/script';
 export const metadata = {
   title: 'ResumeForge - Free Resume Builder',
   description: 'Build stunning professional resumes for free.',
+  verification: {
+    google: "8zo7zLx7ChrzzglQIXzZX4M06tJzwe3RcGY0wHTx8DA",
+  }
 };
 
 export const viewport = {
