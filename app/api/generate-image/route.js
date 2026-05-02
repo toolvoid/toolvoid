@@ -124,12 +124,7 @@ async function callGeminiImagen(prompt, ratio = '1:1') {
 }
 
 async function generateImage(prompt, ratio) {
-  try { return await callPollinationsImage(prompt, ratio); }
-  catch (err) {
-    console.warn('[Image Gen] Pollinations failed, trying Gemini Imagen:', err.message);
-    if (!GEMINI_IMAGE_KEYS.length) throw err;
-    return await callGeminiImagen(prompt, ratio);
-  }
+  return await callPollinationsImage(prompt, ratio);
 }
 
 function extractTitle(story, genre) {
