@@ -1,4 +1,4 @@
-import { getToolMetadata } from '@/lib/seoConfig'
+import { getToolMetadata } from '../../lib/seoConfig'
 import ResumeClient from './ResumeClient'
 
 export const metadata = getToolMetadata('resume')
