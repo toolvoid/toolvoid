@@ -1,1 +1,1 @@
-export { default } from '../keyword/page'
+export { default } from '../keyword/KeywordClient'

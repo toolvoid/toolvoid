@@ -1,1 +1,1 @@
-export { default } from '../hashtag/page'
+export { default } from '../hashtag/HashtagClient'

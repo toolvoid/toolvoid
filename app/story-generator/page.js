@@ -1,1 +1,1 @@
-export { default } from '../story/page'
+export { default } from '../story/StoryClient'

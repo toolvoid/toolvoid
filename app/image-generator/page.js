@@ -1,1 +1,1 @@
-export { default } from '../imagegen/page'
+export { default } from '../imagegen/ImageGeneratorClient'
