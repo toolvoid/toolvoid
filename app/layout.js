@@ -3,10 +3,11 @@ import AppHomeButton from '../components/AppHomeButton';
 import AppThemeShell from '../components/AppThemeShell';
 import AuthSessionProvider from '../components/AuthSessionProvider';
 import Script from 'next/script';
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 export const metadata = {
-  title: 'ResumeForge - Free Resume Builder',
-  description: 'Build stunning professional resumes for free.',
+  title: 'ToolVoid - Free Online Tools',
+  description: 'Free online toolkit with PDF tools, image toolkit, CV builder, AI story generator and more.',
   verification: {
     google: "rbqEJHRr7nYPOzcpX-joYrhKKHOXN43MzVU-L-LjaL8",
   }
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
           {children}
         </AuthSessionProvider>
         <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+        <SpeedInsights />
       </body>
     </html>
   );
