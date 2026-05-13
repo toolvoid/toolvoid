@@ -1,1 +1,4 @@
-export { default } from '../hashtag/HashtagClient'
+import { redirect } from 'next/navigation';
+export default function Page() {
+  redirect('/hashtag-generator');
+}

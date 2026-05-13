@@ -1,4 +1,4 @@
-import { getToolMetadata } from '../../lib/seoConfig'
-import StoryClient from './StoryClient'
-export const metadata = getToolMetadata('story')
-export default StoryClient
+import { redirect } from 'next/navigation';
+export default function Page() {
+  redirect('/story-generator');
+}

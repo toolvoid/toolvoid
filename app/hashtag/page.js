@@ -1,4 +1,4 @@
-import { getToolMetadata } from '../../lib/seoConfig'
-import HashtagClient from './HashtagClient'
-export const metadata = getToolMetadata('hashtag')
-export default HashtagClient
+import { redirect } from 'next/navigation';
+export default function Page() {
+  redirect('/hashtag-generator');
+}

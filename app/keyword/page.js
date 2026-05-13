@@ -1,4 +1,4 @@
-import { getToolMetadata } from '../../lib/seoConfig'
-import KeywordClient from './KeywordClient'
-export const metadata = getToolMetadata('keyword')
-export default KeywordClient
+import { redirect } from 'next/navigation';
+export default function Page() {
+  redirect('/keyword-generator');
+}
