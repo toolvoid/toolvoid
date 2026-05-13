@@ -284,7 +284,7 @@ export default function MobileHome() {
 
           {/* ── Nav ── */}
           <div className="m-nav">
-            <Link href="/" className="m-logo"><em>My Rapid</em> Tools</Link>
+            <Link href="/" className="m-logo"><em>Tool</em> Void</Link>
             <div className="m-pill">20 Tools</div>
           </div>
 
