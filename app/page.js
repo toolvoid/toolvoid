@@ -60,9 +60,9 @@ const comparisons = [
 
 const supports = [
   { type: 'email', t: 'Email Support', d: 'Drop a message when something feels broken or confusing.', l: 'Email Us →', h: 'mailto:0voidtool0@gmail.com', color: '#00FFB2' },
-  { type: 'community', t: 'Community', d: 'Share feedback, ideas, and common issues by email for now.', l: 'Join In →', h: 'mailto:0voidtool0@gmail.com?subject=My%20Rapid%20Tools%20Community', color: '#4D96FF' },
-  { type: 'bug', t: 'Bug Reports', d: 'Point out a broken flow and it gets fixed faster.', l: 'Report It →', h: 'mailto:0voidtool0@gmail.com?subject=My%20Rapid%20Tools%20Bug%20Report', color: '#FF6B6B' },
-  { type: 'feature', t: 'Feature Requests', d: 'Ask for the next utility you want to see shipped.', l: 'Suggest One →', h: 'mailto:0voidtool0@gmail.com?subject=My%20Rapid%20Tools%20Feature%20Request', color: '#FFD93D' },
+  { type: 'community', t: 'Community', d: 'Share feedback, ideas, and common issues by email for now.', l: 'Join In →', h: 'mailto:0voidtool0@gmail.com?subject=Tool%20Void%20Community', color: '#4D96FF' },
+  { type: 'bug', t: 'Bug Reports', d: 'Point out a broken flow and it gets fixed faster.', l: 'Report It →', h: 'mailto:0voidtool0@gmail.com?subject=Tool%20Void%20Bug%20Report', color: '#FF6B6B' },
+  { type: 'feature', t: 'Feature Requests', d: 'Ask for the next utility you want to see shipped.', l: 'Suggest One →', h: 'mailto:0voidtool0@gmail.com?subject=Tool%20Void%20Feature%20Request', color: '#FFD93D' },
 ];
 
 function AudienceCard({ a }) {
@@ -681,7 +681,7 @@ export default function Home() {
             <div className="spotlight" />
             <div className="wrap">
               <nav id="nv" className="nav">
-                <Link href="/" className="m-logo"><em>My Rapid</em> Tools</Link>
+                <Link href="/" className="m-logo"><em>Tool</em> Void</Link>
                 <div className="nav-right">
                   <div className="nav-pill">20 Free Tools</div>
                   <a className="nav-link" href="#tools">Tools</a>
@@ -814,7 +814,7 @@ export default function Home() {
 
               <footer className="footer reveal">
                 <div className="footer-top">
-                  <div className="footer-brand"><em>Tool</em>Site</div>
+                  <div className="footer-brand"><em>Tool</em>Void</div>
                 </div>
                 <div className="footer-copy">A growing set of free browser tools for creators, developers, students and freelancers.</div>
                 <div className="footer-links">
@@ -830,7 +830,7 @@ export default function Home() {
                     <Link href="/privacy">Privacy Policy</Link>
                     <Link href="/terms">Terms of Service</Link>
                   </div>
-                  <div className="footer-legal-copy">© 2026 ToolSite. All rights reserved.</div>
+                  <div className="footer-legal-copy">© 2026 ToolVoid. All rights reserved.</div>
                 </div>
               </footer>
             </div>

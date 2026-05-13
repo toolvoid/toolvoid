@@ -64,9 +64,9 @@ const faqs = [
 
 const supports = [
   { title: 'Email Support',     desc: 'Send a message if something feels broken or confusing.',       link: 'mailto:0voidtool0@gmail.com', cta: 'Email Us →',    color: '#00FFB2' },
-  { title: 'Community Help',    desc: 'Share feedback, ideas and common issues by email for now.',   link: 'mailto:0voidtool0@gmail.com?subject=My%20Rapid%20Tools%20Community', cta: 'Join In →', color: '#4D96FF' },
-  { title: 'Bug Reports',       desc: 'Point out a broken flow and it gets fixed faster.',           link: 'mailto:0voidtool0@gmail.com?subject=My%20Rapid%20Tools%20Bug%20Report', cta: 'Report It →', color: '#FF6B6B' },
-  { title: 'Feature Requests',  desc: 'If a missing tool would help you, ask for it directly.',      link: 'mailto:0voidtool0@gmail.com?subject=My%20Rapid%20Tools%20Feature%20Request', cta: 'Suggest One →', color: '#FFD93D' },
+  { title: 'Community Help',    desc: 'Share feedback, ideas and common issues by email for now.',   link: 'mailto:0voidtool0@gmail.com?subject=Tool%20Void%20Community', cta: 'Join In →', color: '#4D96FF' },
+  { title: 'Bug Reports',       desc: 'Point out a broken flow and it gets fixed faster.',           link: 'mailto:0voidtool0@gmail.com?subject=Tool%20Void%20Bug%20Report', cta: 'Report It →', color: '#FF6B6B' },
+  { title: 'Feature Requests',  desc: 'If a missing tool would help you, ask for it directly.',      link: 'mailto:0voidtool0@gmail.com?subject=Tool%20Void%20Feature%20Request', cta: 'Suggest One →', color: '#FFD93D' },
 ];
 
 // ── Tool Icon SVGs (inline, no 3D dep on mobile) ──────────
@@ -511,7 +511,7 @@ export default function MobileHome() {
 
           {/* ── Footer ── */}
           <footer className="m-footer">
-            <div className="m-footer-brand"><em>Tool</em>Site</div>
+            <div className="m-footer-brand"><em>Tool</em>void</div>
             <div className="m-footer-copy">20 tools for creators, builders and hustlers. Fast workflows, clear daily AI limits.</div>
             <div className="m-footer-cols">
               <div className="m-footer-col">
