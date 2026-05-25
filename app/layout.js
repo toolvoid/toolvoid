@@ -10,7 +10,10 @@ export const metadata = {
   description: 'Free online toolkit with PDF tools, image toolkit, CV builder, AI story generator and more.',
   verification: {
     google: "rbqEJHRr7nYPOzcpX-joYrhKKHOXN43MzVU-L-LjaL8",
-  }
+  },
+  alternates: {
+    canonical: 'https://toolvoid.com',
+  },
 };
 
 export const viewport = {
