@@ -1,10 +1,11 @@
 const fs   = require('fs')
 const path = require('path')
+const { app } = require('electron')
 const { encrypt, decrypt } = require('./encryptionHelper')
 const { buildTokenWarningPromptBlock } = require('./tokenWarning')
 
-// Store capsules next to the app in /storage/capsules/
-const CAPSULES_DIR = path.join(__dirname, '../storage/capsules')
+const STORAGE_DIR = path.join(app.getPath('userData'), 'storage', 'capsules')
+const CAPSULES_DIR = STORAGE_DIR
 if (!fs.existsSync(CAPSULES_DIR)) fs.mkdirSync(CAPSULES_DIR, { recursive: true })
 
 function generateId() {
