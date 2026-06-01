@@ -1,13 +1,14 @@
 'use client';
 import { useEffect, useRef } from 'react';
 
-// ── Color map for all 20 tools ──
+// ── Color map for all 21 tools ──
 const TOOL_COLORS = {
   '/story':'#A78BFA','/hashtag':'#FF6B6B','/imagegen':'#F59E0B','/keyword':'#34D399',
   '/image-tools':'#FFD93D','/pdf':'#FF9A3C','/passport':'#60A5FA','/qr':'#00FFB2',
   '/password':'#F472B6','/domain':'#00C9FF','/unit':'#6BCB77','/base64':'#C77DFF',
   '/emi':'#FB923C','/loan':'#E879F9','/invoice':'#38BDF8','/word-counter':'#4D96FF',
   '/json':'#86EFAC','/tts':'#4D96FF','/video':'#FF4ECD','/resume':'#FF6B6B',
+  '/capsule-manager':'#a78bfa',
   '/resize':'#FFD93D','/compress':'#6BCB77','/convert':'#C77DFF',
 };
 
@@ -84,6 +85,18 @@ function drawToolIcon2D(ctx, href, cx, cy, s, t, hov, color) {
     ctx.fillRect(-10,-12,8,10);
     [-2,4,10].forEach(y => { ctx.beginPath(); ctx.moveTo(2,y-10); ctx.lineTo(10,y-10); ctx.stroke(); });
     [-4,2,8,14].forEach(y => { ctx.beginPath(); ctx.moveTo(-10,y-12); ctx.lineTo(10,y-12); ctx.stroke(); });
+
+  } else if (href === '/capsule-manager') {
+    ctx.lineWidth=2.8;
+    ctx.beginPath(); ctx.roundRect(-20,-8,40,16,8); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,-8); ctx.lineTo(0,8); ctx.stroke();
+    ctx.globalAlpha=0.45;
+    ctx.beginPath(); ctx.roundRect(-12,-21,24,8,4); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(-12,13,24,8,4); ctx.stroke();
+    ctx.globalAlpha=1;
+    ctx.fillStyle=color;
+    ctx.beginPath(); ctx.arc(-9,0,3,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(9,0,3,0,Math.PI*2); ctx.fill();
 
   } else if (href === '/video') {
     ctx.beginPath(); ctx.arc(0,0,18,0,Math.PI*2); ctx.stroke();

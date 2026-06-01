@@ -24,9 +24,10 @@ const tools = [
   { name: 'Text to Speech',      href: '/tts',          desc: 'Convert any text to natural voice instantly free',      color: '#4D96FF', tag: 'Voice' },
   { name: 'Video Converter',     href: '/video',        desc: 'Convert MP4, MOV, AVI, MKV to any format free',        color: '#FF4ECD', tag: 'Media' },
   { name: 'Resume Builder',      href: '/resume',       desc: 'Multiple templates · PDF download · Quick workflow',    color: '#FF6B6B', tag: 'Career' },
+  { name: 'Capsule Manager',     href: '/capsule-manager', desc: 'Save AI conversations as capsules. Never lose context again.', color: '#a78bfa', tag: 'NEW' },
 ];
 
-const ALL_TAGS = ['All', 'AI', 'Image', 'Dev', 'Finance', 'Utility', 'Content', 'Business', 'Media'];
+const ALL_TAGS = ['All', 'NEW', 'AI', 'Image', 'Dev', 'Finance', 'Utility', 'Content', 'Business', 'Media'];
 
 const audiences = [
   { title: 'Creators',    desc: 'Stories, hashtags, AI images & more for your content.', color: '#00FFB2' },
@@ -96,6 +97,7 @@ function MobileToolIcon({ href, color }) {
     '/tts':         <svg {...base}><rect x="17" y="8" width="10" height="18" rx="5" {...s}/><path d="M13 20C13 25 17 29 22 29C27 29 31 25 31 20" {...s}/><path d="M22 29V35" {...s}/><path d="M17 35H27" {...s}/></svg>,
     '/video':       <svg {...base}><circle cx="22" cy="22" r="14" {...s}/><path d="M19 16L29 22L19 28V16Z" {...f} fill={color}/></svg>,
     '/resume':      <svg {...base}><rect x="11" y="6" width="22" height="32" rx="4" {...s}/><circle cx="18" cy="15" r="3" {...s}/><path d="M15 22C16 20.5 17 20 18 20C19 20 20 20.5 21 22" {...s}/><path d="M24 14H29" {...s}/><path d="M24 19H29" {...s}/><path d="M15 27H29" {...s}/><path d="M15 32H25" {...s}/></svg>,
+    '/capsule-manager': <svg {...base}><rect x="9" y="16" width="26" height="12" rx="6" {...s}/><path d="M22 16V28" {...s}/><path d="M13 16L9 22L13 28" {...s} strokeOpacity="0.5"/><path d="M31 16L35 22L31 28" {...s} strokeOpacity="0.5"/><rect x="15" y="9" width="14" height="6" rx="3" {...s}/><rect x="15" y="29" width="14" height="6" rx="3" {...s}/></svg>,
   };
 
   return icons[href] || <svg {...base}><circle cx="22" cy="22" r="12" {...s}/><path d="M18 22H26M22 18V26" {...s}/></svg>;
@@ -285,14 +287,14 @@ export default function MobileHome() {
           {/* ── Nav ── */}
           <div className="m-nav">
             <Link href="/" className="m-logo"><em>Tool</em> Void</Link>
-            <div className="m-pill">20 Tools</div>
+            <div className="m-pill">21 Tools</div>
           </div>
 
           {/* ── Hero ── */}
           <section className="m-hero">
             <div className="m-eyebrow">Free tools for creators & builders</div>
             <div className="m-title">
-              <span className="green">20 Tools.</span>
+              <span className="green">21 Tools.</span>
               <span>Zero Cost.</span>
               <span>Always.</span>
             </div>
@@ -300,14 +302,14 @@ export default function MobileHome() {
               AI tools, image editors, dev utilities, finance calculators — fast browser tools with daily AI credits.
             </div>
             <div className="m-actions">
-              <a href="#tools" className="m-cta primary">Explore All 20 Tools ⚡</a>
+              <a href="#tools" className="m-cta primary">Explore All 21 Tools ⚡</a>
               <a href="#how" className="m-cta secondary">See How It Works →</a>
             </div>
           </section>
 
           {/* ── Stats Bar ── */}
           <div className="m-stats-bar" ref={statsRef}>
-            {[['20','Tools'],['₹0','Forever'],['3s','To Start'],['24/7','Access']].map(([n,l])=>(
+            {[['21','Tools'],['₹0','Forever'],['3s','To Start'],['24/7','Access']].map(([n,l])=>(
               <div key={l} className="m-stat">
                 <div className="m-stat-n">{n}</div>
                 <div className="m-stat-l">{l}</div>
@@ -319,7 +321,7 @@ export default function MobileHome() {
 
           {/* ── Tools ── */}
           <section className="m-section" id="tools">
-            <h2 className="m-sh">All 20 Tools</h2>
+            <h2 className="m-sh">All 21 Tools</h2>
             <p className="m-sp">AI generators, image editors, dev tools, finance calculators — all free.</p>
 
             {/* Search */}
@@ -501,7 +503,7 @@ export default function MobileHome() {
             <div className="m-cta-box">
               <div className="m-cta-kicker">{'// Ready to go?'}</div>
               <div className="m-cta-title">Stop Waiting<br/><span>Start Building</span></div>
-              <div className="m-cta-copy">20 tools. Free daily AI credits. Just open a tab and get moving.</div>
+              <div className="m-cta-copy">21 tools. Free daily AI credits. Just open a tab and get moving.</div>
               <div className="m-cta-btns">
                 <a href="#tools" className="m-cta primary">Try Free Tools ⚡</a>
                 <a href="#faq" className="m-cta secondary">Read FAQs →</a>
@@ -512,7 +514,7 @@ export default function MobileHome() {
           {/* ── Footer ── */}
           <footer className="m-footer">
             <div className="m-footer-brand"><em>Tool</em>void</div>
-            <div className="m-footer-copy">20 tools for creators, builders and hustlers. Fast workflows, clear daily AI limits.</div>
+            <div className="m-footer-copy">21 tools for creators, builders and hustlers. Fast workflows, clear daily AI limits.</div>
             <div className="m-footer-cols">
               <div className="m-footer-col">
                 <h4>AI Tools</h4>

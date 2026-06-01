@@ -5,6 +5,7 @@ export default function sitemap() {
     '',
     '/about',
     '/base64',
+    '/capsule-manager',
     '/domain',
     '/emi',
     '/hashtag-generator',

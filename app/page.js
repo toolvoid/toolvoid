@@ -32,6 +32,7 @@ const tools = [
   { name: 'Text to Speech', desc: 'Convert text into natural voice instantly free', href: '/tts', tag: 'Voice', delay: '.9s', color: '#4D96FF' },
   { name: 'Video Converter', desc: 'Convert MP4, MOV, AVI and MKV for free', href: '/video', tag: 'Media', delay: '.95s', color: '#FF4ECD' },
   { name: 'Resume Builder', desc: 'Multiple templates, PDF export, quick browser workflow', href: '/resume', tag: 'Career', delay: '1s', color: '#FF6B6B' },
+  { name: 'Capsule Manager', desc: 'Save AI conversations as capsules. Never lose context again.', href: '/capsule-manager', tag: 'NEW', delay: '1.05s', color: '#a78bfa' },
 ];
 
 const audiences = [
@@ -139,7 +140,7 @@ function ToolCard({ tool }) {
           <div className="tch">{tool.name}</div>
           <div className="tcd">{tool.desc}</div>
           <div className="tca" style={{ color: tool.color }}>
-            Open Tool <span className="tal" />
+            OPEN TOOL <span className="tal" />
           </div>
         </div>
       </div>
@@ -683,7 +684,7 @@ export default function Home() {
               <nav id="nv" className="nav">
                 <Link href="/" className="m-logo"><em>Tool</em> Void</Link>
                 <div className="nav-right">
-                  <div className="nav-pill">20 Free Tools</div>
+                  <div className="nav-pill">21 Free Tools</div>
                   <a className="nav-link" href="#tools">Tools</a>
                   <a className="nav-link" href="#features">Why Us</a>
                   <a className="nav-link" href="#support">Support</a>
@@ -715,7 +716,7 @@ export default function Home() {
                   </div>
                   <div className="hp-grid">
                     <div className="mini">
-                      <strong>20</strong>
+                      <strong>21</strong>
                       <span>Live Utilities</span>
                     </div>
                     <div className="mini">
