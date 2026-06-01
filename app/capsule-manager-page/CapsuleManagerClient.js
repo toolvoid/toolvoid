@@ -8,7 +8,7 @@ const steps = [
     n: '01',
     title: 'Get Your Free Gemini API Key',
     text: 'Go to aistudio.google.com → Sign in → Create API Key → Copy it',
-    note: 'Free tier resets every month — no credit card needed',
+    note: 'Free tier resets every day — no credit card needed',
   },
   {
     n: '02',
