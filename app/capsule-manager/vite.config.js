@@ -5,5 +5,8 @@ export default defineConfig({
   plugins: [react()],
   root: 'src',
   base: './',
+  css: {
+    postcss: {}
+  },
   build: { outDir: '../dist' }
 })
