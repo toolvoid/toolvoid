@@ -51,7 +51,7 @@ export default function Settings() {
 
       <div className="settings-form">
         <div>
-          <label className="field-label">AI Provider</label>
+          <label className="field-label">API Provider</label>
           <div className="provider-grid">
             {PROVIDERS.map(p => (
               <button

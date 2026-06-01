@@ -18,7 +18,7 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: false
     },
-    titleBarStyle: 'hiddenInset',
+    titleBarStyle: 'default',
     backgroundColor: '#0f0f0f',
     show: false
   })
