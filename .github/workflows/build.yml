@@ -39,6 +39,10 @@ jobs:
         working-directory: app/capsule-manager
         run: npm run build:renderer
 
+      - name: Verify dist exists
+        working-directory: app/capsule-manager
+        run: ls -la dist/
+
       - name: Build Linux installers
         run: npx electron-builder --linux deb rpm AppImage
 

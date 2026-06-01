@@ -14,6 +14,14 @@
     "build": "npm run build:renderer && electron-builder"
   },
   "build": {
+    "files": [
+      "dist/**/*",
+      "core/**/*",
+      "bridge/**/*",
+      "main.js",
+      "preload.js",
+      "capsule-schema.json"
+    ],
     "extraMetadata": {
       "main": "main.js"
     },
