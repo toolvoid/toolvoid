@@ -1,10 +1,11 @@
-const { ipcMain } = require('electron')
+const { app, ipcMain } = require('electron')
 const { createCapsule, getAllCapsules, getCapsule, deleteCapsule, updateCapsule } = require('./capsuleManager')
 const { saveSettings, getSettings } = require('./encryptionHelper')
 const { getInstalledBrowsers, launchBrowser } = require('./browserLauncher')
 const { readChatFromBrowser } = require('./bridgeClient')
 const { transferCapsule } = require('./transferClient')
 const { summarizeWithAI } = require('./apiRouter')
+const { getPreferredStartOnBoot, setStartOnBoot } = require('./startOnBoot')
 
 let capsuleCreateInFlight = false
 
@@ -16,6 +17,13 @@ function setupIpcHandlers() {
   ipcMain.handle('capsule:update',  async (_, id, updates) => updateCapsule(id, updates))
   ipcMain.handle('settings:save',   async (_, settings)    => saveSettings(settings))
   ipcMain.handle('settings:get',    async ()               => getSettings())
+  ipcMain.handle('settings:setStartOnBoot', async (_, openAtLogin) => {
+    return setStartOnBoot(openAtLogin, true)
+  })
+  ipcMain.handle('settings:getStartOnBoot', async () => ({
+    ...app.getLoginItemSettings(),
+    openAtLogin: getPreferredStartOnBoot()
+  }))
   ipcMain.handle('browser:list',    async ()               => getInstalledBrowsers())
   ipcMain.handle('browser:launch',  async (_, browserPath) => launchBrowser(browserPath))
   ipcMain.handle('browser:readChat',async (_, options = {}) => {

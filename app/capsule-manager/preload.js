@@ -17,6 +17,8 @@ contextBridge.exposeInMainWorld('capsule', {
   // Settings
   saveSettings:    (s)        => ipcRenderer.invoke('settings:save', s),
   getSettings:     ()         => ipcRenderer.invoke('settings:get'),
+  setStartOnBoot:  (enabled)  => ipcRenderer.invoke('settings:setStartOnBoot', enabled),
+  getStartOnBoot:  ()         => ipcRenderer.invoke('settings:getStartOnBoot'),
 
   // Events: main → renderer
   onCapsuleUpdated: (cb) => ipcRenderer.on('capsule:updated', (_, d) => cb(d)),

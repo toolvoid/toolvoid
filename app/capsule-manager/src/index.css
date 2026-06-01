@@ -396,6 +396,56 @@ input:focus, select:focus, textarea:focus {
   background: var(--card-hover);
   color: var(--text);
 }
+.boot-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 52px;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+}
+.boot-toggle-title {
+  display: block;
+  color: var(--text);
+  font-weight: 500;
+}
+.boot-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.switch-track {
+  position: relative;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  background: #242424;
+  border: 1px solid var(--border-hover);
+  transition: background var(--transition), border-color var(--transition);
+}
+.switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: #aaa;
+  transition: transform var(--transition), background var(--transition);
+}
+.boot-toggle input:checked + .switch-track {
+  background: rgba(212, 165, 116, 0.26);
+  border-color: rgba(212, 165, 116, 0.75);
+}
+.boot-toggle input:checked + .switch-track .switch-thumb {
+  background: var(--accent);
+  transform: translateX(20px);
+}
 .hint {
   color: var(--muted);
   font-size: 11px;

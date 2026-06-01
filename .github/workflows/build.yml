@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build-linux:
-    name: Build Linux AppImage
+    name: Build Linux Installers
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -27,17 +27,25 @@ jobs:
           cache: npm
           cache-dependency-path: app/capsule-manager/package-lock.json
 
+      - name: Install Linux packaging tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rpm
+
       - name: Install dependencies
         run: npm ci
 
-      - name: Build AppImage
-        run: npm run build -- --linux AppImage
+      - name: Build Linux installers
+        run: npm run build -- --linux deb rpm AppImage
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
         with:
           name: capsule-manager-linux
-          path: app/capsule-manager/dist/*.AppImage
+          path: |
+            app/capsule-manager/dist/*.AppImage
+            app/capsule-manager/dist/*.deb
+            app/capsule-manager/dist/*.rpm
           if-no-files-found: error
 
   build-windows:

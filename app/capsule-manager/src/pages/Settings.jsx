@@ -11,12 +11,28 @@ const PROVIDERS = [
 ]
 
 const DEFAULT = { provider: 'gemini', apiKey: '', mode: 'manual', keyType: 'free' }
+const START_ON_BOOT_KEY = 'capsule-manager:start-on-boot'
 
 export default function Settings() {
   const [settings, set] = useState(DEFAULT)
+  const [startOnBoot, setStartOnBoot] = useState(() => localStorage.getItem(START_ON_BOOT_KEY) !== 'false')
   const [saved,  setSaved] = useState(false)
 
-  useEffect(() => { window.capsule.getSettings().then(s => { if (s && s.provider) set(s) }) }, [])
+  useEffect(() => {
+    window.capsule.getSettings().then(s => { if (s && s.provider) set(s) })
+    window.capsule.getStartOnBoot?.().then(s => {
+      if (typeof s?.openAtLogin === 'boolean') {
+        setStartOnBoot(s.openAtLogin)
+        localStorage.setItem(START_ON_BOOT_KEY, String(s.openAtLogin))
+      }
+    })
+  }, [])
+
+  async function handleStartOnBootChange(enabled) {
+    setStartOnBoot(enabled)
+    localStorage.setItem(START_ON_BOOT_KEY, String(enabled))
+    await window.capsule.setStartOnBoot(enabled)
+  }
 
   async function handleSave() {
     await window.capsule.saveSettings(settings)
@@ -68,6 +84,20 @@ export default function Settings() {
 
         <ApiKeyInput value={settings.apiKey} onChange={v => set(s => ({ ...s, apiKey: v }))} />
         <ModeToggle  mode={settings.mode} keyType={settings.keyType} onChange={m => set(s => ({ ...s, mode: m }))} />
+
+        <label className="boot-toggle">
+          <span>
+            <span className="boot-toggle-title">Start on Boot</span>
+          </span>
+          <input
+            type="checkbox"
+            checked={startOnBoot}
+            onChange={e => handleStartOnBootChange(e.target.checked)}
+          />
+          <span className="switch-track" aria-hidden="true">
+            <span className="switch-thumb" />
+          </span>
+        </label>
 
         <button onClick={handleSave} className="button-primary" style={{ width: '100%', padding: '12px 16px' }}>
           {saved ? 'Saved' : 'Save Settings'}

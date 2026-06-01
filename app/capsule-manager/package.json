@@ -1,20 +1,35 @@
 {
   "name": "capsule-manager",
   "version": "1.0.0",
+  "description": "Capsule Manager desktop app",
+  "author": {
+    "name": "toolvoid",
+    "email": "0voidtool0@gmail.com"
+  },
+  "homepage": "https://github.com/toolvoid/toolvoid",
   "main": "main.js",
   "scripts": {
     "start": "concurrently \"vite src\" \"wait-on http://localhost:5173 && electron .\"",
     "build": "vite build && electron-builder"
   },
   "build": {
+    "extraMetadata": {
+      "main": "main.js"
+    },
     "win": {
       "target": "nsis"
     },
     "linux": {
       "target": [
-        "AppImage",
-        "snap"
-      ]
+        "deb",
+        "rpm",
+        "AppImage"
+      ],
+      "category": "Utility",
+      "maintainer": "toolvoid <0voidtool0@gmail.com>",
+      "desktop": {
+        "StartupNotify": "true"
+      }
     }
   },
   "dependencies": {

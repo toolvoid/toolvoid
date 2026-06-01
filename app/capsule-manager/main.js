@@ -3,6 +3,7 @@ const path = require('path')
 const { setupIpcHandlers } = require('./core/ipcHandlers')
 const { cleanupPrivateProfile } = require('./core/browserLauncher')
 const { shutdownTransferClient } = require('./core/transferClient')
+const { applyStartOnBootPreference } = require('./core/startOnBoot')
 
 let mainWindow
 
@@ -33,6 +34,7 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  applyStartOnBootPreference()
   createWindow()
   setupIpcHandlers()
 })
