@@ -1,0 +1,20 @@
+{
+  "capsule_id": "cap_<timestamp>_<random>",
+  "version": "1.0",
+  "created_at": "<ISO date>",
+  "updated_at": "<ISO date>",
+  "source_ai": "Claude | ChatGPT | Gemini | DeepSeek | Grok",
+  "source_url": "https://...",
+  "title": "Short title (5 words max)",
+  "summary": "2-3 sentence summary of the conversation",
+  "progress": {
+    "completed": ["things already done"],
+    "current": "where we are right now",
+    "next_steps": ["what to do next"]
+  },
+  "key_decisions": ["important choices made in this conversation"],
+  "important_context": "anything the next AI must know",
+  "tags": ["auto", "generated", "tags"],
+  "raw_text": "full conversation text (fallback if no API key)",
+  "transfer_prompt": "Here is my context capsule. Continue from where I left off:\n\n[CAPSULE_JSON]"
+}

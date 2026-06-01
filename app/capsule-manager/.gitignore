@@ -1,0 +1,5 @@
+node_modules/
+dist/
+storage/capsules/
+storage/config.enc
+.env
