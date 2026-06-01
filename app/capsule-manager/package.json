@@ -10,7 +10,8 @@
   "main": "main.js",
   "scripts": {
     "start": "concurrently \"vite src\" \"wait-on http://localhost:5173 && electron .\"",
-    "build": "vite build && electron-builder"
+    "build:renderer": "vite build",
+    "build": "npm run build:renderer && electron-builder"
   },
   "build": {
     "extraMetadata": {

@@ -35,8 +35,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build Vite frontend
+        working-directory: app/capsule-manager
+        run: npm run build:renderer
+
       - name: Build Linux installers
-        run: npm run build -- --linux deb rpm AppImage
+        run: npx electron-builder --linux deb rpm AppImage
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
