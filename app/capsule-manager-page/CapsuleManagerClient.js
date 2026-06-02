@@ -1,7 +1,7 @@
 'use client'
 
-const linuxDownload = 'https://github.com/toolvoid/toolvoid/releases/download/capsule-manager-3/capsule-manager-1.0.0.AppImage'
-const windowsDownload = 'https://github.com/toolvoid/toolvoid/releases/download/capsule-manager-3/capsule-manager.Setup.1.0.0.exe'
+const linuxDownload = 'https://github.com/toolvoid/toolvoid/releases/latest/download/capsule-manager-1.0.0.AppImage'
+const windowsDownload = 'https://github.com/toolvoid/toolvoid/releases/latest/download/capsule-manager.Setup.1.0.0.exe'
 
 const steps = [
   {
@@ -126,6 +126,22 @@ export default function CapsuleManagerClient() {
             <a className="cm-btn primary" href={windowsDownload}>Download for Windows</a>
           </div>
           <p className="cm-requirement">Requires a Chromium-based browser — Chrome, Brave, or Edge</p>
+
+          <div className="cm-install-guide" style={{marginTop: '30px', color: '#d9deea', fontSize: '15px', lineHeight: '1.7'}}>
+            <h3 style={{fontSize: '20px', marginBottom: '12px', color: '#fff'}}>Installation Guide</h3>
+            <div>
+              <h4 style={{margin: '14px 0 8px', color: '#fff'}}>Linux Installation</h4>
+              <p>After downloading, open terminal and run:</p>
+              <pre style={{background: 'rgba(255,255,255,.06)', padding: '12px 14px', borderRadius: '12px', overflowX: 'auto'}}>sudo dpkg -i ~/Downloads/capsule-manager_1.0.0_amd64.deb</pre>
+              <p>Then launch:</p>
+              <pre style={{background: 'rgba(255,255,255,.06)', padding: '12px 14px', borderRadius: '12px', overflowX: 'auto'}}>capsule-manager --no-sandbox</pre>
+            </div>
+            <div>
+              <h4 style={{margin: '14px 0 8px', color: '#fff'}}>Windows Installation</h4>
+              <p>Double-click the downloaded .exe file and follow the installer steps.</p>
+              <p>Capsule Manager will launch automatically after installation.</p>
+            </div>
+          </div>
         </div>
       </section>
 
