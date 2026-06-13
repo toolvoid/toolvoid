@@ -12,8 +12,8 @@ export const getTokens = (dark = true) => ({
     ? { borderColor: 'rgba(255,255,255,0.1)', '--tw-ring-color': 'rgba(255,107,107,0.2)' }
     : { borderColor: '#E5E7EB', '--tw-ring-color': 'rgba(255,107,107,0.15)' },
   label: dark
-    ? 'mb-2 block text-[10.5px] font-semibold uppercase tracking-[0.14em] text-white/40'
-    : 'mb-2 block text-[10.5px] font-semibold uppercase tracking-[0.14em] text-gray-400',
+    ? 'mb-2.5 block text-[12.5px] font-bold uppercase tracking-[0.12em] text-white/70'
+    : 'mb-2.5 block text-[12.5px] font-bold uppercase tracking-[0.12em] text-gray-600',
 })
 
 // Legacy token for compatibility
@@ -104,12 +104,12 @@ export function AddButton({ label, onClick, dark = true }) {
 
 // ─── FIELD WRAPPER ────────────────────────────────────────────────────────────
 export function Field({ label, children, dark = true, hint }) {
-  const labelColor = dark ? 'rgba(255,255,255,0.4)' : '#6B7280'
+  const labelColor = dark ? 'rgba(255,255,255,0.75)' : '#4B5563'
   const hintColor = dark ? 'rgba(255,255,255,0.2)' : '#9CA3AF'
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-        <label style={{ fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.14em', color: labelColor }}>{label}</label>
+        <label style={{ fontSize: 12.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em', color: labelColor }}>{label}</label>
         {hint && <span style={{ fontSize: 10, color: hintColor }}>{hint}</span>}
       </div>
       {children}

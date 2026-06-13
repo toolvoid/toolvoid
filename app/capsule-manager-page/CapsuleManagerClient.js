@@ -131,10 +131,10 @@ export default function CapsuleManagerClient() {
             <h3 style={{fontSize: '20px', marginBottom: '12px', color: '#fff'}}>Installation Guide</h3>
             <div>
               <h4 style={{margin: '14px 0 8px', color: '#fff'}}>Linux Installation</h4>
-              <p>After downloading, open terminal and run:</p>
-              <pre style={{background: 'rgba(255,255,255,.06)', padding: '12px 14px', borderRadius: '12px', overflowX: 'auto'}}>sudo dpkg -i ~/Downloads/capsule-manager_1.0.0_amd64.deb</pre>
-              <p>Then launch:</p>
-              <pre style={{background: 'rgba(255,255,255,.06)', padding: '12px 14px', borderRadius: '12px', overflowX: 'auto'}}>capsule-manager --no-sandbox</pre>
+              <p>After downloading the AppImage, make it executable and run:</p>
+              <pre style={{background: 'rgba(255,255,255,.06)', padding: '12px 14px', borderRadius: '12px', overflowX: 'auto'}}>chmod +x ~/Downloads/capsule-manager-1.0.0.AppImage</pre>
+              <p>Launch it directly from terminal:</p>
+              <pre style={{background: 'rgba(255,255,255,.06)', padding: '12px 14px', borderRadius: '12px', overflowX: 'auto'}}>~/Downloads/capsule-manager-1.0.0.AppImage --no-sandbox</pre>
             </div>
             <div>
               <h4 style={{margin: '14px 0 8px', color: '#fff'}}>Windows Installation</h4>
@@ -178,7 +178,7 @@ export default function CapsuleManagerClient() {
               <tbody>
                 {providers.map(row => (
                   <tr key={row[0]}>
-                    {row.map(cell => <td key={cell}>{cell}</td>)}
+                    {row.map((cell, idx) => <td key={`${row[0]}-${idx}`}>{cell}</td>)}
                   </tr>
                 ))}
               </tbody>

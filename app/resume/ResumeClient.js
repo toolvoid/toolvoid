@@ -1,5 +1,6 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
+import { ResumeBuilderUI } from './components/ResumBuilderUI'
 import { renderTemplate } from './components/templates/index'
 import { PersonalEditor, ExperienceEditor, EducationEditor, SkillsEditor, ProjectsEditor, CertsEditor, LanguagesEditor, AwardsEditor, SocialEditor } from './components/editors'
 import { useResumeStore } from './hooks/useResumeStore'
@@ -120,6 +121,21 @@ const CSS = `
 .rf-case-card{background:var(--card);border:1px solid var(--brd);border-radius:var(--r);padding:1.5rem;transition:all var(--t);cursor:default}
 .rf-case-card:hover{border-color:var(--brd2);transform:translateY(-2px)}
 
+/* ── MODERN TOGGLE SWITCH ── */
+.rf-switch { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--brd); border-radius: 12px; cursor: pointer; transition: all .2s; }
+.rf-switch:hover { background: rgba(255,255,255,0.05); border-color: var(--brd2); }
+.rf-switch-label { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; color: var(--txt); }
+.rf-switch-box { position: relative; width: 38px; height: 22px; background: rgba(255,255,255,0.1); border-radius: 20px; transition: all 0.3s; }
+.rf-switch-box::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; background: #fff; border-radius: 50%; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+/* Active State */
+.rf-switch.active { border-color: rgba(255,107,107,0.3); background: rgba(255,107,107,0.04); }
+.rf-switch.active .rf-switch-box { background: var(--accent); }
+.rf-switch.active .rf-switch-box::after { transform: translateX(16px); }
+
+/* Simple Toggle Button Fallback */
+.rf-toggle-btn { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; border: 1px solid var(--brd); background: var(--sub); color: var(--mut); transition: all .2s; }
+.rf-toggle-btn.active { background: rgba(78,205,196,0.1); border-color: #4ECDC4; color: #4ECDC4; }
+
 @media(max-width:640px){.rf-nav-links{display:none}.rf-stats{gap:1.5rem}.rf-steps::before{display:none}}
 `
 
@@ -148,18 +164,7 @@ function LandingPage({ onStart }) {
     { q:'How does the ATS score work?', a:'We check for completeness of key fields (email, phone, summary, experience, skills, education, LinkedIn) and weight them by importance to automated screening systems.' },
   ]
 
-  useEffect(() => {
-    const root = document.getElementById('rf-landing')
-    if (!root) return
-    root.querySelectorAll('.rf-faq-q').forEach(q => {
-      q.addEventListener('click', () => {
-        const item = q.closest('.rf-faq-item')
-        const isOpen = item.classList.contains('open')
-        root.querySelectorAll('.rf-faq-item').forEach(i => i.classList.remove('open'))
-        if (!isOpen) item.classList.add('open')
-      })
-    })
-  }, [])
+  const [openFaq, setOpenFaq] = useState(null);
 
   // Mini template thumbnails for showcase
   const showcaseTemplates = Object.entries(TEMPLATES).slice(0, 12)
@@ -297,9 +302,9 @@ function LandingPage({ onStart }) {
       {/* USE CASES */}
       <section className="rf-sec rf-bg2" id="rf-usecases">
         <div className="rf-sec-inner">
-          <div className="rf-sec-label">◻ Who It's For</div>
+          <div className="rf-sec-label">◻ Who It&apos;s For</div>
           <h2 className="rf-sec-title">Built for Every Professional</h2>
-          <p className="rf-sec-sub">Whether you're a fresh grad or a seasoned executive, there's a template for you.</p>
+          <p className="rf-sec-sub">Whether you&apos;re a fresh grad or a seasoned executive, there&apos;s a template for you.</p>
           <div className="rf-features" style={{ marginTop: '2.5rem' }}>
             {[
               { icon:'👨‍💻', tag:'Developers', color:'#4ECDC4', title:'Tech & Engineering', desc:'GitHub-style, terminal, dark mode, skill-first templates. Show your stack, projects, and open source contributions.' },
@@ -326,7 +331,7 @@ function LandingPage({ onStart }) {
           <div style={{ flex: '1 1 320px' }}>
             <div className="rf-sec-label">🤖 ATS Intelligence</div>
             <h2 className="rf-sec-title">Beat the Bots Before They Read Your Resume</h2>
-            <p className="rf-sec-sub">Over 75% of resumes are rejected by ATS before a human ever sees them. ResumeForge's real-time ATS checker tells you exactly how to fix it.</p>
+            <p className="rf-sec-sub">Over 75% of resumes are rejected by ATS before a human ever sees them. ResumeForge&apos;s real-time ATS checker tells you exactly how to fix it.</p>
             <div style={{ marginTop:'2rem', display:'flex', flexDirection:'column', gap:'1rem' }}>
               {[
                 { icon:'📧', text:'Checks for email, phone, location, LinkedIn' },
@@ -382,8 +387,13 @@ function LandingPage({ onStart }) {
           </div>
           <div className="rf-faq-list">
             {FAQS.map((f, i) => (
-              <div className="rf-faq-item" key={i}>
-                <div className="rf-faq-q" role="button" tabIndex={0}>
+              <div className={`rf-faq-item ${openFaq === i ? 'open' : ''}`} key={i}>
+                <div 
+                  className="rf-faq-q" 
+                  role="button" 
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  tabIndex={0}
+                >
                   {f.q}
                   <span className="rf-faq-arrow" aria-hidden="true">⌄</span>
                 </div>
@@ -476,7 +486,7 @@ function renderEditor(id, data, store, dark) {
 // ─── BUILDER ─────────────────────────────────────────────────────────────────
 function Builder({ onBack }) {
   const store = useResumeStore()
-  const { data, setData, custom, setCustom, template, setTemplate, hydrated, savedMsg, canUndo, canRedo, undo, redo } = store
+  const { resumeData, data, setData, custom, setCustom, template, setTemplate, hydrated, savedMsg, canUndo, canRedo, undo, redo, clearData } = store
   const [secIdx, setSecIdx]         = useState(0)
   const [mode, setMode]             = useState('edit')
   const [custTab, setCustTab]       = useState('templates')
@@ -486,14 +496,24 @@ function Builder({ onBack }) {
   const [showATS, setShowATS]       = useState(false)
   const [showKeyword, setShowKeyword] = useState(false)
   const dark = true
+  // Fix: Memoize heavy calculations to prevent lag while typing
+  const ats = useMemo(() => checkATS(data), [data])
+  const progress = useMemo(() => calcProgress(data), [data])
 
-  const ats      = checkATS(data)
-  const progress = calcProgress(data)
+  // Helper to reorder items (can be passed to editors)
+  const moveItem = useCallback((section, index, direction) => {
+    const newItems = [...data[section]]
+    const targetIndex = index + direction
+    if (targetIndex < 0 || targetIndex >= newItems.length) return
+    [newItems[index], newItems[targetIndex]] = [newItems[targetIndex], newItems[index]]
+    setData({ ...data, [section]: newItems })
+  }, [data, setData])
+
   const sec      = EDITOR_SECTIONS[secIdx]
   const T = dark ? {
-    bg:'#0A0E17', surf:'#111827', card:'#1A2235',
+    bg:'#0B0B0C', surf:'#111113', card:'#18181B',
     brd:'rgba(255,255,255,0.08)', brd2:'rgba(255,255,255,0.14)',
-    txt:'#F0F4FF', mut:'rgba(255,255,255,0.42)', sub:'rgba(255,255,255,0.06)',
+    txt:'#F0F4FF', mut:'rgba(255,255,255,0.75)', sub:'rgba(255,255,255,0.06)',
   } : {
     bg:'#F4F6FA', surf:'#FFFFFF', card:'#FFFFFF',
     brd:'rgba(0,0,0,0.09)', brd2:'rgba(0,0,0,0.15)',
@@ -530,16 +550,19 @@ function Builder({ onBack }) {
 
   const exportPDF = async () => {
     setIsExporting(true)
+    let wrapper
     try {
       const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([import('html2canvas'), import('jspdf')])
       const el = document.getElementById('resume-preview')
       if (!el) return
 
       // Create off-screen container at FULL scale (no zoom transform)
-      const wrapper = document.createElement('div')
+      wrapper = document.createElement('div')
       wrapper.style.cssText = [
         'position:absolute',
         'top:0',
+        'position:fixed',
+        'top:0', 
         'left:-9999px',
         'width:794px',
         'min-height:1123px',
@@ -578,7 +601,8 @@ function Builder({ onBack }) {
         ignoreElements: el => el.classList?.contains('rf-animated-bg'),
       })
 
-      document.body.removeChild(wrapper)
+      wrapper.remove()
+      wrapper = null
 
       const pdf = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' })
       const pdfW = 210
@@ -606,13 +630,20 @@ function Builder({ onBack }) {
     } catch (err) {
       console.error('PDF export error:', err)
       alert('Export failed. Please try again.')
+    } finally {
+      wrapper?.remove()
+      setIsExporting(false)
     }
-    setIsExporting(false)
   }
 
   const exportJSON = () => {
-    const blob = new Blob([JSON.stringify({data,custom,template},null,2)],{type:'application/json'})
+    const blob = new Blob([JSON.stringify(resumeData,null,2)],{type:'application/json'})
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'resume_data.json'; a.click()
+  }
+
+  const clearResumeData = () => {
+    if (!window.confirm('Clear all resume data saved in this browser?')) return
+    clearData()
   }
 
   const addKwSkill = useCallback(name => {
@@ -633,7 +664,7 @@ function Builder({ onBack }) {
   }
 
   if (!hydrated) return (
-    <div style={{height:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'#0A0E17'}}>
+    <div style={{height:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'#0B0B0C'}}>
       <div style={{textAlign:'center'}}>
         <div style={{width:48,height:48,borderRadius:16,background:'linear-gradient(135deg,#FF6B6B,#FF8E53)',margin:'0 auto 12px',animation:'pulse 1.5s ease-in-out infinite'}}/>
         <p style={{color:'rgba(255,255,255,0.3)',fontSize:14}}>Loading ResumeForge…</p>
@@ -647,7 +678,7 @@ function Builder({ onBack }) {
     <div style={{height:'100vh',display:'flex',flexDirection:'column',overflow:'hidden',background:T.bg,fontFamily:'system-ui,sans-serif',color:T.txt}}>
 
       {/* ── TOP NAVBAR ─────────────────────────────────────────────────────── */}
-      <header style={{height:54,flexShrink:0,display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 16px',background:dark?'#0D1321':'#FFFFFF',borderBottom:`1px solid ${T.brd}`,zIndex:50}}>
+      <header style={{height:54,flexShrink:0,display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 16px',background:dark?'#101012':'#FFFFFF',borderBottom:`1px solid ${T.brd}`,zIndex:50}}>
         {/* Left: Logo + back */}
         <div style={{display:'flex',alignItems:'center',gap:12}}>
           <button onClick={onBack} style={{width:30,height:30,borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center',background:T.sub,border:`1px solid ${T.brd}`,color:T.mut,fontSize:14,cursor:'pointer'}} title="Back to home">←</button>
@@ -687,6 +718,7 @@ function Builder({ onBack }) {
             🎯 Keywords
           </button>
           <button onClick={exportJSON} style={{padding:'5px 10px',borderRadius:8,background:T.sub,border:`1px solid ${T.brd}`,color:T.mut,fontSize:11,fontWeight:600,cursor:'pointer'}}>JSON</button>
+          <button onClick={clearResumeData} style={{padding:'5px 10px',borderRadius:8,background:'rgba(239,68,68,0.1)',border:'1px solid rgba(239,68,68,0.25)',color:'#ef4444',fontSize:11,fontWeight:700,cursor:'pointer'}}>Clear Data</button>
           <button onClick={exportPDF} disabled={isExporting}
             style={{display:'flex',alignItems:'center',gap:6,padding:'7px 16px',borderRadius:10,background:'linear-gradient(135deg,#FF6B6B,#FF8E53)',color:'#fff',fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 3px 14px rgba(255,107,107,0.4)',transition:'all .15s',opacity:isExporting?.6:1}}>
             {isExporting?'⏳':'⬇️'} <span>{isExporting?'Exporting…':'Export PDF'}</span>
@@ -697,8 +729,8 @@ function Builder({ onBack }) {
       {/* ── MAIN SHELL ──────────────────────────────────────────────────────── */}
       <div style={{display:'flex',flex:1,overflow:'hidden'}}>
 
-        {/* ══ LEFT PANEL 60% — EDITOR ═════════════════════════════════════════ */}
-        <div style={{width:'60%',flexShrink:0,display:'flex',flexDirection:'column',borderRight:`1px solid ${T.brd}`,background:T.surf}}>
+        {/* ══ LEFT PANEL 50% — EDITOR ═════════════════════════════════════════ */}
+        <div style={{width:'50%',flexShrink:0,display:'flex',flexDirection:'column',borderRight:`1px solid ${T.brd}`,background:T.surf}}>
 
           {/* ── EDIT MODE ─────────────────────────────────────────────────── */}
           {mode === 'edit' && (
@@ -710,7 +742,7 @@ function Builder({ onBack }) {
                     <div style={{minWidth:40,height:26,borderRadius:13,display:'flex',alignItems:'center',justifyContent:'center',padding:'0 8px',fontSize:11,fontWeight:800,color:'#fff',background:progress>=60?'linear-gradient(135deg,#22c55e,#16a34a)':'linear-gradient(135deg,#FF6B6B,#FF8E53)'}}>
                       {progress}%
                     </div>
-                    <span style={{fontSize:12,fontWeight:500,color:T.mut}}>Resume score</span>
+                    <span style={{fontSize:13,fontWeight:700,color:T.mut}}>Resume score</span>
                   </div>
                   <button onClick={() => setShowATS(true)} style={{fontSize:11,fontWeight:700,color:'#FF6B6B',background:'none',border:'none',cursor:'pointer'}}>
                     ATS: {ats.score}/100 →
@@ -763,7 +795,7 @@ function Builder({ onBack }) {
               </div>
 
               {/* Bottom nav */}
-              <div style={{flexShrink:0,padding:'12px 16px',borderTop:`1px solid ${T.brd}`,background:dark?'#0D1321':'#FAFAFA',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+              <div style={{flexShrink:0,padding:'12px 16px',borderTop:`1px solid ${T.brd}`,background:dark?'#101012':'#FAFAFA',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
                 <button onClick={() => setSecIdx(i => Math.max(0,i-1))} disabled={secIdx===0}
                   style={{padding:'8px 18px',borderRadius:10,border:`1px solid ${T.brd}`,background:T.sub,color:T.mut,fontSize:13,fontWeight:600,cursor:'pointer',opacity:secIdx===0?.3:1,transition:'all .15s'}}>
                   ← Back
@@ -839,7 +871,7 @@ function Builder({ onBack }) {
                           boxShadow: template===key ? '0 4px 20px rgba(255,107,107,0.2)' : 'none',
                           transform: template===key ? 'scale(1.02)' : 'scale(1)',
                         }}>
-                        <div style={{height:120,overflow:'hidden',background:dark?'#1A2235':'#F4F6FA',position:'relative'}}>
+                        <div style={{height:120,overflow:'hidden',background:dark?'#18181B':'#F4F6FA',position:'relative'}}>
                           <div style={{transform:'scale(0.26)',transformOrigin:'top left',width:794,pointerEvents:'none',position:'absolute',top:0,left:0}}>
                             {renderTemplate(key, SAMPLE_RESUME, {sectionSpacing:'compact'})}
                           </div>
@@ -865,7 +897,7 @@ function Builder({ onBack }) {
                 </div>
               )}
 
-              <div style={{flexShrink:0,padding:'12px',borderTop:`1px solid ${T.brd}`,background:dark?'#0D1321':'#FAFAFA'}}>
+              <div style={{flexShrink:0,padding:'12px',borderTop:`1px solid ${T.brd}`,background:dark?'#101012':'#FAFAFA'}}>
                 <button onClick={() => setMode('edit')}
                   style={{width:'100%',padding:'11px',borderRadius:12,background:'linear-gradient(135deg,#FF6B6B,#FF8E53)',color:'#fff',fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 3px 14px rgba(255,107,107,0.3)'}}>
                   ✓ Done — Back to Editor
@@ -875,12 +907,12 @@ function Builder({ onBack }) {
           )}
         </div>
 
-        {/* ══ RIGHT PANEL 40% — PREVIEW ════════════════════════════════════════ */}
+        {/* ══ RIGHT PANEL 50% — PREVIEW ════════════════════════════════════════ */}
         <div style={{flex:1,display:'flex',flexDirection:'column',overflow:'hidden'}}>
           {/* Preview toolbar */}
           <div style={{flexShrink:0,display:'flex',alignItems:'center',justifyContent:'space-between',padding:'8px 14px',background:T.surf,borderBottom:`1px solid ${T.brd}`}}>
             <div style={{display:'flex',alignItems:'center',gap:6}}>
-              <span style={{fontSize:10,fontWeight:600,textTransform:'uppercase',letterSpacing:'.1em',color:T.mut,marginRight:4}}>Zoom</span>
+              <span style={{fontSize:12,fontWeight:800,textTransform:'uppercase',letterSpacing:'.12em',color:T.mut,marginRight:4}}>Zoom</span>
               {[0.4,0.55,0.7,0.85].map(z => (
                 <button key={z} onClick={() => setZoom(z)}
                   style={{padding:'4px 8px',borderRadius:7,fontSize:11,fontWeight:600,cursor:'pointer',transition:'all .15s',
@@ -905,7 +937,7 @@ function Builder({ onBack }) {
           {/* Canvas — scroll to zoom, dotted bg */}
           <div
             style={{flex:1,overflow:'auto',display:'flex',alignItems:'flex-start',justifyContent:'center',padding:'40px 24px',
-              background: dark?'#090D16':'#E4E8F0',
+              background: dark?'#0B0B0C':'#E4E8F0',
               backgroundImage:`radial-gradient(circle, ${dark?'rgba(255,255,255,0.035)':'rgba(0,0,0,0.07)'} 1px, transparent 1px)`,
               backgroundSize:'22px 22px',
             }}>

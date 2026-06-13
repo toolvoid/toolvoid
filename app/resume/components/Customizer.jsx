@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { COLOR_PRESETS } from '../lib/constants'
 
 const TOKEN_INPUT = 'w-full rounded-xl border border-white/[0.09] bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-white/22 focus:outline-none focus:border-blue-400/50 focus:bg-white/[0.07] transition-all'
-const TOKEN_LABEL = 'mb-1.5 block text-[10.5px] font-semibold uppercase tracking-[0.14em] text-white/38'
+const TOKEN_LABEL = 'mb-2.5 block text-[12.5px] font-bold uppercase tracking-[0.12em] text-white/75'
 
 function Seg({ options, value, onChange }) {
   return (
@@ -24,7 +24,7 @@ export default function Customizer({ custom, setCustom }) {
   const upd = (k, v) => setCustom(prev => ({ ...prev, [k]: v }))
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-7">
       {/* Tab bar */}
       <div className="flex gap-1 rounded-xl border border-white/[0.07] bg-white/[0.03] p-1">
         {[['colors', '🎨 Colors'], ['fonts', '✏️ Fonts'], ['style', '✨ Style']].map(([t, label]) => (
@@ -36,7 +36,7 @@ export default function Customizer({ custom, setCustom }) {
       </div>
 
       {tab === 'colors' && (
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div>
             <p className={TOKEN_LABEL}>Color Presets</p>
             <div className="grid grid-cols-2 gap-2">
@@ -54,7 +54,7 @@ export default function Customizer({ custom, setCustom }) {
               ))}
             </div>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-4">
             {[['primaryColor', 'Header / Primary'], ['secondaryColor', 'Accent / Links'], ['accentColor', 'Highlight / Tags']].map(([k, label]) => (
               <div key={k} className="flex items-center justify-between">
                 <span className="text-xs font-medium text-white/45">{label}</span>
@@ -70,7 +70,7 @@ export default function Customizer({ custom, setCustom }) {
       )}
 
       {tab === 'fonts' && (
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div>
             <label className={TOKEN_LABEL}>Heading Font</label>
             <select className={`${TOKEN_INPUT} bg-[#0c1825]`} value={custom.headingFont} onChange={e => upd('headingFont', e.target.value)}>
@@ -95,7 +95,7 @@ export default function Customizer({ custom, setCustom }) {
       )}
 
       {tab === 'style' && (
-        <div className="space-y-4">
+        <div className="space-y-7">
           <div>
             <label className={TOKEN_LABEL}>Section Headers</label>
             <div className="grid grid-cols-2 gap-1.5">
@@ -126,12 +126,9 @@ export default function Customizer({ custom, setCustom }) {
             <label className={TOKEN_LABEL}>Photo Shape</label>
             <Seg options={['circle', 'square', 'rounded']} value={custom.photoShape} onChange={v => upd('photoShape', v)} />
           </div>
-          <div className="flex items-center justify-between rounded-2xl border border-white/[0.07] bg-white/[0.03] p-4">
-            <span className="text-sm font-medium text-white/60">Show Profile Photo</span>
-            <button type="button" onClick={() => upd('showPhoto', !custom.showPhoto)}
-              className={`relative h-5 w-9 rounded-full transition-all ${custom.showPhoto ? 'bg-blue-500' : 'bg-white/20'}`}>
-              <div className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all ${custom.showPhoto ? 'left-4' : 'left-0.5'}`} />
-            </button>
+          <div>
+            <label className={TOKEN_LABEL}>Profile Photo</label>
+            <Seg options={['on', 'off']} value={custom.showPhoto ? 'on' : 'off'} onChange={v => upd('showPhoto', v === 'on')} />
           </div>
         </div>
       )}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { EntryCard, AddButton, Field, Input, Textarea, Select, Grid2, MonthYearPicker } from './ui'
 import { ALL_SKILLS, SKILL_SUGGESTIONS } from '../lib/constants'
 import { detectWeakVerbs } from '../lib/utils'
@@ -27,7 +28,7 @@ export function PersonalEditor({ data, store, dark = true }) {
       {/* Photo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '16px', borderRadius: 16, background: cardBg, border: `1px solid ${cardBorder}` }}>
         <div style={{ width: 56, height: 56, borderRadius: '50%', overflow: 'hidden', border: `2px solid ${dark ? 'rgba(255,255,255,0.12)' : '#E5E7EB'}`, flexShrink: 0, background: dark ? 'rgba(255,255,255,0.06)' : '#F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {p.photo ? <img src={p.photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <span style={{ fontSize: 22, opacity: 0.3 }}>👤</span>}
+          {p.photo ? <Image src={p.photo} alt="" width={56} height={56} unoptimized style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <span style={{ fontSize: 22, opacity: 0.3 }}>👤</span>}
         </div>
         <div>
           <p style={{ fontSize: 13, fontWeight: 700, color: textColor, marginBottom: 6 }}>Profile Photo <span style={{ fontSize: 11, fontWeight: 400, color: mutedColor }}>(optional)</span></p>
@@ -210,7 +211,7 @@ export function SkillsEditor({ data, store, dark = true }) {
       <div style={{ position: 'relative' }}>
         <Input dark={dark} placeholder="🔍 Search skills to add (React, Python, AWS…)" value={search} onChange={e => setSearch(e.target.value)} />
         {suggestions.length > 0 && (
-          <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 20, marginTop: 4, borderRadius: 14, border: `1px solid ${cardBorder}`, background: dark ? '#1A2235' : '#FFFFFF', boxShadow: '0 8px 32px rgba(0,0,0,0.25)', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 20, marginTop: 4, borderRadius: 14, border: `1px solid ${cardBorder}`, background: dark ? '#18181B' : '#FFFFFF', boxShadow: '0 8px 32px rgba(0,0,0,0.25)', overflow: 'hidden' }}>
             {suggestions.map(s => (
               <button key={s} type="button"
                 onClick={() => { if (data.skills[0]) addSkill(data.skills[0].id, s); setSearch('') }}

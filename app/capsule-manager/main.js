@@ -53,7 +53,6 @@ app.on('activate', () => {
 })
 
 function gracefulExit() {
-  shutdownTransferClient()
   if (app.isReady()) app.quit()
   else process.exit(0)
 }

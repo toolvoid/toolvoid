@@ -35,6 +35,37 @@ const tools = [
   { name: 'Capsule Manager', desc: 'Save AI conversations as capsules. Never lose context again.', href: '/capsule-manager', tag: 'NEW', delay: '1.05s', color: '#a78bfa' },
 ];
 
+const toolsByHref = Object.fromEntries(tools.map((tool) => [tool.href, tool]));
+const pickTools = (hrefs) => hrefs.map((href) => toolsByHref[href]).filter(Boolean);
+
+const toolCategories = [
+  {
+    id: 'content-creator',
+    label: '🎨 Content Creator Tools',
+    tools: pickTools(['/story', '/hashtag', '/imagegen', '/keyword', '/word-counter', '/tts', '/video']),
+  },
+  {
+    id: 'developer',
+    label: '👨‍💻 Developer & Utility Tools',
+    tools: pickTools(['/json', '/base64', '/qr', '/password', '/domain', '/capsule-manager', '/unit']),
+  },
+  {
+    id: 'document',
+    label: '📄 Document Tools',
+    tools: pickTools(['/pdf', '/invoice', '/resume']),
+  },
+  {
+    id: 'image-photo',
+    label: '🖼️ Image & Photo Tools',
+    tools: pickTools(['/image-tools', '/passport']),
+  },
+  {
+    id: 'finance',
+    label: '💰 Finance Tools',
+    tools: pickTools(['/emi', '/loan']),
+  },
+];
+
 const audiences = [
   { title: 'Creators', desc: 'Stories, hashtags, AI images and export-ready assets in minutes.', color: '#00FFB2', type: 'creators' },
   { title: 'Developers', desc: 'Domain checker, QR, JSON-like utilities and quick browser workflows.', color: '#4D96FF', type: 'developers' },
@@ -97,7 +128,7 @@ function SupportCard({ s }) {
   );
 }
 
-function ToolCard({ tool }) {
+function ToolCard({ tool, index }) {
   const cardRef = useRef(null);
   const [rot, setRot] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
@@ -120,7 +151,7 @@ function ToolCard({ tool }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => { setRot({ x: 0, y: 0 }); setHovered(false); setIconMouse({ x: 0, y: 0 }); }}
       className={`tc reveal ${tool.featured ? 'tc-feat' : ''}`}
-      style={{ transitionDelay: tool.delay }}
+      style={{ transitionDelay: `${(index % 4) * 0.06}s` }}
     >
       <div
         className="tc-inner"
@@ -585,7 +616,11 @@ export default function Home() {
     .section-copy{max-width:560px}
     .sh{font-family:'Bebas Neue',sans-serif;font-size:58px;line-height:.88;color:#fff;margin:0 0 8px;letter-spacing:1px}
     .sp{font-size:15px;line-height:1.8;color:#8b94a2}
-    .tools-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .tools-categories{display:grid;gap:38px}
+    .tool-category{min-width:0}
+    .tool-category-head{font-size:22px;font-weight:800;color:#fff;margin:0 0 14px;letter-spacing:0}
+    .tool-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;padding:2px 0 14px;margin:0}
+    .tool-row .tc{width:100%}
     .tc{display:block;perspective:1000px;text-decoration:none}
     .tc-inner{position:relative;height:100%;min-height:260px;border-radius:24px;padding:22px;overflow:hidden;border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(12px);transform-style:preserve-3d;transition:transform .12s,border-color .2s,box-shadow .2s,background .2s}
     .tc-feat .tc-inner{min-height:286px}
@@ -630,7 +665,7 @@ export default function Home() {
     .reveal.vis{opacity:1;transform:none}
     @media (max-width:1200px){
       .hero{grid-template-columns:minmax(0,1fr) minmax(360px,.92fr);gap:24px}
-      .tools-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .tool-row .tc{flex-basis:260px;min-width:260px}
       .aud-grid,.support-grid,.compare{grid-template-columns:repeat(2,minmax(0,1fr))}
       .feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
@@ -654,7 +689,7 @@ export default function Home() {
       .nav-right{gap:10px}
       .nav-pill{display:none}
       .footer-legal{flex-direction:column;align-items:flex-start;gap:8px}
-      .tools-grid,.aud-grid,.feature-grid,.support-grid,.compare,.hp-grid{grid-template-columns:minmax(0,1fr)}
+      .aud-grid,.feature-grid,.support-grid,.compare,.hp-grid{grid-template-columns:minmax(0,1fr)}
     }
   `;
 
@@ -737,43 +772,50 @@ export default function Home() {
 
               <section className="section" id="tools">
                 <div className="section-head">
-                  <div className="section-copy">
+                  <div className="section-copy reveal">
                     <h2 className="sh">Popular Tools</h2>
                     <div className="sp">Launch the tools people keep coming back to, from AI workflows to PDF, image and developer utilities.</div>
                   </div>
                 </div>
-                <div className="tools-grid">
-                  {tools.map((tool) => <ToolCard key={tool.href} tool={tool} />)}
+                <div className="tools-categories">
+                  {toolCategories.map((category) => (
+                    <div key={category.id} className="tool-category">
+                      <h3 className="tool-category-head reveal">{category.label}</h3>
+                      <div className="tool-row scrollbar-hide">
+                        {category.tools.map((tool, i) => <ToolCard key={tool.href} tool={tool} index={i} />)}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </section>
 
               <section className="section">
                 <div className="section-head">
-                  <div className="section-copy">
+                  <div className="section-copy reveal">
                     <h2 className="sh">Built For Real People</h2>
                     <div className="sp">Every tool is designed to remove friction for everyday internet work.</div>
                   </div>
                 </div>
                 <div className="aud-grid">
-                  {audiences.map((a) => <AudienceCard key={a.title} a={a} />)}
+                  {audiences.map((a, i) => <AudienceCard key={a.title} a={a} index={i} />)}
                 </div>
               </section>
 
               <section className="section" id="features">
                 <div className="section-head">
-                  <div className="section-copy">
+                  <div className="section-copy reveal">
                     <h2 className="sh">Why TooL Void</h2>
                     <div className="sp">Fast loading, low friction, modern design and practical tools that feel useful on day one.</div>
                   </div>
                 </div>
                 <div className="feature-grid">
-                  {features.map((f) => <FeatureCard key={f.t} f={f} />)}
+                  {features.map((f, i) => <FeatureCard key={f.t} f={f} index={i} />)}
                 </div>
               </section>
 
               <section className="section" id="compare">
                 <div className="section-head">
-                  <div className="section-copy">
+                  <div className="section-copy reveal">
                     <h2 className="sh">Simple Comparison</h2>
                     <div className="sp">The difference is less about hype and more about actually getting work done quickly.</div>
                   </div>
@@ -791,13 +833,13 @@ export default function Home() {
 
               <section className="section" id="support">
                 <div className="section-head">
-                  <div className="section-copy">
+                  <div className="section-copy reveal">
                     <h2 className="sh">Support Paths</h2>
                     <div className="sp">If something breaks or feels missing, there should be a clean next step.</div>
                   </div>
                 </div>
                 <div className="support-grid">
-                  {supports.map((s) => <SupportCard key={s.t} s={s} />)}
+                  {supports.map((s, i) => <SupportCard key={s.t} s={s} index={i} />)}
                 </div>
               </section>
 

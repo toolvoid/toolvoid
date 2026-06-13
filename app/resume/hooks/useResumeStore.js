@@ -1,177 +1,339 @@
-import { useState, useCallback, useEffect } from 'react'
-import { BLANK_RESUME, BLANK_CUSTOMIZATION } from '../lib/constants'
-import { genId } from '../lib/utils'
+'use client'
 
-const LS_DATA = 'rf2_data'
-const LS_CUSTOM = 'rf2_custom'
-const LS_TMPL = 'rf2_template'
+import { useCallback, useMemo, useState } from 'react'
+import {
+  RESUME_STORAGE_KEY,
+  createEducationItem,
+  createExperienceItem,
+  createResumeData,
+  createSkillCategory,
+  editorDataFromResumeData,
+  normalizeResumeData,
+  templateCustomFromResumeData,
+} from '../lib/resumeSchema'
+import { genId } from '../lib/utils'
+import { useLocalStorage } from './useLocalStorage'
+
+const pathToSegments = (path) => {
+  if (Array.isArray(path)) return path
+  return String(path)
+    .replace(/\[(\d+)\]/g, '.$1')
+    .split('.')
+    .filter(Boolean)
+    .map(part => (/^\d+$/.test(part) ? Number(part) : part))
+}
+
+const updateNested = (source, path, value) => {
+  const segments = pathToSegments(path)
+  if (!segments.length) return typeof value === 'function' ? value(source) : value
+
+  const clone = Array.isArray(source) ? [...source] : { ...source }
+  let cursor = clone
+
+  segments.forEach((segment, index) => {
+    const isLast = index === segments.length - 1
+    if (isLast) {
+      cursor[segment] = typeof value === 'function' ? value(cursor[segment]) : value
+      return
+    }
+
+    const nextSegment = segments[index + 1]
+    const current = cursor[segment]
+    cursor[segment] = Array.isArray(current)
+      ? [...current]
+      : current && typeof current === 'object'
+        ? { ...current }
+        : typeof nextSegment === 'number'
+          ? []
+          : {}
+    cursor = cursor[segment]
+  })
+
+  return clone
+}
+
+const mergeName = (personalInfo, field, value) => {
+  const parts = (personalInfo.name || '').trim().split(/\s+/).filter(Boolean)
+  const first = field === 'firstName' ? value : parts[0] || ''
+  const last = field === 'lastName' ? value : parts.slice(1).join(' ')
+  return [first, last].filter(Boolean).join(' ')
+}
 
 export function useResumeStore() {
-  const [data, setDataRaw] = useState(BLANK_RESUME)
-  const [custom, setCustom] = useState(BLANK_CUSTOMIZATION)
-  const [template, setTemplate] = useState('modern-pro')
-  const [hydrated, setHydrated] = useState(false)
+  const initialResumeData = useMemo(() => createResumeData(), [])
+  const [resumeData, setResumeDataRaw, storage] = useLocalStorage(
+    RESUME_STORAGE_KEY,
+    initialResumeData,
+    { deserialize: value => normalizeResumeData(JSON.parse(value)) }
+  )
   const [savedMsg, setSavedMsg] = useState(false)
   const [undoStack, setUndoStack] = useState([])
   const [redoStack, setRedoStack] = useState([])
 
-  // Load from localStorage
-  useEffect(() => {
-    try {
-      const d = localStorage.getItem(LS_DATA)
-      if (d) setDataRaw(JSON.parse(d))
-      const cu = localStorage.getItem(LS_CUSTOM)
-      if (cu) setCustom(JSON.parse(cu))
-      const ct = localStorage.getItem(LS_TMPL)
-      if (ct) setTemplate(ct)
-    } catch (_) {}
-    setHydrated(true)
-  }, [])
+  const setResumeData = useCallback((updater, { track = true } = {}) => {
+    setResumeDataRaw(prev => {
+      const normalizedPrev = normalizeResumeData(prev)
+      const next = normalizeResumeData(typeof updater === 'function' ? updater(normalizedPrev) : updater)
+      if (track) {
+        setUndoStack(stack => [...stack.slice(-30), normalizedPrev])
+        setRedoStack([])
+      }
+      setSavedMsg(true)
+      window.setTimeout(() => setSavedMsg(false), 1800)
+      return next
+    })
+  }, [setResumeDataRaw])
 
-  // Auto-save
-  useEffect(() => {
-    if (!hydrated) return
-    const t = setTimeout(() => {
-      try {
-        localStorage.setItem(LS_DATA, JSON.stringify(data))
-        localStorage.setItem(LS_CUSTOM, JSON.stringify(custom))
-        localStorage.setItem(LS_TMPL, template)
-        setSavedMsg(true)
-        setTimeout(() => setSavedMsg(false), 2200)
-      } catch (_) {}
-    }, 1200)
-    return () => clearTimeout(t)
-  }, [data, custom, template, hydrated])
+  const handleChange = useCallback((path, value) => {
+    setResumeData(current => updateNested(current, path, value))
+  }, [setResumeData])
 
-  // ── MUTATION with undo tracking ──────────────────────────────────────────
-  const setData = useCallback((updater) => {
-    setUndoStack(prev => [...prev.slice(-30), data])
+  const addItem = useCallback((section) => {
+    const createItem = section === 'experience'
+      ? createExperienceItem
+      : section === 'education'
+        ? createEducationItem
+        : null
+    if (!createItem) return
+    setResumeData(current => ({ ...current, [section]: [...current[section], createItem()] }))
+  }, [setResumeData])
+
+  const removeItem = useCallback((section, idOrIndex) => {
+    if (!['experience', 'education'].includes(section)) return
+    setResumeData(current => {
+      const nextItems = current[section].filter((item, index) => item.id !== idOrIndex && index !== idOrIndex)
+      return {
+        ...current,
+        [section]: nextItems.length ? nextItems : [section === 'experience' ? createExperienceItem() : createEducationItem()],
+      }
+    })
+  }, [setResumeData])
+
+  const clearData = useCallback(() => {
+    const blank = createResumeData()
+    storage.clear(blank)
+    setUndoStack([])
     setRedoStack([])
-    setDataRaw(prev => typeof updater === 'function' ? updater(prev) : updater)
-  }, [data])
+    setSavedMsg(false)
+  }, [storage])
 
   const undo = useCallback(() => {
     if (!undoStack.length) return
-    setRedoStack(r => [...r, data])
-    setDataRaw(undoStack[undoStack.length - 1])
-    setUndoStack(u => u.slice(0, -1))
-  }, [undoStack, data])
+    setRedoStack(stack => [...stack, resumeData])
+    setResumeDataRaw(undoStack[undoStack.length - 1])
+    setUndoStack(stack => stack.slice(0, -1))
+  }, [resumeData, setResumeDataRaw, undoStack])
 
   const redo = useCallback(() => {
     if (!redoStack.length) return
-    setUndoStack(u => [...u, data])
-    setDataRaw(redoStack[redoStack.length - 1])
-    setRedoStack(r => r.slice(0, -1))
-  }, [redoStack, data])
+    setUndoStack(stack => [...stack, resumeData])
+    setResumeDataRaw(redoStack[redoStack.length - 1])
+    setRedoStack(stack => stack.slice(0, -1))
+  }, [redoStack, resumeData, setResumeDataRaw])
 
-  // ── PERSONAL ─────────────────────────────────────────────────────────────
-  const setPersonal = useCallback((field, value) =>
-    setData(d => ({ ...d, personal: { ...d.personal, [field]: value } })), [setData])
+  const data = useMemo(() => editorDataFromResumeData(resumeData), [resumeData])
+  const custom = useMemo(() => templateCustomFromResumeData(resumeData), [resumeData])
+  const template = resumeData.themeSettings.template || 'modern-pro'
+
+  const setData = useCallback((updater) => {
+    setResumeData(current => {
+      const legacy = editorDataFromResumeData(current)
+      const nextLegacy = typeof updater === 'function' ? updater(legacy) : updater
+      return {
+        ...current,
+        skills: nextLegacy.skills || current.skills,
+        projects: nextLegacy.projects || current.projects,
+        certifications: nextLegacy.certifications || current.certifications,
+        languages: nextLegacy.languages || current.languages,
+        awards: nextLegacy.awards || current.awards,
+        interests: nextLegacy.interests || current.interests,
+        social: nextLegacy.social || current.social,
+      }
+    })
+  }, [setResumeData])
+
+  const setCustom = useCallback((updater) => {
+    setResumeData(current => {
+      const currentCustom = templateCustomFromResumeData(current)
+      const nextCustom = typeof updater === 'function' ? updater(currentCustom) : updater
+      return {
+        ...current,
+        themeSettings: {
+          ...current.themeSettings,
+          ...nextCustom,
+          fontFamily: nextCustom.bodyFont || nextCustom.fontFamily || current.themeSettings.fontFamily,
+          primaryColor: nextCustom.primaryColor || current.themeSettings.primaryColor,
+        },
+      }
+    })
+  }, [setResumeData])
+
+  const setTemplate = useCallback((nextTemplate) => {
+    handleChange('themeSettings.template', nextTemplate)
+  }, [handleChange])
+
+  const setPersonal = useCallback((field, value) => {
+    setResumeData(current => {
+      const personalInfo = { ...current.personalInfo }
+      if (field === 'firstName' || field === 'lastName') personalInfo.name = mergeName(personalInfo, field, value)
+      else if (field === 'linkedin') personalInfo.linkedIn = value
+      else personalInfo[field] = value
+      return { ...current, personalInfo }
+    })
+  }, [setResumeData])
 
   const addInterest = useCallback((interest) =>
-    setData(d => ({ ...d, interests: [...d.interests, interest] })), [setData])
+    setResumeData(current => ({ ...current, interests: [...current.interests, interest] })), [setResumeData])
 
   const removeInterest = useCallback((index) =>
-    setData(d => ({ ...d, interests: d.interests.filter((_, i) => i !== index) })), [setData])
+    setResumeData(current => ({ ...current, interests: current.interests.filter((_, i) => i !== index) })), [setResumeData])
 
-  // ── EXPERIENCE ────────────────────────────────────────────────────────────
-  const setExp = useCallback((id, field, value) =>
-    setData(d => ({ ...d, experience: d.experience.map(e => e.id === id ? { ...e, [field]: value } : e) })), [setData])
+  const setExp = useCallback((id, field, value) => {
+    const canonicalField = field === 'position' ? 'role' : field
+    setResumeData(current => ({
+      ...current,
+      experience: current.experience.map(item => item.id === id ? { ...item, [canonicalField]: value } : item),
+    }))
+  }, [setResumeData])
 
-  const addExp = useCallback(() =>
-    setData(d => ({ ...d, experience: [...d.experience, { id: genId(), company:'', position:'', location:'', startDate:'', endDate:'', current:false, type:'Full-time', description:'', achievements:[] }] })), [setData])
+  const addExp = useCallback(() => addItem('experience'), [addItem])
+  const removeExp = useCallback((id) => removeItem('experience', id), [removeItem])
 
-  const removeExp = useCallback((id) =>
-    setData(d => ({ ...d, experience: d.experience.filter(e => e.id !== id) })), [setData])
+  const setEdu = useCallback((id, field, value) => {
+    const canonicalField = field === 'institution' ? 'school' : field
+    setResumeData(current => ({
+      ...current,
+      education: current.education.map(item => {
+        if (item.id !== id) return item
+        const next = { ...item, [canonicalField]: value }
+        if (field === 'endDate') next.year = value
+        return next
+      }),
+    }))
+  }, [setResumeData])
 
-  // ── EDUCATION ─────────────────────────────────────────────────────────────
-  const setEdu = useCallback((id, field, value) =>
-    setData(d => ({ ...d, education: d.education.map(e => e.id === id ? { ...e, [field]: value } : e) })), [setData])
+  const addEdu = useCallback(() => addItem('education'), [addItem])
+  const removeEdu = useCallback((id) => removeItem('education', id), [removeItem])
 
-  const addEdu = useCallback(() =>
-    setData(d => ({ ...d, education: [...d.education, { id: genId(), institution:'', degree:'', field:'', location:'', startDate:'', endDate:'', current:false, gpa:'', coursework:'', honors:'', activities:'' }] })), [setData])
+  const addSkillCategory = useCallback(() => {
+    setResumeData(current => ({
+      ...current,
+      skills: [...current.skills, createSkillCategory()],
+    }))
+  }, [setResumeData])
 
-  const removeEdu = useCallback((id) =>
-    setData(d => ({ ...d, education: d.education.filter(e => e.id !== id) })), [setData])
+  const removeSkillCategory = useCallback((categoryId) => {
+    setResumeData(current => {
+      const skills = current.skills.filter(category => category.id !== categoryId)
+      return { ...current, skills: skills.length ? skills : [createSkillCategory()] }
+    })
+  }, [setResumeData])
 
-  // ── SKILLS ────────────────────────────────────────────────────────────────
-  const addSkillCategory = useCallback(() =>
-    setData(d => ({ ...d, skills: [...d.skills, { id: genId(), category: 'New Category', skills: [] }] })), [setData])
+  const setSkillCatName = useCallback((categoryId, category) => {
+    setResumeData(current => ({
+      ...current,
+      skills: current.skills.map(item => item.id === categoryId ? { ...item, category } : item),
+    }))
+  }, [setResumeData])
 
-  const removeSkillCategory = useCallback((catId) =>
-    setData(d => ({ ...d, skills: d.skills.filter(s => s.id !== catId) })), [setData])
+  const addSkill = useCallback((categoryId, name, level = 70) => {
+    setResumeData(current => ({
+      ...current,
+      skills: current.skills.map(category => {
+        if (category.id !== categoryId) return category
+        if (name && category.skills.some(skill => skill.name === name)) return category
+        return {
+          ...category,
+          skills: [...category.skills, { name, level, showLevel: true }],
+        }
+      }),
+    }))
+  }, [setResumeData])
 
-  const setSkillCatName = useCallback((catId, name) =>
-    setData(d => ({ ...d, skills: d.skills.map(s => s.id === catId ? { ...s, category: name } : s) })), [setData])
+  const removeSkill = useCallback((categoryId, index) => {
+    setResumeData(current => ({
+      ...current,
+      skills: current.skills.map(category => category.id === categoryId
+        ? { ...category, skills: category.skills.filter((_, skillIndex) => skillIndex !== index) }
+        : category),
+    }))
+  }, [setResumeData])
 
-  const addSkill = useCallback((catId, name, level = 70) =>
-    setData(d => ({ ...d, skills: d.skills.map(s => s.id === catId ? { ...s, skills: [...s.skills, { name, level }] } : s) })), [setData])
+  const updateSkill = useCallback((categoryId, index, field, value) => {
+    setResumeData(current => ({
+      ...current,
+      skills: current.skills.map(category => category.id === categoryId
+        ? {
+            ...category,
+            skills: category.skills.map((skill, skillIndex) =>
+              skillIndex === index ? { ...skill, [field]: value } : skill
+            ),
+          }
+        : category),
+    }))
+  }, [setResumeData])
 
-  const removeSkill = useCallback((catId, si) =>
-    setData(d => ({ ...d, skills: d.skills.map(s => s.id === catId ? { ...s, skills: s.skills.filter((_, i) => i !== si) } : s) })), [setData])
+  const updateCollection = useCallback((section, id, field, value) => {
+    setResumeData(current => ({
+      ...current,
+      [section]: (current[section] || []).map(item => item.id === id ? { ...item, [field]: value } : item),
+    }))
+  }, [setResumeData])
 
-  const updateSkill = useCallback((catId, si, field, val) =>
-    setData(d => ({ ...d, skills: d.skills.map(s => s.id === catId ? { ...s, skills: s.skills.map((sk, i) => i === si ? { ...sk, [field]: val } : sk) } : s) })), [setData])
+  const addCollectionItem = useCallback((section, item) => {
+    setResumeData(current => ({ ...current, [section]: [...(current[section] || []), { id: genId(), ...item }] }))
+  }, [setResumeData])
 
-  // ── PROJECTS ──────────────────────────────────────────────────────────────
-  const setProj = useCallback((id, field, value) =>
-    setData(d => ({ ...d, projects: d.projects.map(p => p.id === id ? { ...p, [field]: value } : p) })), [setData])
-
-  const addProj = useCallback(() =>
-    setData(d => ({ ...d, projects: [...d.projects, { id: genId(), name:'', description:'', technologies:[], link:'', github:'', startDate:'', endDate:'', highlights:[] }] })), [setData])
-
-  const removeProj = useCallback((id) =>
-    setData(d => ({ ...d, projects: d.projects.filter(p => p.id !== id) })), [setData])
-
-  // ── CERTS ─────────────────────────────────────────────────────────────────
-  const setCert = useCallback((id, field, value) =>
-    setData(d => ({ ...d, certifications: d.certifications.map(c => c.id === id ? { ...c, [field]: value } : c) })), [setData])
-
-  const addCert = useCallback(() =>
-    setData(d => ({ ...d, certifications: [...d.certifications, { id: genId(), name:'', issuer:'', date:'', expiry:'', credentialId:'' }] })), [setData])
-
-  const removeCert = useCallback((id) =>
-    setData(d => ({ ...d, certifications: d.certifications.filter(c => c.id !== id) })), [setData])
-
-  // ── LANGUAGES ─────────────────────────────────────────────────────────────
-  const setLang = useCallback((id, field, value) =>
-    setData(d => ({ ...d, languages: d.languages.map(l => l.id === id ? { ...l, [field]: value } : l) })), [setData])
-
-  const addLang = useCallback(() =>
-    setData(d => ({ ...d, languages: [...d.languages, { id: genId(), language:'', proficiency:'Intermediate' }] })), [setData])
-
-  const removeLang = useCallback((id) =>
-    setData(d => ({ ...d, languages: d.languages.filter(l => l.id !== id) })), [setData])
-
-  // ── AWARDS ────────────────────────────────────────────────────────────────
-  const setAward = useCallback((id, field, value) =>
-    setData(d => ({ ...d, awards: d.awards.map(a => a.id === id ? { ...a, [field]: value } : a) })), [setData])
-
-  const addAward = useCallback(() =>
-    setData(d => ({ ...d, awards: [...d.awards, { id: genId(), title:'', issuer:'', date:'', description:'' }] })), [setData])
-
-  const removeAward = useCallback((id) =>
-    setData(d => ({ ...d, awards: d.awards.filter(a => a.id !== id) })), [setData])
-
-  // ── SOCIAL ────────────────────────────────────────────────────────────────
-  const setSocial = useCallback((field, value) =>
-    setData(d => ({ ...d, social: { ...d.social, [field]: value } })), [setData])
+  const removeCollectionItem = useCallback((section, id) => {
+    setResumeData(current => ({ ...current, [section]: (current[section] || []).filter(item => item.id !== id) }))
+  }, [setResumeData])
 
   return {
-    data, setData, custom, setCustom, template, setTemplate,
-    hydrated, savedMsg,
-    canUndo: undoStack.length > 0, canRedo: redoStack.length > 0,
-    undo, redo,
-    // Mutations
-    setPersonal, addInterest, removeInterest,
-    setExp, addExp, removeExp,
-    setEdu, addEdu, removeEdu,
-    addSkillCategory, removeSkillCategory, setSkillCatName,
-    addSkill, removeSkill, updateSkill,
-    setProj, addProj, removeProj,
-    setCert, addCert, removeCert,
-    setLang, addLang, removeLang,
-    setAward, addAward, removeAward,
-    setSocial,
+    resumeData,
+    setResumeData,
+    handleChange,
+    addItem,
+    removeItem,
+    clearData,
+    data,
+    setData,
+    custom,
+    setCustom,
+    template,
+    setTemplate,
+    hydrated: storage.hydrated,
+    savedMsg: savedMsg || storage.saved,
+    canUndo: undoStack.length > 0,
+    canRedo: redoStack.length > 0,
+    undo,
+    redo,
+    setPersonal,
+    addInterest,
+    removeInterest,
+    setExp,
+    addExp,
+    removeExp,
+    setEdu,
+    addEdu,
+    removeEdu,
+    addSkillCategory,
+    removeSkillCategory,
+    setSkillCatName,
+    addSkill,
+    removeSkill,
+    updateSkill,
+    setProj: (id, field, value) => updateCollection('projects', id, field, value),
+    addProj: () => addCollectionItem('projects', { name: '', description: '', technologies: [], link: '', github: '', startDate: '', endDate: '', highlights: [] }),
+    removeProj: (id) => removeCollectionItem('projects', id),
+    setCert: (id, field, value) => updateCollection('certifications', id, field, value),
+    addCert: () => addCollectionItem('certifications', { name: '', issuer: '', date: '', expiry: '', credentialId: '' }),
+    removeCert: (id) => removeCollectionItem('certifications', id),
+    setLang: (id, field, value) => updateCollection('languages', id, field, value),
+    addLang: () => addCollectionItem('languages', { language: '', proficiency: 'Intermediate' }),
+    removeLang: (id) => removeCollectionItem('languages', id),
+    setAward: (id, field, value) => updateCollection('awards', id, field, value),
+    addAward: () => addCollectionItem('awards', { title: '', issuer: '', date: '', description: '' }),
+    removeAward: (id) => removeCollectionItem('awards', id),
+    setSocial: (field, value) => handleChange(['social', field], value),
   }
 }
