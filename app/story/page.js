@@ -1,16 +1,19 @@
-import { redirect } from 'next/navigation';
+import { createToolMetadata } from '../../lib/toolMetadata';
+import { isMaintenanceMode } from '../../lib/maintenanceMode';
+import StoryClient from './StoryClient';
 
 export const metadata = {
-  title: "AI Story Generator Free Online — ToolVoid",
-  description: "Generate creative stories with AI for free. Create unique stories, tales, and narratives from any prompt. Perfect for writers, students, and creative storytelling.",
-  keywords: ["AI story generator free online", "story generator", "AI story writer", "creative story maker", "AI storytelling"],
+  title: "AI Script Generator Free Online — ToolVoid",
+  description: "Generate timed AI video scripts with narration and visual directions. Perfect for YouTube, shorts, reels, documentaries, and creative video production.",
+  keywords: ["AI script generator free online", "script generator", "AI video script writer", "video script maker", "AI storytelling", "video narration generator"],
   openGraph: {
-    title: "AI Story Generator Free Online | ToolVoid",
-    description: "Generate creative stories with AI for free. Create unique tales from any prompt instantly.",
+    title: "AI Script Generator Free Online | ToolVoid",
+    description: "Generate timed AI video scripts with narration and visual directions instantly.",
     url: "https://toolvoid.com/story",
-  }
+  },
+  ...createToolMetadata('story'),
 }
 
 export default function Page() {
-  redirect('/story-generator');
+  return <StoryClient maintenanceMode={isMaintenanceMode('story')} />;
 }

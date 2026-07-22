@@ -1,4 +1,5 @@
 import PasswordClient from './PasswordClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "Strong Password Generator Free — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "Strong Password Generator | ToolVoid",
     description: "Generate strong, secure passwords instantly with customizable length, symbols, and numbers.",
     url: "https://toolvoid.com/password",
-  }
+  },
+  ...createToolMetadata('password'),
 }
 
 export default function Page() {

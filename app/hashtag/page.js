@@ -1,4 +1,6 @@
-import { redirect } from 'next/navigation';
+import { createToolMetadata } from '../../lib/toolMetadata';
+import { isMaintenanceMode } from '../../lib/maintenanceMode';
+import HashtagClient from './HashtagClient';
 
 export const metadata = {
   title: "AI Hashtag Generator Instagram Free — ToolVoid",
@@ -8,9 +10,10 @@ export const metadata = {
     title: "AI Hashtag Generator Instagram | ToolVoid",
     description: "Generate trending Instagram hashtags with AI for free to boost reach and engagement.",
     url: "https://toolvoid.com/hashtag",
-  }
+  },
+  ...createToolMetadata('hashtag'),
 }
 
 export default function Page() {
-  redirect('/hashtag-generator');
+  return <HashtagClient maintenanceMode={isMaintenanceMode('hashtag')} />;
 }

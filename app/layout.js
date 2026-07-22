@@ -7,7 +7,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 
 export const metadata = {
   title: 'ToolVoid - Free Online Tools',
-  description: 'Free online toolkit with PDF tools, image toolkit, CV builder, AI story generator and more.',
+  description: 'Free online toolkit with PDF tools, image toolkit, CV builder, AI script generator and more.',
   verification: {
     google: "rbqEJHRr7nYPOzcpX-joYrhKKHOXN43MzVU-L-LjaL8",
   },

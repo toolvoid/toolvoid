@@ -1,4 +1,5 @@
 import DomainClient from './DomainClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "Free Domain Availability Checker — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "Free Domain Availability Checker | ToolVoid",
     description: "Check domain name availability instantly. Search .com, .in, .org, .net and more for free.",
     url: "https://toolvoid.com/domain",
-  }
+  },
+  ...createToolMetadata('domain'),
 }
 
 export default function Page() {

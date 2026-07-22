@@ -1,4 +1,5 @@
 import PdfClient from './PdfClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "PDF to Image Converter Free — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "PDF to Image Converter Free | ToolVoid",
     description: "Convert PDF pages to high-quality JPG, PNG, and WebP images online for free. 100% private.",
     url: "https://toolvoid.com/pdf",
-  }
+  },
+  ...createToolMetadata('pdf'),
 }
 
 export default function Page() {

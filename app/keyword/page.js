@@ -1,4 +1,5 @@
-import { redirect } from 'next/navigation';
+import { createToolMetadata } from '../../lib/toolMetadata';
+import KeywordClient from './KeywordClient';
 
 export const metadata = {
   title: "Free SEO Keyword Generator — ToolVoid",
@@ -8,9 +9,10 @@ export const metadata = {
     title: "Free SEO Keyword Generator | ToolVoid",
     description: "Generate high-performing SEO keywords for free. Find long-tail keywords and related terms.",
     url: "https://toolvoid.com/keyword",
-  }
+  },
+  ...createToolMetadata('keyword'),
 }
 
 export default function Page() {
-  redirect('/keyword-generator');
+  return <KeywordClient />;
 }

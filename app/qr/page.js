@@ -1,4 +1,5 @@
 import QrClient from './QrClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "Free QR Code Generator Online — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "Free QR Code Generator | ToolVoid",
     description: "Generate QR codes, barcodes, and data matrices instantly. Custom colors, sizes, PNG/SVG export.",
     url: "https://toolvoid.com/qr",
-  }
+  },
+  ...createToolMetadata('qr'),
 }
 
 export default function Page() {

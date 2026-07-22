@@ -1,4 +1,5 @@
 import UnitClient from './UnitClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "Free Unit Converter Online — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "Free Unit Converter | ToolVoid",
     description: "Convert length, mass, volume, temperature, area, speed, time units online for free.",
     url: "https://toolvoid.com/unit",
-  }
+  },
+  ...createToolMetadata('unit'),
 }
 
 export default function Page() {

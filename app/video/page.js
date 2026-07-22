@@ -1,4 +1,5 @@
 import VideoClient from './VideoClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "Free Online Video Converter — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "Free Online Video Converter | ToolVoid",
     description: "Convert video files between MP4, WebM, AVI, MOV formats online for free. No uploads needed.",
     url: "https://toolvoid.com/video",
-  }
+  },
+  ...createToolMetadata('video'),
 }
 
 export default function Page() {

@@ -1,4 +1,5 @@
 import InvoiceClient from './InvoiceClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "Free Invoice Generator PDF Download — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "Free Invoice Generator PDF Download | ToolVoid",
     description: "Create professional invoices online for free and download as PDF. Custom logo, items, tax included.",
     url: "https://toolvoid.com/invoice",
-  }
+  },
+  ...createToolMetadata('invoice'),
 }
 
 export default function Page() {

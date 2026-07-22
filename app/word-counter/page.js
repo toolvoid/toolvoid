@@ -1,4 +1,5 @@
 import WordCounterClient from './WordCounterClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "Free Word Counter Online — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "Free Word Counter | ToolVoid",
     description: "Count words, characters, sentences, paragraphs online for free. Check reading time and keyword density.",
     url: "https://toolvoid.com/word-counter",
-  }
+  },
+  ...createToolMetadata('word-counter'),
 }
 
 export default function Page() {

@@ -1,4 +1,5 @@
 import TtsClient from './TtsClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "Free Text to Speech Converter Online — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "Free Text to Speech Converter | ToolVoid",
     description: "Convert text to natural-sounding speech online for free. Multiple voices and languages available.",
     url: "https://toolvoid.com/tts",
-  }
+  },
+  ...createToolMetadata('tts'),
 }
 
 export default function Page() {

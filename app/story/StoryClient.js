@@ -1,22 +1,32 @@
 'use client';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import GoogleAuthButton from '../../components/GoogleAuthButton';
+import { convertToSRT } from '../../lib/convertToSRT';
 
 /* ─── Static Data ────────────────────────────────────────────────────── */
 const GENRES = [
-  { id:'drama',     label:'Drama',     emoji:'🎭' },
-  { id:'action',    label:'Action',    emoji:'🔥' },
-  { id:'romance',   label:'Romance',   emoji:'💕' },
-  { id:'horror',    label:'Horror',    emoji:'😱' },
-  { id:'mystery',   label:'Mystery',   emoji:'🔍' },
-  { id:'comedy',    label:'Comedy',    emoji:'😂' },
-  { id:'scifi',     label:'Sci-Fi',    emoji:'🚀' },
-  { id:'fantasy',   label:'Fantasy',   emoji:'🧙' },
-  { id:'thriller',  label:'Thriller',  emoji:'⚡' },
-  { id:'crime',     label:'Crime',     emoji:'🕵️' },
-  { id:'adventure', label:'Adventure', emoji:'🌊' },
-  { id:'historical',label:'Historical',emoji:'📖' },
+  { id:'drama',        label:'Drama',            emoji:'🎭' },
+  { id:'action',       label:'Action',           emoji:'🔥' },
+  { id:'romance',      label:'Romance',          emoji:'💕' },
+  { id:'horror',       label:'Horror',           emoji:'😱' },
+  { id:'mystery',      label:'Mystery',          emoji:'🔍' },
+  { id:'comedy',       label:'Comedy',           emoji:'😂' },
+  { id:'scifi',        label:'Sci-Fi',           emoji:'🚀' },
+  { id:'fantasy',      label:'Fantasy',          emoji:'🧙' },
+  { id:'thriller',     label:'Thriller',         emoji:'⚡' },
+  { id:'crime',        label:'Crime',            emoji:'🕵️' },
+  { id:'adventure',    label:'Adventure',        emoji:'🌊' },
+  { id:'historical',   label:'Historical',       emoji:'📖' },
+  { id:'gaming',       label:'Gaming',           emoji:'🎮' },
+  { id:'truecrime',    label:'True Crime',       emoji:'🔎' },
+  { id:'motivational', label:'Motivational',     emoji:'💪' },
+  { id:'tech-edu',     label:'Tech/Educational', emoji:'📚' },
+  { id:'action-thrill',label:'Action/Thriller',  emoji:'💥' },
+  { id:'documentary',  label:'Documentary',      emoji:'🎥' },
+  { id:'anime',        label:'Anime',            emoji:'⛩️' },
 ];
+
+const NON_NARRATIVE_GENRES = new Set(['gaming', 'comedy', 'motivational', 'tech-edu', 'documentary']);
 
 const MOODS = ['Dark & Gritty','Uplifting','Suspenseful','Emotional','Adventurous','Lighthearted','Mysterious','Romantic','Intense'];
 
@@ -82,17 +92,33 @@ const TITLE_NOUNS = {
   scifi:     ['Signal','Protocol','Zero','Nexus','Grid','Core','Void','Flux'],
   fantasy:   ['Crown','Realm','Rune','Blade','Prophecy','Dawn','Kingdom','Spell'],
   mystery:   ['Case','Shadow','Door','Room','Truth','Hour','Letter','Key'],
-  default:   ['Story','Journey','Night','Dawn','Road','Voice','Way','Fall'],
+  default:   ['Script','Journey','Night','Dawn','Road','Voice','Way','Fall'],
 };
 
-const LOADING_MSGS = [
-  '📖 Building your story...',
-  '✍️ Developing characters...',
-  '🎬 Setting the scene...',
-  '⚡ Adding the plot twist...',
-  '🎯 Finishing your story...',
+const DURATIONS = [
+  { value:15, label:'15s' },
+  { value:30, label:'30s' },
+  { value:45, label:'45s' },
+  { value:60, label:'1 min' },
+  { value:300, label:'5 min' },
+  { value:600, label:'10 min' },
 ];
 
+const PACES = [
+  { value:'slow',   label:'Slow' },
+  { value:'normal', label:'Normal' },
+  { value:'fast',   label:'Fast' },
+];
+
+const LOADING_MSGS = [
+  '📝 Writing your script...',
+  '🎬 Timing the segments...',
+  '🎥 Setting up visuals...',
+  '⏱️ Balancing narration pace...',
+  '✨ Finalizing your script...',
+];
+
+const PACE_WORDS = { slow: 2.0, normal: 2.5, fast: 3.5 };
 
 /* ─── CSS ────────────────────────────────────────────────────────────── */
 const CSS = `
@@ -193,7 +219,7 @@ const CSS = `
 .sg-input{background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:10px;padding:.75rem 1rem;color:var(--text);font-family:'Sora',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s;width:100%}
 .sg-input:focus{border-color:var(--purple)}
 .sg-input::placeholder{color:var(--dim)}
-.sg-textarea{resize:vertical;min-height:90px}
+.sg-textarea{resize:vertical;min-height:80px}
 .sg-select{background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:10px;padding:.7rem 1rem;color:var(--text);font-family:'Sora',sans-serif;font-size:.9rem;outline:none;width:100%;cursor:pointer;appearance:none;transition:border-color .2s}
 .sg-select:focus{border-color:var(--purple)}
 .sg-select option{background:#0C0C1A}
@@ -214,13 +240,18 @@ const CSS = `
 .sg-quality{display:flex;align-items:center;gap:.6rem;font-size:.78rem;color:var(--muted);padding:.6rem .9rem;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--border)}
 .sg-quality-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
-/* STORY OUTPUT */
+/* SEGMENT OUTPUT */
 .sg-output{background:var(--card);border:1px solid var(--purple-border);border-radius:14px;padding:1.75rem;margin-top:1rem;box-shadow:0 0 40px rgba(167,139,250,.06)}
-.sg-story-title{font-family:'Instrument Serif',serif;font-size:clamp(1.5rem,4vw,2.2rem);font-weight:400;font-style:italic;color:var(--text);margin-bottom:.35rem;line-height:1.2}
-.sg-story-divider{height:1px;background:linear-gradient(90deg,var(--purple),transparent);margin:1rem 0}
-.sg-story-body{font-size:.97rem;line-height:1.85;color:rgba(255,255,255,.85);white-space:pre-wrap}
-.sg-story-meta{display:flex;gap:1rem;margin-top:1rem;font-size:.75rem;color:var(--dim);font-family:'JetBrains Mono',monospace}
-.sg-story-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.25rem}
+.sg-script-title{font-family:'Instrument Serif',serif;font-size:clamp(1.5rem,4vw,2.2rem);font-weight:400;font-style:italic;color:var(--text);margin-bottom:.35rem;line-height:1.2}
+.sg-script-divider{height:1px;background:linear-gradient(90deg,var(--purple),transparent);margin:1rem 0}
+.sg-segments{display:grid;gap:.75rem;margin-top:1rem}
+.sg-segment-card{padding:.85rem 1rem;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,.025);transition:border-color .2s}
+.sg-segment-card:hover{border-color:var(--purple-border)}
+.sg-seg-time{display:inline-flex;align-items:center;gap:.3rem;padding:.15rem .6rem;border-radius:99px;background:var(--purple-dim);border:1px solid var(--purple-border);font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--purple);margin-bottom:.5rem}
+.sg-seg-narration{font-size:.92rem;color:var(--text);line-height:1.6;margin-bottom:.35rem}
+.sg-seg-visual{font-size:.8rem;color:var(--muted);line-height:1.5;padding-left:.5rem;border-left:2px solid var(--purple-border)}
+.sg-script-meta{display:flex;gap:1rem;margin-top:1rem;font-size:.75rem;color:var(--dim);font-family:'JetBrains Mono',monospace}
+.sg-script-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.25rem}
 .sg-action-btn{display:flex;align-items:center;gap:.4rem;padding:.5rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .18s;border:1px solid var(--border2);color:var(--muted);background:transparent;font-family:'Sora',sans-serif}
 .sg-action-btn:hover{border-color:var(--purple-border);color:var(--purple)}
 .sg-action-btn.copied{border-color:var(--green-border);color:var(--green);background:var(--green-dim)}
@@ -269,8 +300,32 @@ const CSS = `
 }
 `;
 
+/* ─── Helpers ────────────────────────────────────────────────────────── */
+function formatSegTime(seconds) {
+  if (typeof seconds !== 'number' || isNaN(seconds)) return '0:00';
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${String(secs).padStart(2, '0')}`;
+}
+
+function estimateReadTime(segments) {
+  if (!segments || !segments.length) return 0;
+  const last = segments[segments.length - 1];
+  return Math.ceil((last.end_time || 60) / 60);
+}
+
+function filenameFromTitle(title, extension) {
+  const slug = (title || 'script')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  return `${slug || 'script'}.${extension}`;
+}
+
 /* ─── Component ───────────────────────────────────────────────────────── */
-export default function StoryGenerator() {
+export default function StoryGenerator({ maintenanceMode = false }) {
   const isLight = false;
   // Genre & Mood
   const [genre,     setGenre]     = useState('');
@@ -290,12 +345,21 @@ export default function StoryGenerator() {
   const [conflict,  setConflict]  = useState('');
   const [twist,     setTwist]     = useState('');
   const [starter,   setStarter]   = useState('');
+  const [characterOpen, setCharacterOpen] = useState(true);
+  const [settingOpen, setSettingOpen] = useState(true);
+  const [plotOpen, setPlotOpen] = useState(true);
   // Settings
   const [length,    setLength]    = useState('medium');
   const [pov,       setPov]       = useState('third');
   const [language,  setLanguage]  = useState('english');
+  // Script-specific
+  const [duration,  setDuration]  = useState(60);
+  const [pace,      setPace]      = useState('normal');
+  const [topic,     setTopic]     = useState('');
+  const [customTitle, setCustomTitle] = useState('');
+  const [customInstructions, setCustomInstructions] = useState('');
   // Output
-  const [story,     setStory]     = useState('');
+  const [segments,  setSegments]  = useState([]);
   const [title,     setTitle]     = useState('');
   const [loading,   setLoading]   = useState(false);
   const [loadMsg,   setLoadMsg]   = useState(0);
@@ -312,6 +376,10 @@ export default function StoryGenerator() {
   const [apiModel,  setApiModel]  = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [resetText, setResetText] = useState('Loading…');
+  const isNonNarrative = NON_NARRATIVE_GENRES.has(genre);
+  const includeCharacter = !isNonNarrative || characterOpen;
+  const includeSetting = !isNonNarrative || settingOpen;
+  const includePlot = !isNonNarrative || plotOpen;
 
   /* Load from localStorage */
   useEffect(() => {
@@ -357,24 +425,55 @@ export default function StoryGenerator() {
     return () => { active = false; };
   }, []);
 
+  useEffect(() => {
+    if (!genre) return;
+    const shouldOpenStorySections = !NON_NARRATIVE_GENRES.has(genre);
+    setCharacterOpen(shouldOpenStorySections);
+    setSettingOpen(shouldOpenStorySections);
+    setPlotOpen(shouldOpenStorySections);
+  }, [genre]);
+
   /* Build prompt */
   const buildPrompt = useCallback(() => {
     const parts = [];
-    if (genre)  parts.push(`Write a ${tone || 'cinematic'} ${genre} story.`);
-    if (charName || charRole) {
+    if (genre)  parts.push(`Genre: ${genre}.`);
+    if (topic)  parts.push(`Core topic: ${topic}.`);
+    if (customTitle) parts.push(`Preferred title: ${customTitle}.`);
+    if (tone)   parts.push(`Tone: ${tone}.`);
+    if (mood)   parts.push(`Mood: ${mood}.`);
+    if (includeCharacter && (charName || charAge || charGender || charRole || traits.length)) {
       const charLine = [charName, charAge && `${charAge} years old`, charGender, charRole].filter(Boolean).join(', ');
       const traitLine = traits.length ? `. Personality: ${traits.join(', ')}` : '';
-      parts.push(`Main character: ${charLine}${traitLine}.`);
+      parts.push(`Character: ${charLine}${traitLine}.`);
     }
-    if (period || place) parts.push(`Setting: ${[period, place].filter(Boolean).join(', ')} in a ${world || 'realistic'} world.`);
-    if (conflict) parts.push(`Core conflict: ${conflict}.`);
-    if (twist)    parts.push(`Plot twist to include: ${twist}.`);
-    if (starter)  parts.push(`Begin the story with: "${starter}"`);
-    const words = { short: '300', medium: '600', long: '1000' }[length];
-    const povMap = { first: 'first-person (I/Me)', third: 'third-person (He/She)', second: 'second-person (You)' };
-    parts.push(`Write in ${povMap[pov]} POV. Mood: ${mood || 'engaging'}. Language: ${language}. Approx ${words} words. End with a satisfying conclusion.`);
+    if (includeSetting && (period || place || world)) {
+      const settingLine = [period, place, world && `${world} world`].filter(Boolean).join(', ');
+      parts.push(`Setting: ${settingLine}.`);
+    }
+    if (includePlot && conflict) parts.push(`Conflict: ${conflict}.`);
+    if (includePlot && twist)    parts.push(`Plot twist: ${twist}.`);
+    if (includePlot && starter)  parts.push(`Opening hook: "${starter}"`);
+    if (language && language !== 'english') parts.push(`Language: ${language}.`);
+    if (pov) parts.push(`Narrative POV: ${pov}.`);
+
+    const wps = PACE_WORDS[pace] || 2.5;
+    const durationSec = Number(duration) || 60;
+    const targetWords = Math.round(durationSec * wps);
+    parts.push(``);
+    parts.push(`SCRIPT CONSTRAINTS:`);
+    parts.push(`- Duration: ${durationSec}s, ~${targetWords} words`);
+    parts.push(`- Pace: ${pace} (${wps} words/sec)`);
+    parts.push(`- Start with a strong opening hook.`);
+    parts.push(`- Genre-appropriate tone throughout.`);
+
+    if (customInstructions && customInstructions.trim()) {
+      parts.push(``);
+      parts.push(`CUSTOM INSTRUCTIONS (override genre/mood defaults if conflict):`);
+      parts.push(customInstructions.trim());
+    }
+
     return parts.join('\n');
-  }, [genre, tone, mood, charName, charAge, charGender, charRole, traits, period, place, world, conflict, twist, starter, length, pov, language]);
+  }, [genre, tone, mood, includeCharacter, charName, charAge, charGender, charRole, traits, includeSetting, period, place, world, includePlot, conflict, twist, starter, pov, language, duration, pace, topic, customTitle, customInstructions]);
 
   /* Update prompt preview */
   useEffect(() => {
@@ -383,11 +482,11 @@ export default function StoryGenerator() {
 
   /* Quality score */
   const qualityScore = useMemo(() => {
-    const fields = [genre, mood, tone, charName, charRole, period, place, conflict, twist].filter(Boolean).length;
-    if (fields <= 2) return { label: 'Basic story', color: '#6b7280', pct: 33 };
-    if (fields <= 5) return { label: 'Good story', color: '#F59E0B', pct: 66 };
-    return { label: 'Great story! ⭐', color: '#22c55e', pct: 100 };
-  }, [genre, mood, tone, charName, charRole, period, place, conflict, twist]);
+    const fields = [genre, mood, tone, charName, charRole, period, place, conflict, twist, topic, duration].filter(Boolean).length;
+    if (fields <= 2) return { label: 'Basic script', color: '#6b7280', pct: 33 };
+    if (fields <= 5) return { label: 'Good script', color: '#F59E0B', pct: 66 };
+    return { label: 'Great script! ⭐', color: '#22c55e', pct: 100 };
+  }, [genre, mood, tone, charName, charRole, period, place, conflict, twist, topic, duration]);
 
   /* Random name */
   const randomName = () => {
@@ -411,14 +510,15 @@ export default function StoryGenerator() {
     setTraits(prev => prev.includes(t) ? prev.filter(x => x !== t) : prev.length < 3 ? [...prev, t] : prev);
   };
 
-  /* Generate story */
+  /* Generate script */
   const handleGenerate = async () => {
+    if (maintenanceMode) return;
     if (!genre) { alert('Please select a genre first ⚠️'); return; }
-    if (!isLoggedIn) { alert('Connect your account to use Story Generator'); return; }
+    if (!isLoggedIn) { alert('Connect your account to use Script Generator'); return; }
     if (remaining !== null && remaining <= 0) { setShowLimit(true); return; }
 
     setLoading(true);
-    setStory('');
+    setSegments([]);
     setTitle('');
     setApiModel('');
 
@@ -438,6 +538,27 @@ export default function StoryGenerator() {
           prompt: promptText || buildPrompt(),
           length,
           isPremium,
+          duration: Number(duration),
+          pace,
+          topic,
+          customTitle,
+          customInstructions,
+          genre,
+          mood,
+          tone,
+          charName: includeCharacter && charName ? charName : undefined,
+          charAge: includeCharacter && charAge ? charAge : undefined,
+          charGender: includeCharacter && charGender ? charGender : undefined,
+          charRole: includeCharacter && charRole ? charRole : undefined,
+          traits: includeCharacter && traits.length ? traits : undefined,
+          period: includeSetting && period ? period : undefined,
+          place: includeSetting && place ? place : undefined,
+          world: includeSetting && world ? world : undefined,
+          conflict: includePlot && conflict ? conflict : undefined,
+          twist: includePlot && twist ? twist : undefined,
+          starter: includePlot && starter ? starter : undefined,
+          language,
+          pov,
         }),
       });
 
@@ -453,11 +574,11 @@ export default function StoryGenerator() {
         throw new Error(data.error || 'Generation failed');
       }
 
-      const storyText = data.story || '';
-      const storyTitle = data.title || `${genre.charAt(0).toUpperCase() + genre.slice(1)} Story`;
+      const scriptSegments = data.segments || [];
+      const scriptTitle = data.title || customTitle.trim() || `${(genre || 'Script').charAt(0).toUpperCase() + (genre || 'Script').slice(1)} Script`;
 
-      setStory(storyText);
-      setTitle(storyTitle);
+      setSegments(scriptSegments);
+      setTitle(scriptTitle);
       setApiModel(data.model || '');
       if (data.quota) {
         setRemaining(data.quota.remaining);
@@ -467,7 +588,8 @@ export default function StoryGenerator() {
       }
 
       // Save to history
-      const entry = { title: storyTitle, preview: storyText.slice(0, 100), full: storyText, date: new Date().toLocaleString() };
+      const preview = scriptSegments.length > 0 ? scriptSegments[0].narration?.slice(0, 100) || scriptTitle : scriptTitle;
+      const entry = { title: scriptTitle, preview, segments: scriptSegments, date: new Date().toLocaleString() };
       const hist = [entry, ...storyHistory].slice(0, 5);
       setStoryHistory(hist);
       localStorage.setItem('sg_history', JSON.stringify(hist));
@@ -480,23 +602,38 @@ export default function StoryGenerator() {
     }
   };
 
-  /* Copy story */
-  const copyStory = async () => {
-    await navigator.clipboard.writeText(`${title}\n\n${story}`);
+  /* Copy script segments */
+  const copyScript = async () => {
+    const text = segments.map((s) =>
+      `[${formatSegTime(s.start_time)} - ${formatSegTime(s.end_time)}]\nNarration: ${s.narration}\nVisual: ${s.visual}`
+    ).join('\n\n');
+    await navigator.clipboard.writeText(`${title}\n\n${text}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  /* Download */
-  const downloadStory = () => {
-    const blob = new Blob([`${title}\n\n${story}`], { type: 'text/plain' });
+  /* Download as text */
+  const downloadScript = () => {
+    const text = segments.map((s) =>
+      `[${formatSegTime(s.start_time)} - ${formatSegTime(s.end_time)}]\nNarration: ${s.narration}\nVisual: ${s.visual}`
+    ).join('\n\n');
+    const blob = new Blob([`${title}\n\n${text}`], { type: 'text/plain' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = `${title.replace(/\s+/g, '-').toLowerCase()}.txt`; a.click();
+    a.download = filenameFromTitle(title, 'txt'); a.click();
   };
 
-  /* Word count */
-  const wordCount = story ? story.split(/\s+/).filter(Boolean).length : 0;
-  const readTime = Math.ceil(wordCount / 200);
+  /* Download SRT */
+  const downloadSRT = () => {
+    const srt = convertToSRT(segments);
+    if (!srt) { alert('No segments to export'); return; }
+    const blob = new Blob([srt], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = filenameFromTitle(title, 'srt'); a.click();
+  };
+
+  /* Count words across all segments */
+  const totalWords = segments.reduce((sum, s) => sum + (s.narration || '').split(/\s+/).filter(Boolean).length, 0);
+
   const storyLimit = storyLimitState;
   const storyUsed = quotaUsed;
 
@@ -505,7 +642,7 @@ export default function StoryGenerator() {
     charName || charRole,
     period || place,
     conflict || twist || starter,
-    length && pov && language,
+    duration && pace,
   ];
 
   /* ─── RENDER ──────────────────────────────────────────────────────── */
@@ -513,6 +650,13 @@ export default function StoryGenerator() {
     <>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
       <div className={`sg-root${isLight ? ' light' : ''}`}>
+
+      {maintenanceMode && (
+        <div role="status" style={{ margin: '1.25rem auto', maxWidth: 760, padding: '1rem 1.25rem', border: '1px solid var(--purple)', borderRadius: 10, background: 'rgba(167,139,250,.12)', color: 'var(--text)', textAlign: 'center', fontWeight: 600 }}>
+          This tool is under maintenance, back soon.
+          <span style={{ display: 'block', marginTop: '.25rem', color: 'var(--muted)', fontSize: '.88rem', fontWeight: 400 }}>The Script Generator is being rebuilt and generation is temporarily unavailable.</span>
+        </div>
+      )}
 
       {/* LIMIT MODAL */}
       {showLimit && (
@@ -545,27 +689,27 @@ export default function StoryGenerator() {
         <div className="sg-hero-stars" />
         <div className="sg-hero-glow" />
         <div className="sg-hero-content">
-          <div className="sg-badge">AI Story Lab · Genre Control · Instant Drafts</div>
-          <h1>Cinematic Stories<br /><em>in Seconds</em></h1>
-          <p>Shape the genre, characters, setting, and twist, then generate a polished story draft with a much cleaner builder flow like your other premium tools.</p>
+          <div className="sg-badge">AI Script Lab · Timed Segments · Instant Drafts</div>
+          <h1>Video Scripts<br /><em>in Seconds</em></h1>
+          <p>Shape genre, characters, setting, duration and pace, then generate a timed video script with narration and visual directions for each segment.</p>
           <div className="sg-hero-actions">
             <a href="#sg-builder" className="sg-btn-primary">Open Builder →</a>
-            <a href="#sg-history" className="sg-btn-ghost">Recent Stories</a>
+            <a href="#sg-history" className="sg-btn-ghost">Recent Scripts</a>
           </div>
           <div className="sg-hero-stats">
-            <div className="sg-stat"><div className="sg-stat-num">12</div><div className="sg-stat-label">Genres</div></div>
-            <div className="sg-stat"><div className="sg-stat-num">5</div><div className="sg-stat-label">Story Steps</div></div>
-            <div className="sg-stat"><div className="sg-stat-num">AI</div><div className="sg-stat-label">Draft Engine</div></div>
+            <div className="sg-stat"><div className="sg-stat-num">19</div><div className="sg-stat-label">Genres</div></div>
+            <div className="sg-stat"><div className="sg-stat-num">6</div><div className="sg-stat-label">Duration Options</div></div>
+            <div className="sg-stat"><div className="sg-stat-num">3</div><div className="sg-stat-label">Pace Levels</div></div>
           </div>
         </div>
       </div>
 
       {/* MAIN */}
-      <div className="sg-main" id="sg-builder">
+      <div className="sg-main" id="sg-builder" aria-disabled={maintenanceMode} inert={maintenanceMode ? '' : undefined} style={maintenanceMode ? { opacity: 0.5 } : undefined}>
 
         {/* STEP INDICATOR */}
         <div className="sg-steps">
-          {['Genre & Mood','Characters','Setting','Plot','Settings'].map((s, i) => (
+          {['Genre & Mood','Characters','Setting','Plot','Script Settings'].map((s, i) => (
             <div key={s} style={{ display: 'flex', alignItems: 'center', gap: '.25rem' }}>
               <button className={`sg-step-btn ${activeStep === i + 1 ? 'active' : filledSteps[i] ? 'done' : ''}`}
                 onClick={() => setActiveStep(i + 1)}>
@@ -622,43 +766,58 @@ export default function StoryGenerator() {
         {/* STEP 2 — CHARACTERS */}
         {activeStep === 2 && (
           <div className="sg-card">
-            <div className="sg-card-title">👤 Step 2 — Character Builder</div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '.65rem', marginBottom: '1rem' }}>
-              <input className="sg-input" placeholder="Character name..." value={charName} onChange={e => setCharName(e.target.value)} />
-              <button className="sg-btn-ghost sg-btn-sm" onClick={randomName}>🎲 Random</button>
+            <div className="sg-card-title" style={{ justifyContent: 'space-between' }}>
+              <span>👤 Step 2 — {isNonNarrative ? 'Optional Character Details' : 'Character Builder'}</span>
+              {isNonNarrative && (
+                <button className="sg-btn-ghost sg-btn-sm" onClick={() => setCharacterOpen(v => !v)}>
+                  {characterOpen ? 'Collapse' : 'Expand'}
+                </button>
+              )}
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '.65rem', marginBottom: '1rem' }}>
-              <input className="sg-input" type="number" placeholder="Age (10-80)" min={10} max={80} value={charAge} onChange={e => setCharAge(e.target.value)} />
-              <select className="sg-select" value={charGender} onChange={e => setCharGender(e.target.value)}>
-                <option value="">Gender...</option>
-                <option>Male</option>
-                <option>Female</option>
-                <option>Non-binary</option>
-                <option>Not specified</option>
-              </select>
-            </div>
+            {(!isNonNarrative || characterOpen) ? (
+              <>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '.65rem', marginBottom: '1rem' }}>
+                  <input className="sg-input" placeholder="Character name..." value={charName} onChange={e => setCharName(e.target.value)} />
+                  <button className="sg-btn-ghost sg-btn-sm" onClick={randomName}>🎲 Random</button>
+                </div>
 
-            <div style={{ marginBottom: '1rem' }}>
-              <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>CHARACTER ROLE</div>
-              <div className="sg-pill-grid">
-                {CHAR_ROLES.map(r => (
-                  <button key={r} className={`sg-pill pink ${charRole === r ? 'active' : ''}`} onClick={() => setCharRole(r)}>{r}</button>
-                ))}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '.65rem', marginBottom: '1rem' }}>
+                  <input className="sg-input" type="number" placeholder="Age (10-80)" min={10} max={80} value={charAge} onChange={e => setCharAge(e.target.value)} />
+                  <select className="sg-select" value={charGender} onChange={e => setCharGender(e.target.value)}>
+                    <option value="">Gender...</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Non-binary</option>
+                    <option>Not specified</option>
+                  </select>
+                </div>
+
+                <div style={{ marginBottom: '1rem' }}>
+                  <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>CHARACTER ROLE</div>
+                  <div className="sg-pill-grid">
+                    {CHAR_ROLES.map(r => (
+                      <button key={r} className={`sg-pill pink ${charRole === r ? 'active' : ''}`} onClick={() => setCharRole(r)}>{r}</button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>
+                    PERSONALITY TRAITS <span style={{ color: 'var(--purple)' }}>({traits.length}/3)</span>
+                  </div>
+                  <div className="sg-pill-grid">
+                    {TRAITS.map(t => (
+                      <button key={t} className={`sg-pill ${traits.includes(t) ? 'active' : ''}`} onClick={() => toggleTrait(t)}>{t}</button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div style={{ color: 'var(--muted)', fontSize: '.86rem', lineHeight: 1.6 }}>
+                Character details are optional for this genre. Expand this section only if the script needs a specific person or persona.
               </div>
-            </div>
-
-            <div>
-              <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>
-                PERSONALITY TRAITS <span style={{ color: 'var(--purple)' }}>({traits.length}/3)</span>
-              </div>
-              <div className="sg-pill-grid">
-                {TRAITS.map(t => (
-                  <button key={t} className={`sg-pill ${traits.includes(t) ? 'active' : ''}`} onClick={() => toggleTrait(t)}>{t}</button>
-                ))}
-              </div>
-            </div>
+            )}
 
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.25rem' }}>
               <button className="sg-btn-ghost" onClick={() => setActiveStep(1)}>← Back</button>
@@ -670,36 +829,51 @@ export default function StoryGenerator() {
         {/* STEP 3 — SETTING */}
         {activeStep === 3 && (
           <div className="sg-card">
-            <div className="sg-card-title">🌍 Step 3 — Set the Scene</div>
-
-            <div style={{ marginBottom: '1.1rem' }}>
-              <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>TIME PERIOD</div>
-              <div className="sg-pill-grid">
-                {TIME_PERIODS.map(p => (
-                  <button key={p} className={`sg-pill amber ${period === p ? 'active' : ''}`} onClick={() => setPeriod(p)}>{p}</button>
-                ))}
-              </div>
+            <div className="sg-card-title" style={{ justifyContent: 'space-between' }}>
+              <span>🌍 Step 3 — {isNonNarrative ? 'Optional Setting Details' : 'Set the Scene'}</span>
+              {isNonNarrative && (
+                <button className="sg-btn-ghost sg-btn-sm" onClick={() => setSettingOpen(v => !v)}>
+                  {settingOpen ? 'Collapse' : 'Expand'}
+                </button>
+              )}
             </div>
 
-            <div style={{ marginBottom: '1.1rem' }}>
-              <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>PLACE</div>
-              <div className="sg-pill-grid">
-                {PLACES.map(p => (
-                  <button key={p.id} className={`sg-pill ${place === p.id ? 'active' : ''}`} onClick={() => setPlace(p.id)}>
-                    {p.emoji} {p.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+            {(!isNonNarrative || settingOpen) ? (
+              <>
+                <div style={{ marginBottom: '1.1rem' }}>
+                  <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>TIME PERIOD</div>
+                  <div className="sg-pill-grid">
+                    {TIME_PERIODS.map(p => (
+                      <button key={p} className={`sg-pill amber ${period === p ? 'active' : ''}`} onClick={() => setPeriod(p)}>{p}</button>
+                    ))}
+                  </div>
+                </div>
 
-            <div>
-              <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>WORLD TYPE</div>
-              <div className="sg-pill-grid">
-                {WORLD_TYPES.map(w => (
-                  <button key={w} className={`sg-pill pink ${world === w ? 'active' : ''}`} onClick={() => setWorld(w)}>{w}</button>
-                ))}
+                <div style={{ marginBottom: '1.1rem' }}>
+                  <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>PLACE</div>
+                  <div className="sg-pill-grid">
+                    {PLACES.map(p => (
+                      <button key={p.id} className={`sg-pill ${place === p.id ? 'active' : ''}`} onClick={() => setPlace(p.id)}>
+                        {p.emoji} {p.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>WORLD TYPE</div>
+                  <div className="sg-pill-grid">
+                    {WORLD_TYPES.map(w => (
+                      <button key={w} className={`sg-pill pink ${world === w ? 'active' : ''}`} onClick={() => setWorld(w)}>{w}</button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div style={{ color: 'var(--muted)', fontSize: '.86rem', lineHeight: 1.6 }}>
+                Setting details are optional for this genre. Leave this collapsed to keep the script focused on the topic.
               </div>
-            </div>
+            )}
 
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.25rem' }}>
               <button className="sg-btn-ghost" onClick={() => setActiveStep(2)}>← Back</button>
@@ -711,56 +885,106 @@ export default function StoryGenerator() {
         {/* STEP 4 — PLOT */}
         {activeStep === 4 && (
           <div className="sg-card">
-            <div className="sg-card-title">⚔️ Step 4 — Plot & Conflict</div>
+            <div className="sg-card-title" style={{ justifyContent: 'space-between' }}>
+              <span>⚔️ Step 4 — {isNonNarrative ? 'Optional Plot Details' : 'Plot & Conflict'}</span>
+              {isNonNarrative && (
+                <button className="sg-btn-ghost sg-btn-sm" onClick={() => setPlotOpen(v => !v)}>
+                  {plotOpen ? 'Collapse' : 'Expand'}
+                </button>
+              )}
+            </div>
 
-            <div style={{ marginBottom: '1.1rem' }}>
-              <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>CONFLICT TYPE</div>
-              <div className="sg-pill-grid">
-                {CONFLICTS.map(c => (
-                  <button key={c.id} className={`sg-pill amber ${conflict === c.id ? 'active' : ''}`} onClick={() => setConflict(c.id)}>{c.label}</button>
-                ))}
+            {(!isNonNarrative || plotOpen) ? (
+              <>
+                <div style={{ marginBottom: '1.1rem' }}>
+                  <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>CONFLICT TYPE</div>
+                  <div className="sg-pill-grid">
+                    {CONFLICTS.map(c => (
+                      <button key={c.id} className={`sg-pill amber ${conflict === c.id ? 'active' : ''}`} onClick={() => setConflict(c.id)}>{c.label}</button>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: '1.1rem' }}>
+                  <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>PLOT TWIST (optional)</div>
+                  <div className="sg-pill-grid">
+                    {PLOT_TWISTS.map(t => (
+                      <button key={t} className={`sg-pill pink ${twist === t ? 'active' : ''}`} onClick={() => setTwist(prev => prev === t ? '' : t)}>{t}</button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>SCRIPT STARTER (optional)</div>
+                  <textarea className="sg-input sg-textarea"
+                    placeholder={`Start my script with this line...\ne.g. "The last train had already left when..."`}
+                    value={starter} onChange={e => setStarter(e.target.value)} />
+                </div>
+              </>
+            ) : (
+              <div style={{ color: 'var(--muted)', fontSize: '.86rem', lineHeight: 1.6 }}>
+                Plot details are optional for this genre. Leave this collapsed to avoid forcing a fictional story arc.
               </div>
-            </div>
-
-            <div style={{ marginBottom: '1.1rem' }}>
-              <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>PLOT TWIST (optional)</div>
-              <div className="sg-pill-grid">
-                {PLOT_TWISTS.map(t => (
-                  <button key={t} className={`sg-pill pink ${twist === t ? 'active' : ''}`} onClick={() => setTwist(prev => prev === t ? '' : t)}>{t}</button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>STORY STARTER (optional)</div>
-              <textarea className="sg-input sg-textarea"
-                placeholder={`Start my story with this line...\ne.g. "The last train had already left when..."`}
-                value={starter} onChange={e => setStarter(e.target.value)} />
-            </div>
+            )}
 
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.25rem' }}>
               <button className="sg-btn-ghost" onClick={() => setActiveStep(3)}>← Back</button>
-              <button className="sg-btn-primary" onClick={() => setActiveStep(5)}>Next: Settings →</button>
+              <button className="sg-btn-primary" onClick={() => setActiveStep(5)}>Next: Script Settings →</button>
             </div>
           </div>
         )}
 
-        {/* STEP 5 — SETTINGS */}
+        {/* STEP 5 — SCRIPT SETTINGS */}
         {activeStep === 5 && (
           <div className="sg-card">
-            <div className="sg-card-title">⚙️ Step 5 — Story Settings</div>
+            <div className="sg-card-title">⚙️ Step 5 — Script Settings</div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '.75rem', marginBottom: '1.1rem' }}>
-              <div>
-                <div style={{ fontSize: '.72rem', color: 'var(--dim)', marginBottom: '.4rem' }}>LENGTH</div>
-                {[['short','Short ~300w'],['medium','Medium ~600w'],['long','Long ~1000w']].map(([v, l]) => (
-                  <button key={v} className={`sg-pill ${length === v ? 'active' : ''}`} style={{ width: '100%', justifyContent: 'center', marginBottom: '.35rem', display: 'flex' }} onClick={() => setLength(v)}>{l}</button>
+            {/* Duration */}
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>DURATION</div>
+              <div className="sg-pill-grid">
+                {DURATIONS.map(d => (
+                  <button key={d.value} className={`sg-pill ${duration === d.value ? 'active' : ''}`} onClick={() => setDuration(d.value)}>{d.label}</button>
                 ))}
               </div>
+            </div>
+
+            {/* Pace */}
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>NARRATION PACE</div>
+              <div className="sg-pill-grid">
+                {PACES.map(p => (
+                  <button key={p.value} className={`sg-pill amber ${pace === p.value ? 'active' : ''}`} onClick={() => setPace(p.value)}>{p.label}</button>
+                ))}
+              </div>
+            </div>
+
+            {/* Topic */}
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>What is this script about?</div>
+              <input className="sg-input" placeholder="e.g. GTA 6 leaks, a soldier's story, breakup advice" value={topic} onChange={e => setTopic(e.target.value)} />
+            </div>
+
+            {/* Custom Title */}
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>Custom title (optional)</div>
+              <input className="sg-input" placeholder="e.g. Why Everyone Is Talking About GTA 6" value={customTitle} onChange={e => setCustomTitle(e.target.value)} />
+            </div>
+
+            {/* Custom Instructions */}
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{ fontSize: '.75rem', color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: '.5rem' }}>Any specific style or instructions? (optional)</div>
+              <textarea className="sg-input sg-textarea"
+                placeholder="e.g. keep it emotional, add suspense in the middle"
+                value={customInstructions} onChange={e => setCustomInstructions(e.target.value)} />
+            </div>
+
+            {/* POV & Language (existing) */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '.75rem', marginBottom: '1rem' }}>
               <div>
                 <div style={{ fontSize: '.72rem', color: 'var(--dim)', marginBottom: '.4rem' }}>POV</div>
                 {[['first','First Person (I)'],['third','Third Person (He/She)'],['second','Second Person (You)']].map(([v, l]) => (
-                  <button key={v} className={`sg-pill amber ${pov === v ? 'active' : ''}`} style={{ width: '100%', justifyContent: 'center', marginBottom: '.35rem', display: 'flex' }} onClick={() => setPov(v)}>{l}</button>
+                  <button key={v} className={`sg-pill ${pov === v ? 'active' : ''}`} style={{ width: '100%', justifyContent: 'center', marginBottom: '.35rem', display: 'flex' }} onClick={() => setPov(v)}>{l}</button>
                 ))}
               </div>
               <div>
@@ -772,11 +996,11 @@ export default function StoryGenerator() {
             </div>
 
             <button className="sg-btn-ghost sg-btn-sm" onClick={suggestTitles} style={{ marginBottom: titleSugs.length ? '.5rem' : '0' }}>
-              🎲 Suggest Story Titles
+              🎲 Suggest Script Titles
             </button>
             {titleSugs.length > 0 && (
               <div className="sg-title-chips">
-                {titleSugs.map(t => <span key={t} className="sg-title-chip" onClick={() => setTitle(t)}>{t}</span>)}
+                {titleSugs.map(t => <span key={t} className="sg-title-chip" onClick={() => setCustomTitle(t)}>{t}</span>)}
               </div>
             )}
 
@@ -806,16 +1030,18 @@ export default function StoryGenerator() {
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', flexWrap: 'wrap', gap: '.65rem' }}>
             <div style={{ fontFamily: 'JetBrains Mono', fontSize: '.72rem', color: remaining > 1 ? 'var(--green)' : remaining === 1 ? 'var(--amber)' : 'var(--red)' }}>
-              {isLoggedIn ? (remaining === null ? 'Loading quota...' : remaining > 0 ? `${remaining} ${remaining === 1 ? 'story' : 'stories'} remaining today` : `🔴 Daily limit reached · resets ${resetText}`) : '🔐 Connect your account to start'}
+              {isLoggedIn ? (remaining === null ? 'Loading quota...' : remaining > 0 ? `${remaining} ${remaining === 1 ? 'script' : 'scripts'} remaining today` : `🔴 Daily limit reached · resets ${resetText}`) : '🔐 Connect your account to start'}
             </div>
             <div style={{ display: 'flex', gap: '.5rem' }}>
               <button className="sg-btn-ghost sg-btn-sm" onClick={() => {
                 setGenre(''); setMood(''); setTone(''); setCharName(''); setCharAge(''); setCharGender(''); setCharRole('');
                 setTraits([]); setPeriod(''); setPlace(''); setWorld(''); setConflict(''); setTwist(''); setStarter('');
-                setStory(''); setTitle(''); setActiveStep(1);
+                setCharacterOpen(true); setSettingOpen(true); setPlotOpen(true);
+                setDuration(60); setPace('normal'); setTopic(''); setCustomTitle(''); setCustomInstructions('');
+                setSegments([]); setTitle(''); setActiveStep(1);
               }}>↺ Reset</button>
-              <button className="sg-btn-primary" onClick={handleGenerate} disabled={loading}>
-                {loading ? '⏳ Generating...' : `✨ Generate Story`}
+              <button className="sg-btn-primary" onClick={handleGenerate} disabled={loading || maintenanceMode}>
+                {loading ? '⏳ Generating...' : `🎬 Generate Script`}
               </button>
             </div>
           </div>
@@ -846,24 +1072,35 @@ export default function StoryGenerator() {
           </div>
         )}
 
-        {/* OUTPUT */}
-        {story && !loading && (
+        {/* OUTPUT — SEGMENTS */}
+        {segments.length > 0 && !loading && (
           <div className="sg-output" id="sg-output">
-            <div className="sg-story-title">{title}</div>
-            <div className="sg-story-divider" />
-            <div className="sg-story-body">{story}</div>
-            <div className="sg-story-meta">
-              <span>{wordCount} words</span>
-              <span>·</span>
-              <span>~{readTime} min read</span>
+            <div className="sg-script-title">{title}</div>
+            <div className="sg-script-divider" />
+            <div className="sg-segments">
+              {segments.map((seg, i) => (
+                <div key={i} className="sg-segment-card">
+                  <div className="sg-seg-time">
+                    ⏱ {formatSegTime(seg.start_time)} - {formatSegTime(seg.end_time)}
+                  </div>
+                  <div className="sg-seg-narration">{seg.narration || '...'}</div>
+                  <div className="sg-seg-visual">🎥 {seg.visual || ''}</div>
+                </div>
+              ))}
             </div>
-            <div className="sg-story-actions">
-              <button className={`sg-action-btn ${copied ? 'copied' : ''}`} onClick={copyStory}>
-                {copied ? '✓ Copied!' : '📋 Copy Story'}
+            <div className="sg-script-meta">
+              <span>{segments.length} segments</span>
+              <span>·</span>
+              <span>{totalWords} words</span>
+              <span>·</span>
+              <span>~{estimateReadTime(segments)} min read/speak</span>
+            </div>
+            <div className="sg-script-actions">
+              <button className={`sg-action-btn ${copied ? 'copied' : ''}`} onClick={copyScript}>
+                {copied ? '✓ Copied!' : '📋 Copy Script'}
               </button>
-              <button className="sg-action-btn" onClick={downloadStory}>⬇️ Download .txt</button>
-              <button className="sg-action-btn" onClick={handleGenerate}>🔄 Regenerate</button>
-              <button className="sg-action-btn" onClick={() => { setStory(''); setTitle(''); setActiveStep(1); }}>✨ New Story</button>
+              <button className="sg-action-btn" onClick={downloadScript}>⬇️ Download .txt</button>
+              <button className="sg-action-btn" onClick={downloadSRT}>🎞️ Download .srt</button>
             </div>
           </div>
         )}
@@ -871,9 +1108,9 @@ export default function StoryGenerator() {
         {/* HISTORY */}
         {storyHistory.length > 0 && (
           <div className="sg-card" style={{ marginTop: '1.5rem' }}>
-            <div className="sg-card-title" id="sg-history">📚 Recent Stories</div>
+            <div className="sg-card-title" id="sg-history">📚 Recent Scripts</div>
             {storyHistory.map((h, i) => (
-              <div key={i} className="sg-hist-item" onClick={() => { setTitle(h.title); setStory(h.full); }}>
+              <div key={i} className="sg-hist-item" onClick={() => { setTitle(h.title); setSegments(h.segments || []); }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontFamily: 'Instrument Serif, serif', fontStyle: 'italic', fontSize: '.95rem', marginBottom: '.2rem' }}>{h.title}</div>
                   <div className="sg-hist-preview">{h.preview}...</div>

@@ -1,4 +1,5 @@
 import CapsuleManagerClient from './CapsuleManagerClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "AI Conversation Capsule Manager Free — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "AI Conversation Capsule Manager | ToolVoid",
     description: "Save, manage, and restore AI conversation context for free. Never lose track of your AI chats.",
     url: "https://toolvoid.com/capsule-manager-page",
-  }
+  },
+  ...createToolMetadata('capsule-manager'),
 }
 
 export default function CapsuleManagerPage() {

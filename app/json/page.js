@@ -1,4 +1,5 @@
 import JsonClient from './JsonClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "JSON Formatter Validator Online — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "JSON Formatter Validator | ToolVoid",
     description: "Format, validate, and beautify JSON online for free. Parse and fix JSON syntax errors instantly.",
     url: "https://toolvoid.com/json",
-  }
+  },
+  ...createToolMetadata('json'),
 }
 
 export default function Page() {

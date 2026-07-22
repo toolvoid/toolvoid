@@ -12,7 +12,7 @@ import ToolIcon3D, {
 } from '../components/ToolIcon3D';
 
 const tools = [
-  { name: 'Story Generator', desc: 'Generate cinematic stories & scripts with AI', href: '/story', tag: 'AI', delay: '.05s', color: '#A78BFA', featured: true },
+  { name: 'Script Generator', desc: 'Generate timed AI video scripts with narration & visuals', href: '/story-generator', tag: 'AI', delay: '.05s', color: '#A78BFA', featured: true },
   { name: 'Hashtag Generator', desc: 'Smart hashtags for Instagram, YouTube & Twitter', href: '/hashtag', tag: 'AI', delay: '.1s', color: '#FF6B6B' },
   { name: 'Image Generator', desc: 'Generate AI images from text prompts with daily free credits', href: '/imagegen', tag: 'AI', delay: '.15s', color: '#F59E0B' },
   { name: 'Keyword Generator', desc: 'Find best SEO keywords for your content instantly', href: '/keyword', tag: 'SEO', delay: '.2s', color: '#34D399' },
@@ -42,7 +42,7 @@ const toolCategories = [
   {
     id: 'content-creator',
     label: '🎨 Content Creator Tools',
-    tools: pickTools(['/story', '/hashtag', '/imagegen', '/keyword', '/word-counter', '/tts', '/video']),
+    tools: pickTools(['/story-generator', '/hashtag', '/imagegen', '/keyword', '/word-counter', '/tts', '/video']),
   },
   {
     id: 'developer',
@@ -861,7 +861,7 @@ export default function Home() {
                 </div>
                 <div className="footer-copy">A growing set of free browser tools for creators, developers, students and freelancers.</div>
                 <div className="footer-links">
-                  <Link href="/story">Story</Link>
+                  <Link href="/story-generator">Script Generator</Link>
                   <Link href="/imagegen">Image Gen</Link>
                   <Link href="/pdf">PDF</Link>
                   <Link href="/qr">QR</Link>

@@ -1,4 +1,5 @@
 import ImageToolsClient from './ImageToolsClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "Compress Image Online Free — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "Compress Image Online Free | ToolVoid",
     description: "Compress, resize, and optimize JPG, PNG, WebP images for free. No uploads, no sign-ups.",
     url: "https://toolvoid.com/image-tools",
-  }
+  },
+  ...createToolMetadata('image-tools'),
 }
 
 export default function Page() {

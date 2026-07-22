@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
 const tools = [
-  { name: 'Story Generator',     href: '/story',        desc: 'Generate cinematic stories & scripts with AI',          color: '#A78BFA', tag: 'AI' },
+  { name: 'Script Generator',     href: '/story-generator', desc: 'Generate timed AI video scripts with narration & visuals', color: '#A78BFA', tag: 'AI' },
   { name: 'Hashtag Generator',   href: '/hashtag',      desc: 'Smart hashtags for Instagram, YouTube & Twitter',        color: '#FF6B6B', tag: 'AI' },
   { name: 'Image Generator',     href: '/imagegen',     desc: 'Generate AI images with daily free credits',            color: '#F59E0B', tag: 'AI' },
   { name: 'Keyword Generator',   href: '/keyword',      desc: 'Find best SEO keywords for your content instantly',      color: '#34D399', tag: 'SEO' },
@@ -58,7 +58,7 @@ const faqs = [
   { q: 'Does it work on mobile?',     a: 'Built mobile-first. Optimized for one-hand browsing.' },
   { q: 'Do I need to install anything?', a: 'No. Open in any browser and start immediately.' },
   { q: 'Are my files uploaded?',      a: 'Most tools run locally in your browser. Your files stay private.' },
-  { q: 'Which tools use AI?',         a: 'Story Generator, Hashtag Generator, Image Generator and Keyword Generator use AI APIs.' },
+  { q: 'Which tools use AI?',         a: 'Script Generator, Hashtag Generator, Image Generator and Keyword Generator use AI APIs.' },
   { q: 'Can I use it for client work?', a: 'Yes. Invoice generator, resume builder and image tools are built for professional use.' },
   { q: 'Will more tools be added?',   a: 'Yes. The site grows with more utilities and polish over time.' },
 ];
@@ -77,7 +77,7 @@ function MobileToolIcon({ href, color }) {
   const base = { width: 44, height: 44, viewBox: '0 0 44 44', fill: 'none', xmlns: 'http://www.w3.org/2000/svg' };
 
   const icons = {
-    '/story':       <svg {...base}><path d="M10 10C13 9 16 9 20 10V34C16 33 13 33 10 34V10Z" {...s}/><path d="M24 10C28 9 31 9 34 10V34C31 33 28 33 24 34V10Z" {...s}/><path d="M22 10V34" {...s}/><path d="M32 8L33.5 11.5L37 13L33.5 14.5L32 18L30.5 14.5L27 13L30.5 11.5L32 8Z" {...f} fill={color}/></svg>,
+    '/story-generator': <svg {...base}><path d="M10 10C13 9 16 9 20 10V34C16 33 13 33 10 34V10Z" {...s}/><path d="M24 10C28 9 31 9 34 10V34C31 33 28 33 24 34V10Z" {...s}/><path d="M22 10V34" {...s}/><path d="M32 8L33.5 11.5L37 13L33.5 14.5L32 18L30.5 14.5L27 13L30.5 11.5L32 8Z" {...f} fill={color}/></svg>,
     '/hashtag':     <svg {...base}><path d="M16 7L12 37" {...s}/><path d="M30 7L26 37" {...s}/><path d="M8 16H34" {...s}/><path d="M6 28H32" {...s}/></svg>,
     '/imagegen':    <svg {...base}><rect x="8" y="8" width="28" height="28" rx="5" {...s}/><circle cx="29" cy="16" r="3" {...f} fill={color}/><path d="M13 29L19 23L24 27L30 20L34 24" {...s}/></svg>,
     '/keyword':     <svg {...base}><circle cx="19" cy="19" r="9" {...s}/><path d="M25.5 25.5L34 34" {...s}/><path d="M16 19H22" {...s}/><path d="M19 16V22" {...s}/></svg>,

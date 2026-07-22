@@ -1,4 +1,5 @@
 import ResumeClient from './ResumeClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "Free ATS Resume Builder Online — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "Free ATS Resume Builder | ToolVoid",
     description: "Build professional, ATS-friendly resumes online for free. Customize templates and download PDF.",
     url: "https://toolvoid.com/resume",
-  }
+  },
+  ...createToolMetadata('resume'),
 }
 
 export default function Page() {

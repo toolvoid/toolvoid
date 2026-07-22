@@ -1,4 +1,5 @@
 import PassportClient from './PassportClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "Free Passport Photo Maker Online — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "Free Passport Photo Maker | ToolVoid",
     description: "Create passport-size photos online for free. Crop and resize to meet official requirements.",
     url: "https://toolvoid.com/passport",
-  }
+  },
+  ...createToolMetadata('passport'),
 }
 
 export default function Page() {

@@ -1,4 +1,5 @@
 import Base64Client from './Base64Client'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "Base64 Encoder Decoder Online — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "Base64 Encoder Decoder | ToolVoid",
     description: "Encode and decode Base64 data instantly. Convert text, images, and files to Base64 format free.",
     url: "https://toolvoid.com/base64",
-  }
+  },
+  ...createToolMetadata('base64'),
 }
 
 export default function Page() {

@@ -1,4 +1,5 @@
 import EmiClient from './EmiClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "Home Loan EMI Calculator India — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "Home Loan EMI Calculator | ToolVoid",
     description: "Calculate home loan, personal loan, and car loan EMI instantly. Compare rates and tenures free.",
     url: "https://toolvoid.com/emi",
-  }
+  },
+  ...createToolMetadata('emi'),
 }
 
 export default function Page() {

@@ -1,4 +1,5 @@
 import LoanClient from './LoanClient'
+import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
   title: "Personal Loan Eligibility Calculator India — ToolVoid",
@@ -8,7 +9,8 @@ export const metadata = {
     title: "Personal Loan Eligibility Calculator | ToolVoid",
     description: "Check personal loan eligibility and calculate EMI instantly for Indian borrowers. Free and private.",
     url: "https://toolvoid.com/loan",
-  }
+  },
+  ...createToolMetadata('loan'),
 }
 
 export default function Page() {

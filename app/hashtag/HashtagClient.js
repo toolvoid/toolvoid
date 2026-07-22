@@ -301,6 +301,8 @@ const CSS = `
 .ht-toast { position: fixed; bottom: 2rem; right: 2rem; z-index: 999; background: var(--card); border: 1px solid var(--border-hi); padding: 0.7rem 1.2rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 0.5rem; pointer-events: none; transform: translateY(80px); opacity: 0; transition: all 0.28s cubic-bezier(0.4,0,0.2,1); }
 .ht-toast.show { transform: translateY(0); opacity: 1; }
 .ht-toast-icon { color: var(--accent); }
+.tool-maintenance-banner { margin: 1.25rem auto; max-width: 760px; padding: 1rem 1.25rem; border: 1px solid var(--accent); border-radius: var(--radius-sm); background: var(--accent-dim); color: var(--text); text-align: center; font-weight: 600; }
+.tool-maintenance-banner span { display: block; margin-top: .25rem; color: var(--text-dim); font-size: .88rem; font-weight: 400; }
 
 /* ── SPINNER ── */
 .ht-spin { animation: htSpin 0.7s linear infinite; display: inline-block; }
@@ -325,8 +327,9 @@ const LOADING_MSGS = ['Analyzing your topic…','Finding trending hashtags…','
 const HISTORY_KEY = 'ht_history_v1';
 const TRIES_KEY = 'ht_tries_v1';
 
-export default function HashtagPage() {
+export default function HashtagPage({ maintenanceMode = false }) {
   useEffect(() => {
+    if (maintenanceMode) return undefined;
     const root = document.getElementById('ht-root');
     if (!root) return;
 
@@ -749,7 +752,7 @@ export default function HashtagPage() {
       return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
     return () => controller.abort();
-  }, []);
+  }, [maintenanceMode]);
 
   return (
     <div id="ht-root" className="ht-root">
@@ -805,8 +808,15 @@ export default function HashtagPage() {
         </div>
       </section>
 
+      {maintenanceMode && (
+        <div className="tool-maintenance-banner" role="status">
+          This tool is under maintenance, back soon.
+          <span>Hashtag generation is temporarily unavailable while we make improvements.</span>
+        </div>
+      )}
+
       {/* ── GENERATOR ── */}
-      <section className="ht-section ht-gen" id="ht-generator">
+      <section className="ht-section ht-gen" id="ht-generator" aria-disabled={maintenanceMode} inert={maintenanceMode ? '' : undefined} style={maintenanceMode ? { opacity: 0.5 } : undefined}>
         <div className="ht-section-inner">
           <div className="ht-gen-header">
             <div className="ht-label">✦ Live Generator</div>

@@ -1,4 +1,5 @@
-import { redirect } from 'next/navigation';
+import { createToolMetadata } from '../../lib/toolMetadata';
+import ImageGeneratorClient from './ImageGeneratorClient';
 
 export const metadata = {
   title: "Free AI Image Generator Online — ToolVoid",
@@ -8,9 +9,10 @@ export const metadata = {
     title: "Free AI Image Generator | ToolVoid",
     description: "Generate stunning AI images from text descriptions for free. Create unique artwork instantly.",
     url: "https://toolvoid.com/imagegen",
-  }
+  },
+  ...createToolMetadata('imagegen'),
 }
 
 export default function Page() {
-  redirect('/image-generator');
+  return <ImageGeneratorClient />;
 }

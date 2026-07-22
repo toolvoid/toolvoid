@@ -3,7 +3,7 @@
 import Link from 'next/link'
 
 const tools = [
-  ['Story Generator', '/story-generator', 'Generate cinematic stories with AI. 3 free per day.'],
+  ['Script Generator', '/story-generator', 'Generate timed AI video scripts with narration & visuals. 3 free per day.'],
   ['Hashtag Generator', '/hashtag-generator', 'Generate hashtags for social media. 10 free per day.'],
   ['Keyword Generator', '/keyword-generator', 'Generate SEO keywords. 10 free per day.'],
   ['Image Generator', '/image-generator', 'Generate AI images with Pollinations. 6 free per day.'],
