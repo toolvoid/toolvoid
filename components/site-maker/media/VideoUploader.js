@@ -1,0 +1,5 @@
+'use client';
+
+import { useState } from 'react';
+
+export default function VideoUploader({ onChange, maxSize = 50 * 1024 * 1024 }) { const [error, setError] = useState(''); const handleFile = (file) => { if (!file) return; if (file.size > maxSize) { setError('Videos must be 50MB or smaller.'); return; } setError(''); onChange({ url: URL.createObjectURL(file), file, name: file.name, type: file.type, local: true }); }; return <div className="sm-uploader" style={{ marginTop: 9, padding: 10, border: '1px dashed rgba(167,139,250,.65)', borderRadius: 9, background: 'rgba(167,139,250,.08)', color: '#ede9fe', textAlign: 'center' }}><label style={{ display: 'block', cursor: 'pointer', fontSize: 12, fontWeight: 800 }}>Upload a video<input type="file" accept="video/*" onChange={(event) => handleFile(event.target.files?.[0])} style={{ display: 'none' }} /></label><small style={{ display: 'block', marginTop: 4, color: '#b8b1d2', fontSize: 10 }}>MP4, WebM, MOV · up to 50MB</small>{error && <small style={{ display: 'block', marginTop: 4, color: '#fda4af' }}>{error}</small>}</div>; }

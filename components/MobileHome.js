@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
 const tools = [
+  { name: 'Site Maker',           href: '/site-maker',   desc: 'Build a responsive website visually — no code needed',   color: '#22D3EE', tag: 'NEW' },
   { name: 'Script Generator',     href: '/story-generator', desc: 'Generate timed AI video scripts with narration & visuals', color: '#A78BFA', tag: 'AI' },
   { name: 'Hashtag Generator',   href: '/hashtag',      desc: 'Smart hashtags for Instagram, YouTube & Twitter',        color: '#FF6B6B', tag: 'AI' },
   { name: 'Image Generator',     href: '/imagegen',     desc: 'Generate AI images with daily free credits',            color: '#F59E0B', tag: 'AI' },
@@ -98,6 +99,7 @@ function MobileToolIcon({ href, color }) {
     '/video':       <svg {...base}><circle cx="22" cy="22" r="14" {...s}/><path d="M19 16L29 22L19 28V16Z" {...f} fill={color}/></svg>,
     '/resume':      <svg {...base}><rect x="11" y="6" width="22" height="32" rx="4" {...s}/><circle cx="18" cy="15" r="3" {...s}/><path d="M15 22C16 20.5 17 20 18 20C19 20 20 20.5 21 22" {...s}/><path d="M24 14H29" {...s}/><path d="M24 19H29" {...s}/><path d="M15 27H29" {...s}/><path d="M15 32H25" {...s}/></svg>,
     '/capsule-manager': <svg {...base}><rect x="9" y="16" width="26" height="12" rx="6" {...s}/><path d="M22 16V28" {...s}/><path d="M13 16L9 22L13 28" {...s} strokeOpacity="0.5"/><path d="M31 16L35 22L31 28" {...s} strokeOpacity="0.5"/><rect x="15" y="9" width="14" height="6" rx="3" {...s}/><rect x="15" y="29" width="14" height="6" rx="3" {...s}/></svg>,
+    '/site-maker': <svg {...base}><rect x="6" y="7" width="32" height="30" rx="4" {...s}/><path d="M6 15H38" {...s}/><circle cx="10" cy="11" r="1.2" {...f} fill={color}/><circle cx="14" cy="11" r="1.2" {...f} fill={color}/><path d="M12 23H25M12 28H21" {...s}/><rect x="28" y="21" width="6" height="10" rx="1" {...s}/><path d="M30 27L31.5 28.5L34 25" {...s}/></svg>,
   };
 
   return icons[href] || <svg {...base}><circle cx="22" cy="22" r="12" {...s}/><path d="M18 22H26M22 18V26" {...s}/></svg>;
@@ -287,14 +289,14 @@ export default function MobileHome() {
           {/* ── Nav ── */}
           <div className="m-nav">
             <Link href="/" className="m-logo"><em>Tool</em> Void</Link>
-            <div className="m-pill">21 Tools</div>
+            <div className="m-pill">22 Tools</div>
           </div>
 
           {/* ── Hero ── */}
           <section className="m-hero">
             <div className="m-eyebrow">Free tools for creators & builders</div>
             <div className="m-title">
-              <span className="green">21 Tools.</span>
+              <span className="green">22 Tools.</span>
               <span>Zero Cost.</span>
               <span>Always.</span>
             </div>
@@ -302,7 +304,7 @@ export default function MobileHome() {
               AI tools, image editors, dev utilities, finance calculators — fast browser tools with daily AI credits.
             </div>
             <div className="m-actions">
-              <a href="#tools" className="m-cta primary">Explore All 21 Tools ⚡</a>
+              <a href="#tools" className="m-cta primary">Explore All 22 Tools ⚡</a>
               <a href="#how" className="m-cta secondary">See How It Works →</a>
             </div>
           </section>
@@ -321,7 +323,7 @@ export default function MobileHome() {
 
           {/* ── Tools ── */}
           <section className="m-section" id="tools">
-            <h2 className="m-sh">All 21 Tools</h2>
+            <h2 className="m-sh">All 22 Tools</h2>
             <p className="m-sp">AI generators, image editors, dev tools, finance calculators — all free.</p>
 
             {/* Search */}
@@ -503,7 +505,7 @@ export default function MobileHome() {
             <div className="m-cta-box">
               <div className="m-cta-kicker">{'// Ready to go?'}</div>
               <div className="m-cta-title">Stop Waiting<br/><span>Start Building</span></div>
-              <div className="m-cta-copy">21 tools. Free daily AI credits. Just open a tab and get moving.</div>
+              <div className="m-cta-copy">22 tools. Free daily AI credits. Just open a tab and get moving.</div>
               <div className="m-cta-btns">
                 <a href="#tools" className="m-cta primary">Try Free Tools ⚡</a>
                 <a href="#faq" className="m-cta secondary">Read FAQs →</a>
@@ -514,7 +516,7 @@ export default function MobileHome() {
           {/* ── Footer ── */}
           <footer className="m-footer">
             <div className="m-footer-brand"><em>Tool</em>void</div>
-            <div className="m-footer-copy">21 tools for creators, builders and hustlers. Fast workflows, clear daily AI limits.</div>
+            <div className="m-footer-copy">22 tools for creators, builders and hustlers. Fast workflows, clear daily AI limits.</div>
             <div className="m-footer-cols">
               <div className="m-footer-col">
                 <h4>AI Tools</h4>

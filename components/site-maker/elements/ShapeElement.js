@@ -1,0 +1,10 @@
+export default function ShapeElement({ element, editable = false, onChange = () => {} }) {
+  const shape = element.content || 'rectangle';
+  const clipPath = { triangle: 'polygon(50% 0, 100% 100%, 0 100%)', diamond: 'polygon(50% 0, 100% 50%, 50% 100%, 0 50%)', hexagon: 'polygon(25% 6%,75% 6%,100% 50%,75% 94%,25% 94%,0 50%)', star: 'polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 94%,50% 72%,21% 94%,32% 57%,2% 35%,39% 35%)' }[shape];
+  const style = element.style || {};
+  const colors = style.gradientColors?.length === 2 ? style.gradientColors : [style.backgroundColor || '#a78bfa', '#60a5fa'];
+  const background = style.gradientType === 'linear' ? `linear-gradient(${style.gradientAngle ?? 135}deg, ${colors.join(', ')})` : style.gradientType === 'radial' ? `radial-gradient(circle at center, ${colors.join(', ')})` : colors[0];
+  return <div className={`sm-shape sm-shape-${shape}`} style={{ width: '100%', height: '100%', position: 'relative', background, border: `${style.borderWidth || 1}px ${style.borderStyle || 'solid'} ${style.borderColor || '#a78bfa'}`, borderRadius: shape === 'circle' ? '50%' : shape === 'pill' ? 999 : shape === 'blob' ? '58% 42% 45% 55% / 45% 54% 46% 55%' : style.borderRadius || 8, boxShadow: style.boxShadow || undefined, opacity: style.opacity ?? 1, clipPath }}>
+    {editable && <div style={{ position: 'absolute', left: 0, bottom: -62, zIndex: 120, display: 'flex', flexWrap: 'wrap', width: 250, gap: 3, padding: 4, borderRadius: 6, background: '#191727', boxShadow: '0 6px 18px rgba(0,0,0,.35)' }}>{['rectangle', 'circle', 'pill', 'triangle', 'diamond', 'hexagon', 'star', 'blob'].map((name) => <button type="button" key={name} onMouseDown={(event) => event.stopPropagation()} onClick={(event) => { event.stopPropagation(); onChange(name); }} style={{ border: 0, borderRadius: 4, padding: '4px 6px', cursor: 'pointer', background: shape === name ? '#a78bfa' : 'transparent', color: shape === name ? '#1e1035' : '#ddd6fe', fontSize: 9 }}>{name}</button>)}</div>}
+  </div>;
+}

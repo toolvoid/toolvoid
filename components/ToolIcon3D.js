@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef } from 'react';
 
-// ── Color map for all 21 tools ──
+// ── Color map for all tools ──
 const TOOL_COLORS = {
   '/story':'#A78BFA','/story-generator':'#A78BFA','/hashtag':'#FF6B6B','/imagegen':'#F59E0B','/keyword':'#34D399',
   '/image-tools':'#FFD93D','/pdf':'#FF9A3C','/passport':'#60A5FA','/qr':'#00FFB2',
@@ -9,6 +9,7 @@ const TOOL_COLORS = {
   '/emi':'#FB923C','/loan':'#E879F9','/invoice':'#38BDF8','/word-counter':'#4D96FF',
   '/json':'#86EFAC','/tts':'#4D96FF','/video':'#FF4ECD','/resume':'#FF6B6B',
   '/capsule-manager':'#a78bfa',
+  '/site-maker':'#22D3EE',
   '/resize':'#FFD93D','/compress':'#6BCB77','/convert':'#C77DFF',
 };
 

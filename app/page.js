@@ -12,6 +12,7 @@ import ToolIcon3D, {
 } from '../components/ToolIcon3D';
 
 const tools = [
+  { name: 'Site Maker', desc: 'Build a responsive website visually with drag, drop and no code', href: '/site-maker', tag: 'NEW', delay: '.02s', color: '#22D3EE', featured: true },
   { name: 'Script Generator', desc: 'Generate timed AI video scripts with narration & visuals', href: '/story-generator', tag: 'AI', delay: '.05s', color: '#A78BFA', featured: true },
   { name: 'Hashtag Generator', desc: 'Smart hashtags for Instagram, YouTube & Twitter', href: '/hashtag', tag: 'AI', delay: '.1s', color: '#FF6B6B' },
   { name: 'Image Generator', desc: 'Generate AI images from text prompts with daily free credits', href: '/imagegen', tag: 'AI', delay: '.15s', color: '#F59E0B' },
@@ -39,6 +40,11 @@ const toolsByHref = Object.fromEntries(tools.map((tool) => [tool.href, tool]));
 const pickTools = (hrefs) => hrefs.map((href) => toolsByHref[href]).filter(Boolean);
 
 const toolCategories = [
+  {
+    id: 'website-builder',
+    label: '✨ Build Your Website',
+    tools: pickTools(['/site-maker']),
+  },
   {
     id: 'content-creator',
     label: '🎨 Content Creator Tools',
@@ -164,7 +170,14 @@ function ToolCard({ tool, index }) {
       >
         <div className="tc-glow" style={{ background: `radial-gradient(circle at ${50 + (iconMouse.x * 22)}% ${50 - (iconMouse.y * 22)}%, ${tool.color}22, transparent 45%)`, opacity: hovered ? 1 : 0.55 }} />
         <div className="tct">{tool.tag}</div>
-        <div className="tc-icon" style={{ transform: hovered ? 'translateZ(26px)' : 'translateZ(0px)' }}>
+        <div
+          className="tc-icon"
+          style={{
+            transform: hovered ? 'translateZ(26px)' : 'translateZ(0px)',
+            '--tool-color': tool.color,
+            '--tool-shadow': `${tool.color}40`,
+          }}
+        >
           <ToolIcon3D href={tool.href} color={tool.color} hovered={hovered} mouseX={iconMouse.x} mouseY={iconMouse.y} />
         </div>
         <div className="tc-copy" style={{ transform: hovered ? 'translateZ(18px)' : 'translateZ(0px)' }}>
@@ -376,14 +389,27 @@ export default function Home() {
 
       const shapes = [];
       [
-        [new THREE.OctahedronGeometry(5, 0), 0xFFE500, 0.5, [-65, 18, -25]],
-        [new THREE.IcosahedronGeometry(4, 0), 0x1a2050, 0.22, [58, -18, -12]],
-        [new THREE.TetrahedronGeometry(3.5, 0), 0x101040, 0.16, [-28, -28, 8]],
-        [new THREE.OctahedronGeometry(3, 0), 0xFFE500, 0.18, [75, 32, -35]],
-        [new THREE.IcosahedronGeometry(2, 0), 0xFFE500, 0.12, [-80, -10, 10]],
-        [new THREE.BoxGeometry(4, 4, 4), 0x4D96FF, 0.15, [40, 25, -20]],
-      ].forEach(([geometry, color, opacity, position]) => {
-        const mesh = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), new THREE.LineBasicMaterial({ color, transparent: true, opacity }));
+        [new THREE.OctahedronGeometry(5, 0), [0x22D3EE, 0xA78BFA], 0.5, [-65, 18, -25]],
+        [new THREE.IcosahedronGeometry(4, 0), [0x34D399, 0x22D3EE], 0.22, [58, -18, -12]],
+        [new THREE.TetrahedronGeometry(3.5, 0), [0xA78BFA, 0x4D96FF], 0.16, [-28, -28, 8]],
+        [new THREE.OctahedronGeometry(3, 0), [0x22D3EE, 0x34D399], 0.18, [75, 32, -35]],
+        [new THREE.IcosahedronGeometry(2, 0), [0xA78BFA, 0x22D3EE], 0.12, [-80, -10, 10]],
+        [new THREE.BoxGeometry(4, 4, 4), [0x4D96FF, 0xA78BFA], 0.15, [40, 25, -20]],
+      ].forEach(([geometry, colors, opacity, position]) => {
+        const wireGeometry = new THREE.WireframeGeometry(geometry);
+        const positions = wireGeometry.getAttribute('position');
+        const start = new THREE.Color(colors[0]);
+        const end = new THREE.Color(colors[1]);
+        const vertexColors = new Float32Array(positions.count * 3);
+        for (let i = 0; i < positions.count; i += 1) {
+          const mix = Math.max(0, Math.min(1, (positions.getX(i) + positions.getY(i) + 10) / 20));
+          const color = start.clone().lerp(end, mix);
+          vertexColors[(i * 3)] = color.r;
+          vertexColors[(i * 3) + 1] = color.g;
+          vertexColors[(i * 3) + 2] = color.b;
+        }
+        wireGeometry.setAttribute('color', new THREE.BufferAttribute(vertexColors, 3));
+        const mesh = new THREE.LineSegments(wireGeometry, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity }));
         mesh.position.set(...position);
         scene.add(mesh);
         shapes.push(mesh);
@@ -626,7 +652,9 @@ export default function Home() {
     .tc-feat .tc-inner{min-height:286px}
     .tc-glow{position:absolute;inset:0;border-radius:24px;pointer-events:none;transition:opacity .25s}
     .tct{display:inline-flex;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8b94a2}
-    .tc-icon{position:relative;width:78px;height:78px;margin:18px 0 14px;transition:transform .18s}
+    .tc-icon{position:relative;width:78px;height:78px;margin:18px 0 14px;border-radius:20px;display:grid;place-items:center;isolation:isolate;overflow:hidden;border:1px solid color-mix(in srgb,var(--tool-color) 42%,rgba(255,255,255,.18));background:linear-gradient(135deg,color-mix(in srgb,var(--tool-color) 28%,rgba(255,255,255,.06)),rgba(34,211,238,.12) 52%,rgba(167,139,250,.18));box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 10px 22px var(--tool-shadow),0 2px 6px rgba(0,0,0,.28);transition:transform .18s,box-shadow .2s,border-color .2s}
+    .tc-icon::before{content:'';position:absolute;inset:1px;border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.16),transparent 38%);pointer-events:none;z-index:-1}
+    .tc:hover .tc-icon{border-color:color-mix(in srgb,var(--tool-color) 72%,white);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 16px 30px var(--tool-shadow),0 4px 10px rgba(0,0,0,.3)}
     .tc-copy{transition:transform .18s}
     .tch{font-size:22px;font-weight:700;color:#fff;line-height:1.12;margin-bottom:8px}
     .tcd{font-size:14px;line-height:1.75;color:#8b94a2}
@@ -719,7 +747,7 @@ export default function Home() {
               <nav id="nv" className="nav">
                 <Link href="/" className="m-logo"><em>Tool</em> Void</Link>
                 <div className="nav-right">
-                  <div className="nav-pill">21 Free Tools</div>
+                  <div className="nav-pill">22 Free Tools</div>
                   <a className="nav-link" href="#tools">Tools</a>
                   <a className="nav-link" href="#features">Why Us</a>
                   <a className="nav-link" href="#support">Support</a>
@@ -751,7 +779,7 @@ export default function Home() {
                   </div>
                   <div className="hp-grid">
                     <div className="mini">
-                      <strong>21</strong>
+                      <strong>22</strong>
                       <span>Live Utilities</span>
                     </div>
                     <div className="mini">

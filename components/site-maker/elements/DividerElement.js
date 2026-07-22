@@ -1,0 +1,1 @@
+export default function DividerElement({ element }) { return <div className="sm-divider-element" style={{ background: element.style?.borderColor || element.style?.color || '#a78bfa', height: element.style?.borderWidth || 2, opacity: element.style?.opacity ?? 1 }} />; }
