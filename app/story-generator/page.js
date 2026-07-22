@@ -18,4 +18,9 @@ export const metadata = {
   },
 };
 
-export { default } from '../story/StoryClient'
+import { isMaintenanceMode } from '../../lib/maintenanceMode';
+import StoryClient from '../story/StoryClient';
+
+export default function StoryGeneratorPage() {
+  return <StoryClient maintenanceMode={isMaintenanceMode('story')} />;
+}

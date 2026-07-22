@@ -816,7 +816,7 @@ export default function HashtagPage({ maintenanceMode = false }) {
       )}
 
       {/* ── GENERATOR ── */}
-      <section className="ht-section ht-gen" id="ht-generator" aria-disabled={maintenanceMode} inert={maintenanceMode ? '' : undefined} style={maintenanceMode ? { opacity: 0.5 } : undefined}>
+      <section className="ht-section ht-gen" id="ht-generator" aria-disabled={maintenanceMode} inert={maintenanceMode} style={maintenanceMode ? { opacity: 0.5 } : undefined}>
         <div className="ht-section-inner">
           <div className="ht-gen-header">
             <div className="ht-label">✦ Live Generator</div>

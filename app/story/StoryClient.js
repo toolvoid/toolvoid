@@ -705,7 +705,7 @@ export default function StoryGenerator({ maintenanceMode = false }) {
       </div>
 
       {/* MAIN */}
-      <div className="sg-main" id="sg-builder" aria-disabled={maintenanceMode} inert={maintenanceMode ? '' : undefined} style={maintenanceMode ? { opacity: 0.5 } : undefined}>
+      <div className="sg-main" id="sg-builder" aria-disabled={maintenanceMode} inert={maintenanceMode} style={maintenanceMode ? { opacity: 0.5 } : undefined}>
 
         {/* STEP INDICATOR */}
         <div className="sg-steps">
