@@ -1,6 +1,13 @@
- 'use client'
-
 import Link from 'next/link'
+import BackButton from './BackButton'
+
+export const metadata = {
+  title: 'About ToolVoid - Free Online Tools for Creators & Builders',
+  description: 'ToolVoid builds free, browser-based tools that help creators, builders, and everyday users create, convert, calculate, and work faster online.',
+  alternates: {
+    canonical: 'https://toolvoid.com/about',
+  },
+}
 
 const tools = [
   ['Script Generator', '/story-generator', 'Generate timed AI video scripts with narration & visuals. 3 free per day.'],
@@ -13,7 +20,7 @@ export default function AboutPage() {
   return (
     <main style={{ minHeight: '100vh', background: '#07070f', color: '#f0f0fa', padding: '5rem 1.25rem', fontFamily: 'system-ui, sans-serif' }}>
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
-        <button onClick={() => history.back()} style={{ marginBottom: '2rem', border: '1px solid rgba(255,255,255,.12)', background: 'transparent', color: 'rgba(255,255,255,.7)', borderRadius: 999, padding: '.55rem 1rem', cursor: 'pointer' }}>← Back</button>
+        <BackButton />
         <h1 style={{ fontSize: 'clamp(2rem, 6vw, 4rem)', marginBottom: '1rem' }}>About TooL Void</h1>
         <p style={{ color: 'rgba(255,255,255,.68)', lineHeight: 1.8, fontSize: '1.05rem' }}>TooL Void is a collection of free AI tools for creators, marketers, writers, and anyone who wants quick help generating useful content.</p>
 
