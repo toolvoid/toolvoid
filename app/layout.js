@@ -12,7 +12,7 @@ export const metadata = {
     google: "rbqEJHRr7nYPOzcpX-joYrhKKHOXN43MzVU-L-LjaL8",
   },
   alternates: {
-    canonical: 'https://toolvoid.com',
+    canonical: 'https://toolvoid.com/',
   },
 };
 
