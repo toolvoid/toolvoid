@@ -61,6 +61,28 @@ const CSS = `
 .ht-root ::-webkit-scrollbar-track { background: var(--bg); }
 .ht-root ::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 99px; }
 
+/* ── TRANSITIONS ── */
+.ht-hero::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 12rem;
+  background: linear-gradient(180deg, rgba(15, 8, 8, 0) 0%, rgba(15, 8, 8, 0.18) 24%, rgba(21, 13, 13, 0.55) 50%, rgba(21, 13, 13, 0.9) 82%, rgba(21, 13, 13, 1) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.ht-root.light .ht-hero::after {
+  background: linear-gradient(180deg, rgba(255, 245, 245, 0) 0%, rgba(255, 245, 245, 0.14) 28%, rgba(255, 245, 245, 0.5) 52%, rgba(255, 245, 245, 0.78) 82%, rgba(255, 245, 245, 1) 100%);
+}
+.ht-gen {
+  position: relative;
+  background: linear-gradient(180deg, rgba(21, 13, 13, 0.96) 0%, rgba(21, 13, 13, 0.88) 10%, rgba(21, 13, 13, 1) 28%, var(--bg2) 100%);
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.ht-card, .ht-preview-panel, .ht-content-card, .ht-step-card, .ht-case-card, .ht-feat-card {
+  box-shadow: var(--shadow);
+}
+
 /* ── NAV ── */
 .ht-nav {
   position: sticky; top: 0; z-index: 100;
@@ -191,10 +213,12 @@ const CSS = `
 .ht-dot-bg { position: absolute; inset: 0; background-image: radial-gradient(circle, var(--border-hi) 1px, transparent 1px); background-size: 18px 18px; opacity: 0.5; pointer-events: none; }
 
 /* Placeholder */
-.ht-placeholder { text-align: center; position: relative; z-index: 1; }
-.ht-placeholder-icon { font-size: 2.8rem; opacity: 0.18; margin-bottom: 0.75rem; animation: htFloat 3s ease-in-out infinite; }
+.ht-placeholder { text-align: center; position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; max-width: 360px; margin: 0 auto; }
+.ht-placeholder-icon { width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; font-size: 1.8rem; background: var(--accent-dim); border: 1px solid rgba(255,107,107,0.2); margin-bottom: 0.2rem; animation: htFloat 3s ease-in-out infinite; }
 @keyframes htFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-.ht-placeholder-text { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted); }
+.ht-placeholder-title { font-family: var(--font-head); font-size: 1.05rem; font-weight: 700; letter-spacing: -0.02em; }
+.ht-placeholder-text { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+.ht-placeholder-tip { font-size: 0.82rem; color: var(--text-dim); border: 1px solid var(--border); border-radius: 999px; padding: 0.35rem 0.75rem; background: rgba(255,255,255,0.03); }
 
 /* Skeleton */
 .ht-skeleton { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1.25rem; width: 100%; }
@@ -205,7 +229,13 @@ const CSS = `
 .ht-loading-msg { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); text-align: center; margin-bottom: 1rem; opacity: 0.8; }
 
 /* Results */
-.ht-results { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1.25rem; animation: htFadeUp 0.4s ease both; }
+.ht-results { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1rem; animation: htFadeUp 0.4s ease both; }
+.ht-results-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); }
+.ht-results-title { font-family: var(--font-head); font-size: 1rem; font-weight: 700; letter-spacing: -0.02em; }
+.ht-results-sub { font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-mono); }
+.ht-results-badge { padding: 0.3rem 0.7rem; border-radius: 999px; background: var(--accent-dim); border: 1px solid rgba(255,107,107,0.16); color: var(--accent); font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.ht-results-stack { display: flex; flex-direction: column; gap: 0.9rem; }
+.ht-group-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.9rem; }
 .ht-group-label { display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600; margin-bottom: 0.6rem; }
 .ht-group-count { font-size: 0.68rem; background: rgba(255,255,255,0.06); padding: 0.15rem 0.5rem; border-radius: 99px; color: var(--text-muted); }
 .ht-tags-wrap { display: flex; flex-wrap: wrap; gap: 0.5rem; }
@@ -229,6 +259,42 @@ const CSS = `
   transition: all var(--tr);
 }
 .ht-copy-all:hover { opacity: 0.85; transform: translateY(-1px); }
+
+/* ── CONTENT SECTIONS ── */
+.ht-content-stack { display: grid; gap: 1.25rem; margin-top: 2.5rem; }
+.ht-content-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.ht-content-card p { color: var(--text-dim); line-height: 1.8; font-size: 0.95rem; }
+.ht-content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 1rem; }
+.ht-step-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1.15rem 1.2rem;
+}
+.ht-step-card h3 { font-family: var(--font-head); font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+.ht-step-card p { font-size: 0.9rem; color: var(--text-dim); line-height: 1.7; }
+.ht-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.71rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  width: fit-content;
+}
 
 /* ── FEATURES ── */
 .ht-features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 1.25rem; margin-top: 3rem; }
@@ -261,7 +327,7 @@ const CSS = `
 .ht-case-card p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.6; }
 
 /* ── FAQ ── */
-.ht-faq-list { max-width: 680px; margin: 3rem auto 0; display: flex; flex-direction: column; gap: 0.75rem; }
+.ht-faq-list { max-width: 780px; margin: 3rem auto 0; display: flex; flex-direction: column; gap: 0.75rem; }
 .ht-faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; transition: border-color var(--tr); }
 .ht-faq-item.open { border-color: var(--border-hi); }
 .ht-faq-q { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 1.25rem; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: color var(--tr); gap: 1rem; }
@@ -621,19 +687,26 @@ export default function HashtagPage({ maintenanceMode = false }) {
       const warnHtml = chars > 2200 ? '<span class="ht-char-warn"> ⚠ Instagram 2200 char limit</span>' : '';
 
       results.innerHTML = `
-        <div>
-          <div class="ht-group-label"><span style="color:#fda4c8">🔥 High Volume</span><span class="ht-group-count">${(r.high_volume||[]).length}</span></div>
-          <div class="ht-tags-wrap">${hiTags}</div>
+        <div class="ht-results-top">
+          <div>
+            <div class="ht-results-title">Ready to paste</div>
+            <div class="ht-results-sub">${total} hashtags blended for ${state.platform.toLowerCase()}</div>
+          </div>
+          <div class="ht-results-badge">${state.platform}</div>
         </div>
-        <hr class="ht-divider"/>
-        <div>
-          <div class="ht-group-label"><span style="color:#93c5fd">📊 Medium Volume</span><span class="ht-group-count">${(r.medium||[]).length}</span></div>
-          <div class="ht-tags-wrap">${medTags}</div>
-        </div>
-        <hr class="ht-divider"/>
-        <div>
-          <div class="ht-group-label"><span style="color:#6ee7b7">💎 Niche</span><span class="ht-group-count">${(r.niche||[]).length}</span></div>
-          <div class="ht-tags-wrap">${niTags}</div>
+        <div class="ht-results-stack">
+          <div class="ht-group-card">
+            <div class="ht-group-label"><span style="color:#fda4c8">🔥 High Volume</span><span class="ht-group-count">${(r.high_volume||[]).length}</span></div>
+            <div class="ht-tags-wrap">${hiTags}</div>
+          </div>
+          <div class="ht-group-card">
+            <div class="ht-group-label"><span style="color:#93c5fd">📊 Medium Volume</span><span class="ht-group-count">${(r.medium||[]).length}</span></div>
+            <div class="ht-tags-wrap">${medTags}</div>
+          </div>
+          <div class="ht-group-card">
+            <div class="ht-group-label"><span style="color:#6ee7b7">💎 Niche</span><span class="ht-group-count">${(r.niche||[]).length}</span></div>
+            <div class="ht-tags-wrap">${niTags}</div>
+          </div>
         </div>
       `;
 
@@ -808,15 +881,8 @@ export default function HashtagPage({ maintenanceMode = false }) {
         </div>
       </section>
 
-      {maintenanceMode && (
-        <div className="tool-maintenance-banner" role="status">
-          This tool is under maintenance, back soon.
-          <span>Hashtag generation is temporarily unavailable while we make improvements.</span>
-        </div>
-      )}
-
       {/* ── GENERATOR ── */}
-      <section className="ht-section ht-gen" id="ht-generator" aria-disabled={maintenanceMode} inert={maintenanceMode} style={maintenanceMode ? { opacity: 0.5 } : undefined}>
+      <section className="ht-section ht-gen" id="ht-generator">
         <div className="ht-section-inner">
           <div className="ht-gen-header">
             <div className="ht-label">✦ Live Generator</div>
@@ -907,7 +973,9 @@ export default function HashtagPage({ maintenanceMode = false }) {
                 {/* Placeholder */}
                 <div id="ht-placeholder" className="ht-placeholder">
                   <div className="ht-placeholder-icon">🏷️</div>
-                  <div className="ht-placeholder-text">Enter a topic to generate hashtags</div>
+                  <div className="ht-placeholder-title">Ready when you are</div>
+                  <div className="ht-placeholder-text">Describe your post, pick a platform, and generate a polished set of hashtags in seconds.</div>
+                  <div className="ht-placeholder-tip">Tip: be specific for better matches</div>
                 </div>
 
                 {/* Skeleton */}
@@ -940,6 +1008,110 @@ export default function HashtagPage({ maintenanceMode = false }) {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SEO CONTENT ── */}
+      <section className="ht-section ht-section-alt" id="ht-seo">
+        <div className="ht-section-inner">
+          <div className="ht-content-stack">
+            <article className="ht-content-card">
+              <div className="ht-pill">What is Hashtag Generator</div>
+              <p>
+                Hashtag Generator is a fast AI-powered writing helper for creators and marketers who want better reach without spending time researching tags by hand. You describe your topic, choose a platform, and the tool returns a curated set of relevant hashtags that can support discovery, engagement, and brand visibility.
+              </p>
+              <p>
+                Hashtags still matter because they help people find content outside your existing audience. A thoughtful mix of broad, medium, and niche tags can make a post easier to discover while keeping the message aligned with the topic you are actually covering.
+              </p>
+            </article>
+
+            <article className="ht-content-card">
+              <div className="ht-pill">How it works</div>
+              <div className="ht-content-grid">
+                <div className="ht-step-card">
+                  <h3>1. Describe your post</h3>
+                  <p>Share a short topic or caption idea so the generator can understand the context.</p>
+                </div>
+                <div className="ht-step-card">
+                  <h3>2. Choose your platform</h3>
+                  <p>Switch between Instagram, TikTok, YouTube, LinkedIn, or X to match the right format.</p>
+                </div>
+                <div className="ht-step-card">
+                  <h3>3. Generate and refine</h3>
+                  <p>Review the grouped hashtag set, copy the full list, or grab individual tags that fit your post.</p>
+                </div>
+              </div>
+            </article>
+
+            <article className="ht-content-card">
+              <div className="ht-pill">Who it's for</div>
+              <div className="ht-content-grid">
+                <div className="ht-step-card">
+                  <h3>Instagram creators</h3>
+                  <p>Reach more people on Reels, stories, and feed posts with hashtags tuned for the platform’s discovery flow.</p>
+                </div>
+                <div className="ht-step-card">
+                  <h3>YouTube creators</h3>
+                  <p>Support video discoverability with practical tags that match the topic and audience you want to reach.</p>
+                </div>
+                <div className="ht-step-card">
+                  <h3>TikTok creators</h3>
+                  <p>Use trend-aware tags that make short-form content easier to surface in niche communities.</p>
+                </div>
+                <div className="ht-step-card">
+                  <h3>Small businesses & marketers</h3>
+                  <p>Keep campaign posts consistent and discoverable across product launches, promotions, and educational content.</p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section className="ht-section" id="ht-faq">
+        <div className="ht-section-inner">
+          <div style={{ textAlign: 'center' }}>
+            <div className="ht-label">❓ Questions</div>
+            <h2 className="ht-title">Frequently Asked</h2>
+            <p className="ht-sub" style={{ margin: '0 auto' }}>Everything you need to know about using the Hashtag Generator for better post discovery.</p>
+          </div>
+          <div className="ht-faq-list">
+            {[
+              {
+                q: 'What does this tool actually do?',
+                a: 'It takes a short topic or content idea and creates a balanced hashtag set that is relevant to your post and easy to copy into captions, bios, and descriptions. Instead of researching tags manually, you get a ready-made mix that supports reach and organization.',
+              },
+              {
+                q: 'How many hashtags should I use on Instagram?',
+                a: 'Instagram posts usually work best when you choose a focused set rather than dumping a wall of tags. Our generator gives you a curated group of hashtags so you can keep your caption clean while still covering broad, medium, and niche interests.',
+              },
+              {
+                q: 'Are the hashtags current and relevant?',
+                a: 'The tool generates fresh suggestions based on the topic and platform you choose, which makes it useful for both evergreen content and timely campaigns. That means you can adapt your tag mix as your content changes without starting from scratch.',
+              },
+              {
+                q: 'Does it work for TikTok and YouTube too?',
+                a: 'Yes. Hashtags are not one-size-fits-all across social platforms, so the generator adjusts the suggestions to better fit the behavior of each network. That helps your content feel more intentional whether you are posting a Reel, short video, or long-form upload.',
+              },
+              {
+                q: 'What is the high, medium, and niche split?',
+                a: 'The groups are designed to balance visibility and precision. Broad tags improve discoverability, medium tags help you reach a more specific audience, and niche tags support stronger relevance for people who are already interested in your topic.',
+              },
+              {
+                q: 'Is my topic data stored?',
+                a: 'No. The generator processes your input to create hashtags and does not keep it for later reuse. That keeps the experience straightforward and private while still giving you useful suggestions right away.',
+              },
+            ].map((f, i) => (
+              <div className="ht-faq-item" key={i}>
+                <div className="ht-faq-q" role="button" tabIndex={0} aria-expanded="false">
+                  {f.q}
+                  <span className="ht-faq-arrow">⌄</span>
+                </div>
+                <div className="ht-faq-a">{f.a}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -1013,35 +1185,6 @@ export default function HashtagPage({ maintenanceMode = false }) {
                 <h3>{c.title}</h3>
                 <p>{c.desc}</p>
               </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── FAQ ── */}
-      <section className="ht-section ht-section-alt" id="ht-faq">
-        <div className="ht-section-inner">
-          <div style={{ textAlign: 'center' }}>
-            <div className="ht-label">❓ Questions</div>
-            <h2 className="ht-title">Frequently Asked</h2>
-            <p className="ht-sub" style={{ margin: '0 auto' }}>Everything you need to know about the Hashtag Generator.</p>
-          </div>
-          <div className="ht-faq-list">
-            {[
-              { q: 'Is this tool completely free?', a: 'Yes — 10 free generations per day.' },
-              { q: 'How many hashtags should I use on Instagram?', a: 'Instagram currently recommends 3–5 hashtags for best reach, though many creators still use 15–30. Our tool gives you 30 so you can pick the best ones.' },
-              { q: 'Are the hashtags updated and relevant?', a: 'Gemini AI generates hashtags fresh each time based on current knowledge of platform trends, ensuring relevance to your topic and category.' },
-              { q: 'Does this work for TikTok hashtags?', a: 'Yes. TikTok hashtags are generated with the platform\'s discovery algorithm in mind — focusing on trending sounds and content categories specific to TikTok.' },
-              { q: 'What is the high / medium / niche split?', a: 'High volume tags have millions of posts and give broad exposure. Medium tags balance reach and competition. Niche tags have targeted, highly engaged audiences. Using all three maximizes algorithmic reach.' },
-              { q: 'Is my topic data stored?', a: 'No. Your input is sent to the AI to generate hashtags and is never stored, logged, or used for any other purpose.' },
-            ].map((f, i) => (
-              <div className="ht-faq-item" key={i}>
-                <div className="ht-faq-q" role="button" tabIndex={0} aria-expanded="false">
-                  {f.q}
-                  <span className="ht-faq-arrow">⌄</span>
-                </div>
-                <div className="ht-faq-a">{f.a}</div>
-              </div>
             ))}
           </div>
         </div>
