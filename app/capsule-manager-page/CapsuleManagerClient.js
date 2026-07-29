@@ -33,7 +33,7 @@ const steps = [
 ]
 
 const providers = [
-  ['Google Gemini', '✅ Yes', 'gemini-2.0-flash', 'gemini-2.0-pro', '15 RPM free'],
+  ['Google Gemini', '✅ Yes', 'gemini-3.5-flash-lite', 'gemini-3.5-flash-lite', '15 RPM free'],
   ['OpenAI', '❌ No', '—', 'gpt-4o-mini', 'Paid only'],
   ['Anthropic Claude', '❌ No', '—', 'claude-haiku-4-5', 'Paid only'],
   ['DeepSeek', '✅ Yes', 'deepseek-chat', 'deepseek-chat', 'Limited free credits'],
@@ -184,7 +184,7 @@ export default function CapsuleManagerClient() {
               </tbody>
             </table>
           </div>
-          <p className="cm-callout">For most users, Gemini free tier (gemini-2.0-flash) is the best starting point — no credit card required.</p>
+          <p className="cm-callout">For most users, Gemini free tier (gemini-3.5-flash-lite) is the best starting point — no credit card required.</p>
         </div>
       </section>
 

@@ -38,17 +38,26 @@ function getActiveKey(isPremium) {
     usage.emergency_slots++;
     const key = process.env.EMERGENCY_FLASH_KEY || process.env.EMERGENCY_LITE_KEY;
     if (!key) return { error: 'Emergency keys not configured' };
-    return { type: 'emergency', key, isGemini: true, model: 'gemini-2.5-flash' };
+    return { type: 'emergency', key, isGemini: true, model: 'gemini-3.5-flash-lite' };
   }
   if (usage.flash < LIMITS.flash * THRESHOLD && process.env.GEMINI_FLASH_KEY)
-    return { type: 'flash', key: process.env.GEMINI_FLASH_KEY, isGemini: true, model: 'gemini-2.5-flash' };
+    return { type: 'flash', key: process.env.GEMINI_FLASH_KEY, isGemini: true, model: 'gemini-3.5-flash-lite' };
   if (usage.lite < LIMITS.lite * THRESHOLD && process.env.GEMINI_LITE_KEY)
-    return { type: 'lite', key: process.env.GEMINI_LITE_KEY, isGemini: true, model: 'gemini-2.5-flash-lite' };
+    return { type: 'lite', key: process.env.GEMINI_LITE_KEY, isGemini: true, model: 'gemini-3.5-flash-lite' };
   if (usage.groq1 < LIMITS.groq1 * THRESHOLD && process.env.GROQ_KEY_STORY_1)
     return { type: 'groq1', key: process.env.GROQ_KEY_STORY_1, isGemini: false, model: 'llama-3.3-70b-versatile' };
   if (usage.groq2 < LIMITS.groq2 * THRESHOLD && process.env.GROQ_KEY_STORY_2)
     return { type: 'groq2', key: process.env.GROQ_KEY_STORY_2, isGemini: false, model: 'llama-3.3-70b-versatile' };
   return { error: 'All API limits reached for today' };
+}
+
+function extractGeminiText(data) {
+  const parts = data?.candidates?.[0]?.content?.parts;
+  if (Array.isArray(parts)) {
+    const texts = parts.map(part => (typeof part?.text === 'string' ? part.text : '')).filter(Boolean);
+    if (texts.length) return texts.join('');
+  }
+  return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
 }
 
 async function callGemini(key, model, systemPrompt, userPrompt, maxTokens) {
@@ -61,7 +70,7 @@ async function callGemini(key, model, systemPrompt, userPrompt, maxTokens) {
   });
   if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err?.error?.message || `Gemini error: ${response.status}`); }
   const data = await response.json();
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  return extractGeminiText(data);
 }
 
 async function callGroq(key, model, systemPrompt, userPrompt, maxTokens) {

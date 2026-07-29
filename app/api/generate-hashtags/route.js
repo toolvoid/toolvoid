@@ -29,6 +29,15 @@ function getActiveKey() {
 
 function bumpKey(which) { if (which === 1) keyStore.key1_count++; else keyStore.key2_count++; }
 
+function extractGeminiText(data) {
+  const parts = data?.candidates?.[0]?.content?.parts;
+  if (Array.isArray(parts)) {
+    const texts = parts.map(part => (typeof part?.text === 'string' ? part.text : '')).filter(Boolean);
+    if (texts.length) return texts.join('');
+  }
+  return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+}
+
 async function callGemini(apiKey, topic, platform, category, count, attempt = 1) {
   const perGroup  = Math.floor(count / 3);
   const remainder = count - perGroup * 3;
@@ -55,7 +64,7 @@ Return ONLY this exact JSON, nothing else:
 
   try {
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -74,7 +83,7 @@ Return ONLY this exact JSON, nothing else:
     }
 
     const data  = await res.json();
-    const raw   = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const raw   = extractGeminiText(data);
     const clean = raw.replace(/```json\s*/gi, '').replace(/```\s*/gi, '').trim();
 
     let parsed;

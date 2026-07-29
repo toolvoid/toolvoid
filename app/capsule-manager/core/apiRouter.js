@@ -98,7 +98,7 @@ function parseJSON(text, rawText) {
 
 async function callGemini(apiKey, text) {
   const res = await axios.post(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${encodeURIComponent(apiKey)}`,
     {
       contents: [{ parts: [{ text: SYSTEM_PROMPT + '\n\nConversation:\n' + text }] }],
       generationConfig: { responseMimeType: 'application/json' }
