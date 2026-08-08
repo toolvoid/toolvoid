@@ -1,5 +1,11 @@
 'use client';
 
+export const metadata = {
+  alternates: {
+    canonical: 'https://toolvoid.com/',
+  },
+};
+
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
