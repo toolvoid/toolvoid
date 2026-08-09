@@ -20,10 +20,10 @@ export const metadata = {
     apple: '/apple-touch-icon.png',
   },
   openGraph: {
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://toolvoid.com/og-image.png', width: 1200, height: 630 }],
   },
   twitter: {
-    images: ['/og-image.png'],
+    images: ['https://toolvoid.com/og-image.png'],
   },
 };
 
