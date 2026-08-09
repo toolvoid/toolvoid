@@ -665,25 +665,41 @@ function TreeNode({ label, value, depth = 0, limit = 4 }) {
 
 export default function JsonWorkbenchPage() {
   const fileRef = useRef(null);
-  const [input, setInput] = useState(SAMPLE_JSON);
-  const [indentSize, setIndentSize] = useState('2');
-  const [queryPath, setQueryPath] = useState('');
-  const [copied, setCopied] = useState('');
-  const [outputTab, setOutputTab] = useState('viewer');
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
+  const [input, setInput] = useState(() => {
+    if (typeof window === 'undefined') return SAMPLE_JSON;
     const saved = window.localStorage.getItem(STORAGE_KEY);
-    if (!saved) return;
+    if (!saved) return SAMPLE_JSON;
     try {
       const parsed = JSON.parse(saved);
-      if (typeof parsed.input === 'string') setInput(parsed.input);
-      if (typeof parsed.indentSize === 'string') setIndentSize(parsed.indentSize);
-      if (typeof parsed.queryPath === 'string') setQueryPath(parsed.queryPath);
+      return typeof parsed.input === 'string' ? parsed.input : SAMPLE_JSON;
     } catch {
-      // ignore invalid storage
+      return SAMPLE_JSON;
     }
-  }, []);
+  });
+  const [indentSize, setIndentSize] = useState(() => {
+    if (typeof window === 'undefined') return '2';
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    if (!saved) return '2';
+    try {
+      const parsed = JSON.parse(saved);
+      return typeof parsed.indentSize === 'string' ? parsed.indentSize : '2';
+    } catch {
+      return '2';
+    }
+  });
+  const [queryPath, setQueryPath] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    if (!saved) return '';
+    try {
+      const parsed = JSON.parse(saved);
+      return typeof parsed.queryPath === 'string' ? parsed.queryPath : '';
+    } catch {
+      return '';
+    }
+  });
+  const [copied, setCopied] = useState('');
+  const [outputTab, setOutputTab] = useState('viewer');
 
   useEffect(() => {
     if (typeof window === 'undefined') return;

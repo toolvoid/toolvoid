@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import GoogleAuthButton from '../../components/GoogleAuthButton';
@@ -317,7 +318,10 @@ const EXTRA_PACKAGES = {
 export default function ImageGenPage() {
   const { status } = useSession();
   const authStatusRef = useRef(status);
-  authStatusRef.current = status;
+
+  useEffect(() => {
+    authStatusRef.current = status;
+  }, [status]);
 
   useEffect(() => {
     const root = document.getElementById('ig-root');
@@ -1021,8 +1025,7 @@ export default function ImageGenPage() {
                 </div>
 
                 {/* Output image */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img id="ig-output-img" className="ig-output-img" alt="AI Generated" />
+                <Image id="ig-output-img" className="ig-output-img" alt="AI Generated" width={640} height={480} unoptimized />
 
                 {/* Hover overlay */}
                 <div className="ig-img-overlay">

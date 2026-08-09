@@ -440,7 +440,15 @@ export default function UnitConverter() {
   const [precision,  setPrecision] = useState(4);
   const [scientific, setScientific]= useState(false);
   const [search,     setSearch]    = useState('');
-  const [history,    setHistory]   = useState([]);
+  const [history,    setHistory]   = useState(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const h = localStorage.getItem('uc_history');
+      return h ? JSON.parse(h) : [];
+    } catch {
+      return [];
+    }
+  });
   const [copiedKey,  setCopiedKey] = useState('');
   const [toast,      setToast]     = useState('');
   const [openFaq,    setOpenFaq]   = useState(null);
@@ -455,10 +463,6 @@ export default function UnitConverter() {
   };
 
   /* Load history */
-  useEffect(() => {
-    try { const h = localStorage.getItem('uc_history'); if (h) setHistory(JSON.parse(h)); } catch {}
-  }, []);
-
   /* Change category → reset units */
   const handleCategoryChange = (cat) => {
     setCategory(cat);
@@ -467,15 +471,23 @@ export default function UnitConverter() {
     setFromValue('1'); setToValue('');
   };
 
-  /* Compute toValue whenever inputs change */
-  useEffect(() => {
-    const result = convert(fromValue, fromUnit, toUnit, category);
-    setToValue(result === '' ? '' : formatNum(result, precision, scientific));
-  }, [fromValue, fromUnit, toUnit, category, precision, scientific]);
-
   /* Reverse: typing in "to" box */
+  const handleFromChange = (val) => {
+    setFromValue(val);
+    if (!val) {
+      setToValue('');
+      return;
+    }
+    const result = convert(val, fromUnit, toUnit, category);
+    setToValue(result === '' ? '' : formatNum(result, precision, scientific));
+  };
+
   const handleToChange = (val) => {
     setToValue(val);
+    if (!val) {
+      setFromValue('');
+      return;
+    }
     const result = convert(val, toUnit, fromUnit, category);
     setFromValue(result === '' ? '' : formatNum(result, precision, scientific));
   };
@@ -524,7 +536,7 @@ export default function UnitConverter() {
       const t = setTimeout(() => saveHistory(entry), 1500);
       return () => clearTimeout(t);
     }
-  }, [fromValue, toValue, fromUnit, toUnit, category]);
+  }, [category, fromUnit, fromValue, saveHistory, toUnit, toValue]);
 
   /* Copy */
   const copyVal = async (text, key) => {

@@ -1,5 +1,6 @@
 'use client';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import Image from 'next/image';
 
 /* ─── CSS ─────────────────────────────────────────────────────────────── */
 const CSS = `
@@ -326,76 +327,76 @@ export default function Base64Encoder() {
   const [tab, setTab] = useState('text');
   const [mode, setMode] = useState('encode');
   const [input, setInput] = useState('');
-  const [output, setOutput] = useState('');
   const [urlSafe, setUrlSafe] = useState(false);
   const [wrapLines, setWrapLines] = useState(false);
   const [noPad, setNoPad] = useState(false);
   const [upper, setUpper] = useState(false);
-  const [isValid, setIsValid] = useState(null);
+  const output = useMemo(() => {
+    if (!input.trim()) return '';
+    if (mode === 'encode') {
+      return encodeB64(input, urlSafe, noPad, wrapLines, upper);
+    }
+    const ok = isValidB64(input);
+    return ok ? decodeB64(input) : 'Invalid Base64 — check for invalid characters';
+  }, [input, mode, noPad, upper, urlSafe, wrapLines]);
+  const isValid = useMemo(() => {
+    if (!input.trim() || mode === 'encode') return null;
+    return isValidB64(input);
+  }, [input, mode]);
   const [imagePreview, setImagePreview] = useState('');
   const [imageB64, setImageB64] = useState('');
   const [fileInfo, setFileInfo] = useState(null);
   const [fileB64, setFileB64] = useState('');
   const [imgDecodeInput, setImgDecodeInput] = useState('');
-  const [imgDecodePreview, setImgDecodePreview] = useState('');
+  const [imgDecodePreviewInput, setImgDecodePreviewInput] = useState('');
   const [extraTool, setExtraTool] = useState('url');
   const [extraIn, setExtraIn] = useState('');
-  const [extraOut, setExtraOut] = useState('');
+  const extraOut = useMemo(() => {
+    if (!extraIn) return '';
+    if (extraTool === 'url') return urlEncode(extraIn);
+    if (extraTool === 'urlDec') return urlDecode(extraIn);
+    if (extraTool === 'html') return htmlEncode(extraIn);
+    if (extraTool === 'htmlDec') return htmlDecode(extraIn);
+    if (extraTool === 'hex') return textToHex(extraIn);
+    if (extraTool === 'hexDec') return hexToText(extraIn);
+    if (extraTool === 'bin') return textToBin(extraIn);
+    if (extraTool === 'binDec') return binToText(extraIn);
+    return '';
+  }, [extraIn, extraTool]);
   const [hashAlgo, setHashAlgo] = useState('SHA-256');
-  const [hashOut, setHashOut] = useState('');
+  const hashOut = useMemo(() => {
+    if (!extraIn || !['SHA-1','SHA-256','SHA-384','SHA-512'].includes(hashAlgo)) {
+      return hashAlgo === 'MD5' && extraIn ? md5(extraIn) : '';
+    }
+    return '';
+  }, [extraIn, hashAlgo]);
   const [copiedKey, setCopiedKey] = useState('');
   const [toast, setToast] = useState('');
-  const [history, setHistory] = useState([]);
+  const [now, setNow] = useState(() => Date.now());
+  const [history, setHistory] = useState(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const h = localStorage.getItem('b64_history');
+      return h ? JSON.parse(h) : [];
+    } catch {
+      return [];
+    }
+  });
   const [openFaq, setOpenFaq] = useState(null);
   const [isDragOver, setIsDragOver] = useState(false);
   const fileRef = useRef();
 
   useEffect(() => {
-    try { const h = localStorage.getItem('b64_history'); if (h) setHistory(JSON.parse(h)); } catch {}
+    const id = window.setInterval(() => setNow(Date.now()), 60000);
+    return () => window.clearInterval(id);
   }, []);
-
-  /* Live encode/decode */
-  useEffect(() => {
-    if (!input.trim()) { setOutput(''); setIsValid(null); return; }
-    if (mode === 'encode') {
-      setOutput(encodeB64(input, urlSafe, noPad, wrapLines, upper));
-      setIsValid(null);
-    } else {
-      const ok = isValidB64(input);
-      setIsValid(ok);
-      setOutput(ok ? decodeB64(input) : 'Invalid Base64 — check for invalid characters');
-    }
-  }, [input, mode, urlSafe, noPad, wrapLines, upper]);
 
   /* Auto-detect */
   const autoMode = input.trim() ? (isValidB64(input.trim()) ? 'decode' : 'encode') : null;
 
-  /* Extra tools live */
-  useEffect(() => {
-    if (!extraIn) { setExtraOut(''); return; }
-    if (extraTool === 'url') setExtraOut(urlEncode(extraIn));
-    else if (extraTool === 'urlDec') setExtraOut(urlDecode(extraIn));
-    else if (extraTool === 'html') setExtraOut(htmlEncode(extraIn));
-    else if (extraTool === 'htmlDec') setExtraOut(htmlDecode(extraIn));
-    else if (extraTool === 'hex') setExtraOut(textToHex(extraIn));
-    else if (extraTool === 'hexDec') setExtraOut(hexToText(extraIn));
-    else if (extraTool === 'bin') setExtraOut(textToBin(extraIn));
-    else if (extraTool === 'binDec') setExtraOut(binToText(extraIn));
-  }, [extraIn, extraTool]);
-
-  /* Hash */
-  useEffect(() => {
-    if (!extraIn || !['SHA-1','SHA-256','SHA-384','SHA-512'].includes(hashAlgo)) {
-      if (hashAlgo === 'MD5' && extraIn) setHashOut(md5(extraIn));
-      else setHashOut('');
-      return;
-    }
-    hashText(extraIn, hashAlgo).then(h => setHashOut(h)).catch(() => setHashOut(''));
-  }, [extraIn, hashAlgo]);
-
   /* Copy */
-  let toastTimer;
-  const showToast = (msg) => { setToast(msg); clearTimeout(toastTimer); toastTimer = setTimeout(() => setToast(''), 2500); };
+  const toastTimerRef = useRef(null);
+  const showToast = (msg) => { setToast(msg); clearTimeout(toastTimerRef.current); toastTimerRef.current = setTimeout(() => setToast(''), 2500); };
   const copy = async (text, key) => {
     try { await navigator.clipboard.writeText(text); setCopiedKey(key); showToast('Copied!'); setTimeout(() => setCopiedKey(''), 2000); } catch {}
   };
@@ -438,21 +439,22 @@ export default function Base64Encoder() {
   };
 
   /* B64 → image decode */
-  useEffect(() => {
-    if (!imgDecodeInput.trim()) { setImgDecodePreview(''); return; }
+  const imgDecodePreview = useMemo(() => {
+    if (!imgDecodeInput.trim()) return '';
     const clean = imgDecodeInput.trim();
     const isDataUri = clean.startsWith('data:');
-    const uri = isDataUri ? clean : `data:image/png;base64,${clean}`;
-    setImgDecodePreview(uri);
+    return isDataUri ? clean : `data:image/png;base64,${clean}`;
   }, [imgDecodeInput]);
 
   /* Save history */
   const pushHistory = useCallback((type, preview) => {
     const entry = { type, preview, ts: Date.now() };
-    const h = [entry, ...history].slice(0, 10);
-    setHistory(h);
-    try { localStorage.setItem('b64_history', JSON.stringify(h)); } catch {}
-  }, [history]);
+    setHistory((prev) => {
+      const h = [entry, ...prev].slice(0, 10);
+      try { localStorage.setItem('b64_history', JSON.stringify(h)); } catch {}
+      return h;
+    });
+  }, []);
 
   /* Stats */
   const inputBytes = new TextEncoder().encode(input).length;
@@ -564,10 +566,10 @@ export default function Base64Encoder() {
                         {v && <span className="check">✓</span>}{l}
                       </button>
                     ))}
-                    <button className="b64-opt-chip" onClick={() => { setInput(output); setOutput(input); setMode(mode==='encode'?'decode':'encode'); }}>
+                    <button className="b64-opt-chip" onClick={() => { setInput(output); setMode(mode==='encode'?'decode':'encode'); }}>
                       ⇅ Swap
                     </button>
-                    <button className="b64-opt-chip" onClick={() => { setInput(''); setOutput(''); }}>✕ Clear</button>
+                    <button className="b64-opt-chip" onClick={() => { setInput(''); }}>✕ Clear</button>
                   </div>
 
                   <div className="b64-arrow-row">
@@ -632,7 +634,7 @@ export default function Base64Encoder() {
                 ) : (
                   <>
                     <div className="b64-img-preview">
-                      <img src={imagePreview} alt="preview" />
+                      <Image src={imagePreview} alt="preview" width={480} height={320} unoptimized />
                       <div className="b64-img-meta">
                         {fileInfo && <>
                           <span>📄 {fileInfo.name}</span>
@@ -663,7 +665,7 @@ export default function Base64Encoder() {
                     onChange={e => setImgDecodeInput(e.target.value)} rows={3} />
                   {imgDecodePreview && (
                     <div className="b64-img-preview" style={{ marginTop: '0.75rem' }}>
-                      <img src={imgDecodePreview} alt="decoded" onError={() => setImgDecodePreview('')} />
+                      <Image src={imgDecodePreview} alt="decoded" width={500} height={320} unoptimized onError={() => setImgDecodeInput('')} />
                       <div className="b64-action-row">
                         <a className="b64-action-btn" href={imgDecodePreview} download="decoded-image.png">⬇ Download Image</a>
                       </div>
@@ -712,7 +714,7 @@ export default function Base64Encoder() {
                 <div className="b64-tool-label">🛠️ EXTRA DEVELOPER TOOLS</div>
                 <div className="b64-sub-tabs">
                   {[['url','URL ↑'],['urlDec','URL ↓'],['html','HTML ↑'],['htmlDec','HTML ↓'],['hex','Hex ↑'],['hexDec','Hex ↓'],['bin','Binary ↑'],['binDec','Binary ↓'],['hash','Hash']].map(([id,label]) => (
-                    <button key={id} className={`b64-sub-tab ${extraTool===id?'active':''}`} onClick={() => { setExtraTool(id); setExtraIn(''); setExtraOut(''); setHashOut(''); }}>{label}</button>
+                    <button key={id} className={`b64-sub-tab ${extraTool===id?'active':''}`} onClick={() => { setExtraTool(id); setExtraIn(''); }}>{label}</button>
                   ))}
                 </div>
 
@@ -742,7 +744,7 @@ export default function Base64Encoder() {
                   <button className="b64-action-btn primary" onClick={() => copy(extraTool==='hash' ? hashOut : extraOut, 'extra')}>
                     {copiedKey==='extra' ? '✓ Copied!' : '📋 Copy Output'}
                   </button>
-                  {(extraOut || hashOut) && <button className="b64-action-btn" onClick={() => { setExtraIn(extraOut || hashOut); setExtraOut(''); }}>⇅ Use as input</button>}
+                  {(extraOut || hashOut) && <button className="b64-action-btn" onClick={() => { setExtraIn(extraOut || hashOut); }}>⇅ Use as input</button>}
                 </div>
               </div>
             )}
@@ -760,7 +762,7 @@ export default function Base64Encoder() {
                     <span className="b64-hist-type">{h.type}</span>
                     <span className="b64-hist-preview">{h.preview}</span>
                     <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', flexShrink: 0 }}>
-                      {Math.round((Date.now() - h.ts) / 60000)}m ago
+                      {Math.round((now - h.ts) / 60000)}m ago
                     </span>
                   </div>
                 ))}

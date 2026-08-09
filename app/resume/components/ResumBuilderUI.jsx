@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import React, { useState, useCallback, useMemo } from 'react'
 import { ChevronRight, Download, Settings2, ZoomIn, ZoomOut, Loader, Sparkles } from 'lucide-react'
 
@@ -458,7 +459,7 @@ function PersonalEditor({ data, onUpdate, isDark }) {
         <div className={`mb-8 p-6 rounded-2xl border-2 ${isDark ? 'bg-gradient-to-br from-slate-800/50 to-slate-800/30 border-slate-700 hover:border-blue-500/50' : 'bg-gradient-to-br from-slate-50 to-slate-100 border-slate-300 hover:border-blue-500/50'} transition-all`}>
           <div className="flex items-center gap-6">
             <div className={`w-24 h-24 rounded-2xl flex items-center justify-center text-5xl flex-shrink-0 ${isDark ? 'bg-gradient-to-br from-slate-700 to-slate-800 border-2 border-slate-600' : 'bg-gradient-to-br from-slate-200 to-slate-300 border-2 border-slate-300'} shadow-lg`}>
-              {data.photo ? <img src={data.photo} alt="Profile" className="w-full h-full object-cover rounded-xl" /> : '📷'}
+              {data.photo ? <Image unoptimized src={data.photo} alt="Profile" width={96} height={96} className="w-full h-full object-cover rounded-xl" /> : '📷'}
             </div>
             <div>
               <label className={`inline-block px-6 py-3 rounded-xl cursor-pointer font-bold text-sm transition-all transform hover:scale-105 active:scale-95 ${isDark ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:shadow-lg hover:shadow-blue-500/50' : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:shadow-lg'}`}>
@@ -955,7 +956,7 @@ function ResumePreview({ data, isDark }) {
               )}
             </div>
             {data.personal.photo && (
-              <img src={data.personal.photo} alt="" className="w-16 h-16 rounded object-cover ml-4" />
+              <Image unoptimized src={data.personal.photo} alt="" width={64} height={64} className="w-16 h-16 rounded object-cover ml-4" />
             )}
           </div>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
@@ -725,8 +725,12 @@ function LineChart({ points }) {
 function NumberInput({ value, onValueChange, ...props }) {
   const [draft, setDraft] = useState(String(value));
 
+  const previousValueRef = useRef(value);
   useEffect(() => {
-    setDraft(String(value));
+    if (previousValueRef.current !== value) {
+      setDraft(String(value));
+      previousValueRef.current = value;
+    }
   }, [value]);
 
   function handleChange(event) {
@@ -769,22 +773,20 @@ export default function LoanEligibilityPage() {
 
   const [interestRate, setInterestRate] = useState(8.5);
   const [tenure, setTenure] = useState(20);
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const stored = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
+      return Array.isArray(stored.history) ? stored.history : [];
+    } catch {
+      return [];
+    }
+  });
 
   const [growthRate, setGrowthRate] = useState(8);
   const [targetLoan, setTargetLoan] = useState(5000000);
   const [chartType, setChartType] = useState('budget');
   const [copied, setCopied] = useState('');
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      const stored = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
-      if (Array.isArray(stored.history)) setHistory(stored.history);
-    } catch {
-      // ignore invalid local storage
-    }
-  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;

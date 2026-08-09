@@ -270,18 +270,19 @@ function Icon2D({ draw, size, hovered, color }) {
     const canvas = ref.current; if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const dpr = window.devicePixelRatio || 1;
+    const currentState = state.current;
     canvas.width = size * dpr; canvas.height = size * dpr;
     canvas.style.width = `${size}px`; canvas.style.height = `${size}px`;
     ctx.scale(dpr, dpr);
     const loop = () => {
-      state.current.t += 0.022;
+      currentState.t += 0.022;
       ctx.clearRect(0,0,size,size);
-      draw(ctx,size/2,size/2,size,state.current.t,state.current.hovered,color);
-      state.current.raf = requestAnimationFrame(loop);
+      draw(ctx,size/2,size/2,size,currentState.t,currentState.hovered,color);
+      currentState.raf = requestAnimationFrame(loop);
     };
     loop();
-    return () => cancelAnimationFrame(state.current.raf);
-  }, [size, color]);
+    return () => cancelAnimationFrame(currentState.raf);
+  }, [color, draw, size]);
   useEffect(() => { state.current.hovered = hovered; }, [hovered]);
   return (
     <canvas ref={ref} width={size} height={size}

@@ -2103,7 +2103,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
               <input type="file" id="p-file-input" accept=".pdf,application/pdf,image/*" multiple />
               <div className="p-drop-icon">📄</div>
               <div className="p-drop-title">Drop your file here</div>
-              <div className="p-drop-sub">PDF for most tools · Images for "Images → PDF"</div>
+              <div className="p-drop-sub">PDF for most tools · Images for &quot;Images → PDF&quot;</div>
               <div className="p-drop-btn">Browse Files</div>
               <div className="p-drop-info">All processing is local · Files never leave your device</div>
             </div>

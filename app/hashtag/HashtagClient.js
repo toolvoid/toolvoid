@@ -1045,7 +1045,7 @@ export default function HashtagPage({ maintenanceMode = false }) {
             </article>
 
             <article className="ht-content-card">
-              <div className="ht-pill">Who it's for</div>
+              <div className="ht-pill">Who it&apos;s for</div>
               <div className="ht-content-grid">
                 <div className="ht-step-card">
                   <h3>Instagram creators</h3>

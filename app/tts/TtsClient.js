@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 
 const MAX_CHARS = 5000;
@@ -87,52 +87,59 @@ export default function TextToSpeech() {
   const [speaking, setSpeaking]     = useState(false);
   const [paused, setPaused]         = useState(false);
   const [progress, setProgress]     = useState(0);
-  const [wordCount, setWordCount]   = useState(0);
-  const [estTime, setEstTime]       = useState(0);
   const [langFilter, setLangFilter] = useState('all');
   const [downloading, setDownloading] = useState(false);
   const [downloadMsg, setDownloadMsg] = useState('');
   const [activePreset, setActivePreset] = useState('Normal');
   const [currentChunk, setCurrentChunk] = useState(0);
+  const [chunkCount, setChunkCount] = useState(0);
 
   const utterRef = useRef(null);
-  const chunksRef = useRef([]);
   const stopRequestedRef = useRef(false);
   const audioUrlRef = useRef('');
+
+  const wordCount = useMemo(() => {
+    const words = text.trim().split(/\s+/).filter(Boolean);
+    return text.trim() ? words.length : 0;
+  }, [text]);
+
+  const estTime = useMemo(() => {
+    const words = text.trim().split(/\s+/).filter(Boolean);
+    const wpm = 150 * rate;
+    return Math.ceil(words.length / wpm);
+  }, [text, rate]);
 
   useEffect(() => {
     const loadVoices = () => {
       const v = window.speechSynthesis?.getVoices() || [];
       setVoices(v);
-      if (v.length && !selectedVoice) {
-        const preferred = getPreferredVoice(v, langFilter) || v[0];
-        if (preferred) setSelectedVoice(preferred.name);
+      if (!v.length) return;
+
+      const currentSelection = v.find((voice) => voice.name === selectedVoice);
+      const preferred = currentSelection || getPreferredVoice(v, langFilter) || v[0];
+      if (preferred && preferred.name !== selectedVoice) {
+        setSelectedVoice(preferred.name);
       }
     };
+
     loadVoices();
     window.speechSynthesis?.addEventListener('voiceschanged', loadVoices);
     return () => window.speechSynthesis?.removeEventListener('voiceschanged', loadVoices);
-  }, [selectedVoice, langFilter]);
+  }, [langFilter, selectedVoice]);
 
-  useEffect(() => {
-    const words = text.trim().split(/\s+/).filter(Boolean);
-    setWordCount(text.trim() ? words.length : 0);
-    const wpm = 150 * rate;
-    setEstTime(Math.ceil(words.length / wpm));
-  }, [text, rate]);
+  const filteredVoices = useMemo(() => {
+    return langFilter === 'all'
+      ? voices
+      : voices.filter((voice) => voice.lang.startsWith(langFilter));
+  }, [langFilter, voices]);
 
-  const filteredVoices = langFilter === 'all'
-    ? voices
-    : voices.filter(v => v.lang.startsWith(langFilter));
-
-  useEffect(() => {
-    if (!voices.length) return;
-    const currentIsVisible = filteredVoices.some((voice) => voice.name === selectedVoice);
-    if (currentIsVisible) return;
-
-    const nextVoice = getPreferredVoice(voices, langFilter) || voices[0];
-    if (nextVoice) setSelectedVoice(nextVoice.name);
-  }, [filteredVoices, langFilter, voices, selectedVoice]);
+  const selectedVoiceName = useMemo(() => {
+    if (!voices.length) return '';
+    if (selectedVoice && filteredVoices.some((voice) => voice.name === selectedVoice)) {
+      return selectedVoice;
+    }
+    return getPreferredVoice(voices, langFilter)?.name || voices[0]?.name || '';
+  }, [filteredVoices, langFilter, selectedVoice, voices]);
 
   useEffect(() => () => {
     if (audioUrlRef.current) {
@@ -147,14 +154,16 @@ export default function TextToSpeech() {
     setPaused(false);
     setProgress(0);
     setCurrentChunk(0);
+    setChunkCount(0);
   }, []);
 
-  const playChunk = useCallback((index, chunkList, preferredVoice) => {
+  const playChunk = useCallback(function playChunk(index, chunkList, preferredVoice) {
     if (!window.speechSynthesis || stopRequestedRef.current || index >= chunkList.length) {
       setSpeaking(false);
       setPaused(false);
       setProgress(chunkList.length ? 100 : 0);
       setCurrentChunk(0);
+      setChunkCount(0);
       return;
     }
 
@@ -182,6 +191,7 @@ export default function TextToSpeech() {
         setPaused(false);
         setProgress(100);
         setCurrentChunk(chunkList.length);
+        setChunkCount(0);
         return;
       }
       playChunk(index + 1, chunkList, preferredVoice);
@@ -203,12 +213,12 @@ export default function TextToSpeech() {
     const voice = voices.find(v => v.name === selectedVoice);
     const chunkList = splitIntoChunks(text);
     stopRequestedRef.current = false;
-    chunksRef.current = chunkList;
     setDownloadMsg('');
     setSpeaking(true);
     setPaused(false);
     setProgress(0);
     setCurrentChunk(chunkList.length ? 1 : 0);
+    setChunkCount(chunkList.length);
     playChunk(0, chunkList, voice);
   }, [text, selectedVoice, voices, playChunk]);
 
@@ -225,7 +235,7 @@ export default function TextToSpeech() {
 
   const rateLabel = rate <= 0.6 ? 'Very Slow' : rate <= 0.85 ? 'Slow' : rate <= 1.15 ? 'Normal' : rate <= 1.5 ? 'Fast' : 'Very Fast';
   const pitchLabel = pitch <= 0.6 ? 'Very Low' : pitch <= 0.85 ? 'Low' : pitch <= 1.15 ? 'Normal' : pitch <= 1.5 ? 'High' : 'Very High';
-  const selectedVoiceMeta = voices.find((voice) => voice.name === selectedVoice);
+  const selectedVoiceMeta = voices.find((voice) => voice.name === selectedVoiceName);
   const qualityLabel = selectedVoiceMeta
     ? VOICE_HINTS.some((hint) => `${selectedVoiceMeta.name} ${selectedVoiceMeta.lang}`.toLowerCase().includes(hint))
       ? 'Enhanced voice'
@@ -464,8 +474,8 @@ export default function TextToSpeech() {
                     <div className="prog-track">
                       <div className="prog-fill" style={{width:`${progress}%`}}/>
                     </div>
-                    {speaking && chunksRef.current.length > 1 && (
-                      <div className="chunk-note">Playing section {currentChunk} / {chunksRef.current.length} for smoother speech</div>
+                    {speaking && chunkCount > 1 && (
+                      <div className="chunk-note">Playing section {currentChunk} / {chunkCount} for smoother speech</div>
                     )}
                     {speaking && (
                       <div className="wave-bars">
@@ -511,7 +521,7 @@ export default function TextToSpeech() {
                   {langs.map(l => <option key={l} value={l}>{l.toUpperCase()}</option>)}
                 </select>
                 <label className="lbl" style={{marginBottom:'6px'}}>Select Voice</label>
-                <select className="sel" value={selectedVoice} onChange={e => setSelectedVoice(e.target.value)}>
+                <select className="sel" value={selectedVoiceName} onChange={e => setSelectedVoice(e.target.value)}>
                   {filteredVoices.length === 0
                     ? <option value="">Loading voices...</option>
                     : filteredVoices.map(v => (

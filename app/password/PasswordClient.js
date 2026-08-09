@@ -1,5 +1,6 @@
 'use client';
 import { useEffect } from 'react';
+import Link from 'next/link';
 
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
@@ -1009,7 +1010,7 @@ export default function PasswordGenerator() {
         </div>
         <div className="pg-nav-right">
           <span className="pg-nav-pill">Crypto Secure</span>
-          <a href="/" className="pg-back-btn">← All Tools</a>
+          <Link href="/" className="pg-back-btn">← All Tools</Link>
         </div>
       </nav>
 

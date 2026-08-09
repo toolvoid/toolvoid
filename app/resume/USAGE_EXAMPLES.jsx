@@ -19,22 +19,20 @@ export function BasicResumBuilder() {
 /**
  * Example 2: With Initial Data and LocalStorage
  */
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 export function AdvancedResumeBuilder() {
-  const [resumeData, setResumeData] = useState(null)
+  const [resumeData] = useState(() => {
+    if (typeof window === 'undefined') return null
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem('resume_data')
-    if (saved) {
-      try {
-        setResumeData(JSON.parse(saved))
-      } catch (error) {
-        console.error('Failed to load resume data:', error)
-      }
+    try {
+      const saved = window.localStorage.getItem('resume_data')
+      return saved ? JSON.parse(saved) : null
+    } catch (error) {
+      console.error('Failed to load resume data:', error)
+      return null
     }
-  }, [])
+  })
 
   // Save to localStorage whenever data changes (done in ResumeBuilderUI)
   const handleDownload = async (data) => {

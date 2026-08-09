@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 import { TEMPLATES } from '../../lib/constants'
 
 // ─── SHARED ───────────────────────────────────────────────────────────────────
@@ -60,7 +61,7 @@ function TwoCol({data,c:custom}){
   return(
     <div id="resume-preview" style={{width:794,minHeight:1123,background:C.bg,display:'flex',flexDirection:'column',fontFamily:C.bFont}}>
       <div style={{background:C.pri,padding:'20px 24px',display:'flex',alignItems:'center',gap:12,flexShrink:0}}>
-        {custom.showPhoto&&data.personal.photo&&<img src={data.personal.photo} alt="" style={{width:60,height:60,objectFit:'cover',flexShrink:0,borderRadius:custom.photoShape==='circle'?'50%':6,border:`2px solid ${C.sec}`}}/>}
+        {custom.showPhoto&&data.personal.photo&&<Image unoptimized src={data.personal.photo} alt="" width={60} height={60} style={{width:60,height:60,objectFit:'cover',flexShrink:0,borderRadius:custom.photoShape==='circle'?'50%':6,border:`2px solid ${C.sec}`}} />}
         <div style={{...S.flex,...SAFE}}>
           <h1 style={{margin:0,fontFamily:C.hFont,fontSize:20,color:'#fff',fontWeight:700,letterSpacing:-.3,...SAFE}}>{data.personal.firstName||'Your'} {data.personal.lastName||'Name'}</h1>
           {data.personal.title&&<p style={{margin:'2px 0 0',color:C.sec,fontSize:11,fontWeight:500,...SAFE}}>{data.personal.title}</p>}
@@ -166,18 +167,18 @@ function Dark({data,c:custom}){
     <div id="resume-preview" style={{width:794,minHeight:1123,background:bg,fontFamily:`'Courier New',monospace`,color:'#E6EDF3'}}>
       <div style={{background:'rgba(255,255,255,0.03)',borderBottom:`1px solid ${brd}`,padding:'16px 22px',flexShrink:0}}>
         <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:6}}>{['#FF5F57','#FFBD2E','#28CA41'].map((c,i)=><span key={i} style={{width:10,height:10,borderRadius:'50%',background:c,display:'inline-block'}}/>)}<span style={{color:'rgba(255,255,255,0.3)',fontSize:8,marginLeft:6}}>resume.json</span></div>
-        <h1 style={{margin:0,fontSize:18,color:C.sec,...SAFE}}><span style={{color:C.acc}}>const</span> <span style={{color:'#FFA657'}}>{data.personal.firstName||'Dev'}</span> = <span style={{color:C.sec}}>"{data.personal.firstName||'Your'} {data.personal.lastName||'Name'}"</span>;</h1>
-        {data.personal.title&&<p style={{margin:'2px 0 0',color:'rgba(255,255,255,0.45)',fontSize:9,...SAFE}}>// {data.personal.title}</p>}
+        <h1 style={{margin:0,fontSize:18,color:C.sec,...SAFE}}><span style={{color:C.acc}}>const</span> <span style={{color:'#FFA657'}}>{data.personal.firstName||'Dev'}</span> = <span style={{color:C.sec}}>&quot;{data.personal.firstName||'Your'} {data.personal.lastName||'Name'}&quot;</span>;</h1>
+        {data.personal.title&&<p style={{margin:'2px 0 0',color:'rgba(255,255,255,0.45)',fontSize:9,...SAFE}}>{'// ' + data.personal.title}</p>}
         <div style={{display:'flex',gap:14,marginTop:6,flexWrap:'wrap'}}>{[data.personal.email&&`email: "${data.personal.email}"`,data.personal.github&&`github: "${data.personal.github}"`,data.personal.phone&&`phone: "${data.personal.phone}"`].filter(Boolean).map((item,i)=><span key={i} style={{fontSize:8,color:'rgba(255,255,255,0.4)'}}>{item}</span>)}</div>
       </div>
       <div style={{display:'flex',padding:'14px',gap:12}}>
         <div style={{flex:1.4,...S.flex}}>
-          {data.personal.summary&&<div style={{marginBottom:10,background:panel,border:`1px solid ${brd}`,borderRadius:6,padding:9,...SAFE}}><p style={{margin:'0 0 2px',fontSize:8,color:C.acc}}>/* ABOUT */</p><p style={{margin:0,fontSize:9,lineHeight:1.7,...SAFE}}>{data.personal.summary}</p></div>}
+          {data.personal.summary&&<div style={{marginBottom:10,background:panel,border:`1px solid ${brd}`,borderRadius:6,padding:9,...SAFE}}><p style={{margin:'0 0 2px',fontSize:8,color:C.acc}}>{'/* ABOUT */'}</p><p style={{margin:0,fontSize:9,lineHeight:1.7,...SAFE}}>{data.personal.summary}</p></div>}
           {exp.length>0&&<div style={{marginBottom:10}}><p style={{margin:'0 0 5px',fontSize:9,color:C.sec,fontWeight:700}}>▶ EXPERIENCE</p>{exp.map(e=><div key={e.id} style={{marginBottom:8,background:panel,border:`1px solid ${brd}`,borderRadius:6,padding:8,...SAFE}}><div style={{display:'flex',justifyContent:'space-between',gap:8}}><span style={{color:C.acc,fontWeight:700,fontSize:10,...S.flex,...SAFE}}>{e.position}</span><span style={{color:'rgba(255,255,255,0.35)',fontSize:8,flexShrink:0,whiteSpace:'nowrap'}}>{e.startDate}→{e.current?'now':e.endDate}</span></div><p style={{margin:'2px 0 3px',color:C.sec,fontSize:9,...SAFE}}>{e.company}</p>{e.description&&lines(e.description,'›',C.acc)}</div>)}</div>}
           {proj.length>0&&<div><p style={{margin:'0 0 5px',fontSize:9,color:C.sec,fontWeight:700}}>▶ PROJECTS</p>{proj.map(p=><div key={p.id} style={{marginBottom:7,background:panel,border:`1px solid ${brd}`,borderRadius:6,padding:8,...SAFE}}><p style={{margin:0,fontWeight:700,color:C.acc,fontSize:10,...SAFE}}>⌥ {p.name}</p>{p.technologies?.length>0&&<div style={{display:'flex',flexWrap:'wrap',gap:2,margin:'2px 0'}}>{p.technologies.map((t,ti)=><span key={ti} style={{background:C.sec+'22',color:C.sec,fontSize:7,padding:'1px 4px',borderRadius:3,border:`1px solid ${C.sec}44`,...SAFE}}>{t}</span>)}</div>}{p.description&&<p style={{margin:'2px 0 0',fontSize:8.5,color:'rgba(255,255,255,0.5)',...SAFE}}>{p.description}</p>}</div>)}</div>}
         </div>
         <div style={{flex:1,...S.flex}}>
-          {sk.length>0&&<div style={{marginBottom:10,background:panel,border:`1px solid ${brd}`,borderRadius:6,padding:9,...SAFE}}><p style={{margin:'0 0 5px',fontSize:9,color:C.sec,fontWeight:700}}>▶ SKILLS</p>{sk.map(cat=><div key={cat.id} style={{marginBottom:6,...SAFE}}><p style={{margin:'0 0 3px',fontSize:8,color:C.acc,...SAFE}}>// {cat.category}</p><div style={{display:'flex',flexWrap:'wrap',gap:2}}>{cat.skills.map((s,si)=><span key={si} style={{background:C.acc+'22',color:C.acc,fontSize:7.5,padding:'1.5px 5px',borderRadius:3,border:`1px solid ${C.acc}44`,...SAFE}}>{s.name}</span>)}</div></div>)}</div>}
+          {sk.length>0&&<div style={{marginBottom:10,background:panel,border:`1px solid ${brd}`,borderRadius:6,padding:9,...SAFE}}><p style={{margin:'0 0 5px',fontSize:9,color:C.sec,fontWeight:700}}>▶ SKILLS</p>{sk.map(cat=><div key={cat.id} style={{marginBottom:6,...SAFE}}><p style={{margin:'0 0 3px',fontSize:8,color:C.acc,...SAFE}}>{'// ' + cat.category}</p><div style={{display:'flex',flexWrap:'wrap',gap:2}}>{cat.skills.map((s,si)=><span key={si} style={{background:C.acc+'22',color:C.acc,fontSize:7.5,padding:'1.5px 5px',borderRadius:3,border:`1px solid ${C.acc}44`,...SAFE}}>{s.name}</span>)}</div></div>)}</div>}
           {edu.length>0&&<div style={{background:panel,border:`1px solid ${brd}`,borderRadius:6,padding:9,...SAFE}}><p style={{margin:'0 0 5px',fontSize:9,color:C.sec,fontWeight:700}}>▶ EDUCATION</p>{edu.map(e=><div key={e.id} style={{marginBottom:6,...SAFE}}><p style={{margin:0,color:C.acc,fontSize:9.5,fontWeight:700,...SAFE}}>{e.institution}</p><p style={{margin:'1px 0',fontSize:9,...SAFE}}>{e.degree} {e.field?`in ${e.field}`:''}</p><p style={{margin:0,color:'rgba(255,255,255,0.35)',fontSize:8,...SAFE}}>{e.startDate}–{e.current?'Now':e.endDate}{e.gpa?` · ${e.gpa}`:''}</p></div>)}</div>}
         </div>
       </div>
@@ -192,7 +193,7 @@ function Sidebar({data,c:custom}){
   return(
     <div id="resume-preview" style={{width:794,minHeight:1123,background:C.bg,display:'flex',fontFamily:'Arial,sans-serif'}}>
       <div style={{width:'32%',minWidth:'32%',maxWidth:'32%',background:`linear-gradient(170deg,${C.pri} 0%,${C.sec} 100%)`,padding:'22px 13px',color:'#fff',boxSizing:'border-box',flexShrink:0}}>
-        {custom.showPhoto&&data.personal.photo&&<div style={{textAlign:'center',marginBottom:10}}><img src={data.personal.photo} alt="" style={{width:65,height:65,borderRadius:custom.photoShape==='circle'?'50%':8,objectFit:'cover',border:'2px solid rgba(255,255,255,0.5)'}}/></div>}
+        {custom.showPhoto&&data.personal.photo&&<div style={{textAlign:'center',marginBottom:10}}><Image unoptimized src={data.personal.photo} alt="" width={65} height={65} style={{width:65,height:65,borderRadius:custom.photoShape==='circle'?'50%':8,objectFit:'cover',border:'2px solid rgba(255,255,255,0.5)'}} /></div>}
         <div style={{textAlign:'center',marginBottom:14}}><h1 style={{margin:0,fontSize:14,fontWeight:700,lineHeight:1.3,...SAFE}}>{data.personal.firstName||'Your'}<br/>{data.personal.lastName||'Name'}</h1>{data.personal.title&&<p style={{margin:'3px 0 0',fontSize:8.5,opacity:0.85,...SAFE}}>{data.personal.title}</p>}</div>
         <div style={{marginBottom:10}}><p style={{margin:'0 0 4px',fontSize:7,letterSpacing:2,fontWeight:700,opacity:0.65,textTransform:'uppercase'}}>Contact</p>{[data.personal.email&&`✉ ${data.personal.email}`,data.personal.phone&&`📱 ${data.personal.phone}`,data.personal.location&&`📍 ${data.personal.location}`,data.personal.linkedin&&`in ${data.personal.linkedin}`].filter(Boolean).map((item,i)=><p key={i} style={{margin:'2px 0',fontSize:8,...SAFE}}>{item}</p>)}</div>
         {sk.length>0&&<div style={{marginBottom:10}}><p style={{margin:'0 0 5px',fontSize:7,letterSpacing:2,fontWeight:700,opacity:0.65,textTransform:'uppercase'}}>Skills</p>{sk.map(cat=><div key={cat.id} style={{marginBottom:6,...SAFE}}><p style={{margin:'0 0 2px',fontSize:8.5,fontWeight:700,...SAFE}}>{cat.category}</p>{cat.skills.slice(0,6).map((s,si)=><div key={si} style={{marginBottom:2,...SAFE}}><span style={{fontSize:8,...SAFE}}>{s.name}</span><div style={{height:2,background:'rgba(255,255,255,0.2)',borderRadius:2,marginTop:1}}><div style={{width:`${s.level}%`,height:'100%',background:'rgba(255,255,255,0.8)',borderRadius:2}}/></div></div>)}</div>)}</div>}
@@ -226,7 +227,7 @@ function Elegant({data,c:custom}){
     <div id="resume-preview" style={{width:794,minHeight:1123,background:'#FEFCF8',fontFamily:'Georgia,serif',color:C.txt}}>
       <div style={{background:C.pri,padding:'20px 32px'}}>
         <div style={{display:'flex',alignItems:'center',gap:14}}>
-          {custom.showPhoto&&data.personal.photo&&<img src={data.personal.photo} alt="" style={{width:58,height:58,borderRadius:'50%',objectFit:'cover',border:`2px solid ${C.sec}`,flexShrink:0}}/>}
+          {custom.showPhoto&&data.personal.photo&&<Image unoptimized src={data.personal.photo} alt="" width={58} height={58} style={{width:58,height:58,borderRadius:'50%',objectFit:'cover',border:`2px solid ${C.sec}`,flexShrink:0}} />}
           <div style={{...S.flex,...SAFE}}>
             <h1 style={{margin:0,fontSize:24,color:'#fff',fontWeight:400,...SAFE}}>{data.personal.firstName||'Your'} <span style={{color:C.sec,fontWeight:700}}>{data.personal.lastName||'Name'}</span></h1>
             {data.personal.title&&<p style={{margin:'3px 0 0',color:C.sec,fontSize:11,fontStyle:'italic',...SAFE}}>{data.personal.title}</p>}
@@ -234,7 +235,7 @@ function Elegant({data,c:custom}){
           </div>
         </div>
       </div>
-      {data.personal.summary&&<div style={{textAlign:'center',fontStyle:'italic',fontSize:10,lineHeight:1.9,color:'#444',borderTop:`1px solid ${C.sec}`,borderBottom:`1px solid ${C.sec}`,padding:'8px 36px',margin:'0',...SAFE}}>"{data.personal.summary}"</div>}
+      {data.personal.summary&&<div style={{textAlign:'center',fontStyle:'italic',fontSize:10,lineHeight:1.9,color:'#444',borderTop:`1px solid ${C.sec}`,borderBottom:`1px solid ${C.sec}`,padding:'8px 36px',margin:'0',...SAFE}}>&quot;{data.personal.summary}&quot;</div>}
       <div style={{padding:'18px 32px',display:'flex',gap:20}}>
         <div style={{flex:1.5,...S.flex}}>
           {exp.length>0&&<div style={{marginBottom:13}}><h2 style={{margin:'0 0 7px',fontSize:9,fontWeight:700,letterSpacing:3,textTransform:'uppercase',color:C.sec,...SAFE}}>✦ Experience</h2>{exp.map(e=><div key={e.id} style={{marginBottom:9,...SAFE}}><div style={{display:'flex',justifyContent:'space-between',gap:8}}><div style={{...S.flex,...SAFE}}><span style={{fontWeight:700,fontSize:11,color:C.pri,...SAFE}}>{e.position}</span><p style={{margin:'1px 0 3px',color:C.sec,fontSize:9.5,fontStyle:'italic',...SAFE}}>{e.company}{e.location?`, ${e.location}`:''}</p></div><span style={{color:C.mut,fontSize:8.5,fontStyle:'italic',flexShrink:0,whiteSpace:'nowrap'}}>{e.startDate}–{e.current?'Now':e.endDate}</span></div>{e.description&&lines(e.description,'◆',C.sec)}</div>)}</div>}
@@ -357,7 +358,7 @@ function HeroHeader({data,c:custom}){
         <div style={{position:'absolute',right:-30,top:-30,width:180,height:180,borderRadius:'50%',background:'rgba(255,255,255,0.05)'}}/>
         <div style={{position:'absolute',right:50,bottom:-50,width:250,height:250,borderRadius:'50%',background:'rgba(255,255,255,0.04)'}}/>
         <div style={{position:'relative',...SAFE}}>
-          {custom.showPhoto&&data.personal.photo&&<img src={data.personal.photo} alt="" style={{width:66,height:66,borderRadius:custom.photoShape==='circle'?'50%':8,objectFit:'cover',border:'2px solid rgba(255,255,255,0.35)',float:'right',marginLeft:12}}/>}
+          {custom.showPhoto&&data.personal.photo&&<Image unoptimized src={data.personal.photo} alt="" width={66} height={66} style={{width:66,height:66,borderRadius:custom.photoShape==='circle'?'50%':8,objectFit:'cover',border:'2px solid rgba(255,255,255,0.35)',float:'right',marginLeft:12}} />}
           <h1 style={{margin:0,fontFamily:C.hFont,fontSize:26,fontWeight:800,color:'#fff',letterSpacing:-1,...SAFE}}>{data.personal.firstName||'Your'} {data.personal.lastName||'Name'}</h1>
           {data.personal.title&&<p style={{margin:'5px 0 10px',color:'rgba(255,255,255,0.8)',fontSize:12,fontWeight:500,...SAFE}}>{data.personal.title}</p>}
           <div style={{display:'flex',gap:14,flexWrap:'wrap'}}>{[data.personal.email&&`✉ ${data.personal.email}`,data.personal.phone&&`📱 ${data.personal.phone}`,data.personal.location&&`📍 ${data.personal.location}`,data.personal.linkedin&&`in/${data.personal.linkedin}`,data.personal.github&&`⌥ ${data.personal.github}`].filter(Boolean).map((item,i)=><span key={i} style={{color:'rgba(255,255,255,0.72)',fontSize:8,...SAFE}}>{item}</span>)}</div>
@@ -500,14 +501,14 @@ function MonoDev({data,c:custom}){
     <div id="resume-preview" style={{width:794,minHeight:1123,background:'#FFFEF9',fontFamily:mono,color:'#1a1a1a',padding:'28px 38px',boxSizing:'border-box'}}>
       <div style={{marginBottom:16,borderBottom:`2px solid #1a1a1a`,paddingBottom:9,...SAFE}}>
         <h1 style={{margin:0,fontSize:20,fontWeight:700,fontFamily:mono,letterSpacing:-.5,...SAFE}}>{data.personal.firstName||'Your'} {data.personal.lastName||'Name'}</h1>
-        {data.personal.title&&<p style={{margin:'2px 0 0',color:C.sec,fontSize:9.5,fontWeight:600,...SAFE}}>// {data.personal.title}</p>}
+        {data.personal.title&&<p style={{margin:'2px 0 0',color:C.sec,fontSize:9.5,fontWeight:600,...SAFE}}>{'// ' + data.personal.title}</p>}
         <p style={{margin:'4px 0 0',fontSize:8,color:'#666',...SAFE}}>{[data.personal.email&&`email: ${data.personal.email}`,data.personal.phone&&`phone: ${data.personal.phone}`,data.personal.github&&`github: /${data.personal.github}`,data.personal.linkedin&&`linkedin: /${data.personal.linkedin}`].filter(Boolean).join('  |  ')}</p>
       </div>
-      {data.personal.summary&&<div style={{marginBottom:13,...SAFE}}><p style={{margin:'0 0 2px',fontWeight:700,color:C.sec,fontSize:9}}>/* ABOUT */</p><p style={{margin:0,lineHeight:1.7,color:'#333',paddingLeft:8,fontSize:9,...SAFE}}>{data.personal.summary}</p></div>}
-      {sk.length>0&&<div style={{marginBottom:13,...SAFE}}><p style={{margin:'0 0 3px',fontWeight:700,color:C.sec,fontSize:9}}>/* SKILLS */</p>{sk.map(cat=><p key={cat.id} style={{margin:'1px 0',paddingLeft:8,fontSize:9,...SAFE}}><span style={{color:C.sec,fontWeight:700}}>{cat.category}:</span> {cat.skills.map(s=>s.name).join(', ')}</p>)}</div>}
-      {exp.length>0&&<div style={{marginBottom:13}}><p style={{margin:'0 0 5px',fontWeight:700,color:C.sec,fontSize:9}}>/* EXPERIENCE */</p>{exp.map(e=><div key={e.id} style={{marginBottom:9,paddingLeft:8,...SAFE}}><p style={{margin:'0 0 1px',fontSize:9,...SAFE}}><strong>{e.position}</strong> @ {e.company} <span style={{color:'#999',fontSize:8}}>({e.startDate}→{e.current?'present':e.endDate})</span></p>{e.description&&<div style={{paddingLeft:8,marginTop:2}}>{lines(e.description,'>',C.sec)}</div>}</div>)}</div>}
-      {proj.length>0&&<div style={{marginBottom:13}}><p style={{margin:'0 0 5px',fontWeight:700,color:C.sec,fontSize:9}}>/* PROJECTS */</p>{proj.map(p=><div key={p.id} style={{marginBottom:6,paddingLeft:8,...SAFE}}><p style={{margin:'0 0 1px',fontSize:9,...SAFE}}><strong>{p.name}</strong>{p.technologies?.length>0&&<span style={{color:'#999',fontSize:8}}> [{p.technologies.join(', ')}]</span>}</p><p style={{margin:0,color:'#555',paddingLeft:8,fontSize:9,...SAFE}}>{p.description}</p></div>)}</div>}
-      {edu.length>0&&<div><p style={{margin:'0 0 5px',fontWeight:700,color:C.sec,fontSize:9}}>/* EDUCATION */</p>{edu.map(e=><p key={e.id} style={{margin:'1px 0',paddingLeft:8,fontSize:9,...SAFE}}>{e.degree} {e.field?`in ${e.field}`:''} — {e.institution} ({e.startDate}–{e.current?'now':e.endDate}){e.gpa?` | gpa: ${e.gpa}`:''}</p>)}</div>}
+      {data.personal.summary&&<div style={{marginBottom:13,...SAFE}}><p style={{margin:'0 0 2px',fontWeight:700,color:C.sec,fontSize:9}}>{'/* ABOUT */'}</p><p style={{margin:0,lineHeight:1.7,color:'#333',paddingLeft:8,fontSize:9,...SAFE}}>{data.personal.summary}</p></div>}
+      {sk.length>0&&<div style={{marginBottom:13,...SAFE}}><p style={{margin:'0 0 3px',fontWeight:700,color:C.sec,fontSize:9}}>{'/* SKILLS */'}</p>{sk.map(cat=><p key={cat.id} style={{margin:'1px 0',paddingLeft:8,fontSize:9,...SAFE}}><span style={{color:C.sec,fontWeight:700}}>{cat.category}:</span> {cat.skills.map(s=>s.name).join(', ')}</p>)}</div>}
+      {exp.length>0&&<div style={{marginBottom:13}}><p style={{margin:'0 0 5px',fontWeight:700,color:C.sec,fontSize:9}}>{'/* EXPERIENCE */'}</p>{exp.map(e=><div key={e.id} style={{marginBottom:9,paddingLeft:8,...SAFE}}><p style={{margin:'0 0 1px',fontSize:9,...SAFE}}><strong>{e.position}</strong> @ {e.company} <span style={{color:'#999',fontSize:8}}>({e.startDate}→{e.current?'present':e.endDate})</span></p>{e.description&&<div style={{paddingLeft:8,marginTop:2}}>{lines(e.description,'>',C.sec)}</div>}</div>)}</div>}
+      {proj.length>0&&<div style={{marginBottom:13}}><p style={{margin:'0 0 5px',fontWeight:700,color:C.sec,fontSize:9}}>{'/* PROJECTS */'}</p>{proj.map(p=><div key={p.id} style={{marginBottom:6,paddingLeft:8,...SAFE}}><p style={{margin:'0 0 1px',fontSize:9,...SAFE}}><strong>{p.name}</strong>{p.technologies?.length>0&&<span style={{color:'#999',fontSize:8}}> [{p.technologies.join(', ')}]</span>}</p><p style={{margin:0,color:'#555',paddingLeft:8,fontSize:9,...SAFE}}>{p.description}</p></div>)}</div>}
+      {edu.length>0&&<div><p style={{margin:'0 0 5px',fontWeight:700,color:C.sec,fontSize:9}}>{'/* EDUCATION */'}</p>{edu.map(e=><p key={e.id} style={{margin:'1px 0',paddingLeft:8,fontSize:9,...SAFE}}>{e.degree} {e.field?`in ${e.field}`:''} — {e.institution} ({e.startDate}–{e.current?'now':e.endDate}){e.gpa?` | gpa: ${e.gpa}`:''}</p>)}</div>}
     </div>
   )
 }
@@ -520,7 +521,7 @@ function SplitEqual({data,c:custom}){
     <div id="resume-preview" style={{width:794,minHeight:1123,background:C.bg,fontFamily:C.bFont,color:C.txt,display:'flex',flexDirection:'column'}}>
       <div style={{background:`linear-gradient(135deg,${C.pri},${C.sec})`,padding:'18px 26px',display:'flex',alignItems:'center',justifyContent:'space-between',flexShrink:0}}>
         <div style={{...S.flex,...SAFE}}>
-          {custom.showPhoto&&data.personal.photo&&<img src={data.personal.photo} alt="" style={{width:50,height:50,borderRadius:'50%',objectFit:'cover',border:'2px solid rgba(255,255,255,0.5)',float:'left',marginRight:10}}/>}
+          {custom.showPhoto&&data.personal.photo&&<Image unoptimized src={data.personal.photo} alt="" width={50} height={50} style={{width:50,height:50,borderRadius:'50%',objectFit:'cover',border:'2px solid rgba(255,255,255,0.5)',float:'left',marginRight:10}} />}
           <h1 style={{margin:0,fontFamily:C.hFont,fontSize:20,fontWeight:700,color:'#fff',...SAFE}}>{data.personal.firstName||'Your'} {data.personal.lastName||'Name'}</h1>
           {data.personal.title&&<p style={{margin:'2px 0 0',color:'rgba(255,255,255,0.8)',fontSize:10,...SAFE}}>{data.personal.title}</p>}
         </div>
@@ -770,7 +771,7 @@ function Matrix({data,c:custom}){
       <div style={{display:'flex',padding:'12px',gap:12}}>
         <div style={{flex:1.5,...S.flex}}>
           {data.personal.summary&&<div style={{marginBottom:10,border:`1px solid ${brd}`,borderRadius:4,padding:'8px 10px',background:panel,...SAFE}}>
-            <p style={{margin:'0 0 2px',fontSize:8,color:g3}}>// PROFILE.EXE</p>
+            <p style={{margin:'0 0 2px',fontSize:8,color:g3}}>{'// PROFILE.EXE'}</p>
             <p style={{margin:0,fontSize:9,lineHeight:1.7,color:'rgba(0,255,65,0.8)',...SAFE}}>{data.personal.summary}</p>
           </div>}
           {exp.length>0&&<div style={{marginBottom:10}}>
@@ -796,7 +797,7 @@ function Matrix({data,c:custom}){
           {sk.length>0&&<div style={{marginBottom:10,border:`1px solid ${brd}`,borderRadius:3,padding:'9px',background:panel,...SAFE}}>
             <p style={{margin:'0 0 5px',fontSize:9,color:g1,fontWeight:700,letterSpacing:2}}>■ SKILLS.SYS</p>
             {sk.map(cat=><div key={cat.id} style={{marginBottom:7,...SAFE}}>
-              <p style={{margin:'0 0 3px',fontSize:8.5,color:g2,fontWeight:700,...SAFE}}>// {cat.category}</p>
+              <p style={{margin:'0 0 3px',fontSize:8.5,color:g2,fontWeight:700,...SAFE}}>{'// ' + cat.category}</p>
               <div style={{display:'flex',flexWrap:'wrap',gap:2}}>{cat.skills.map((s,si)=><span key={si} style={{background:'rgba(0,255,65,0.08)',color:g1,fontSize:8,padding:'2px 5px',borderRadius:2,border:`1px solid rgba(0,255,65,0.15)`,...SAFE}}>{s.name}</span>)}</div>
             </div>)}
           </div>}

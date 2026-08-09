@@ -6,6 +6,7 @@ import Script from 'next/script';
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
 export const metadata = {
+  metadataBase: new URL('https://toolvoid.com'),
   title: 'ToolVoid - Free Online Tools',
   description: 'Free online toolkit with PDF tools, image toolkit, CV builder, AI script generator and more.',
   verification: {
@@ -13,6 +14,16 @@ export const metadata = {
   },
   alternates: {
     canonical: 'https://toolvoid.com/',
+  },
+  icons: {
+    icon: '/icon-192.png',
+    apple: '/apple-touch-icon.png',
+  },
+  openGraph: {
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    images: ['/og-image.png'],
   },
 };
 
@@ -25,6 +36,9 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full">
+      <head>
+        <link rel="manifest" href="/site.webmanifest" />
+      </head>
       <body className="app-body min-h-full flex flex-col">
         <AuthSessionProvider>
           <AppHomeButton />

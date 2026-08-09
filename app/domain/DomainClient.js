@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const TLDS = [
   '.com', '.in', '.io', '.co', '.net', '.org', '.ai',
@@ -130,8 +130,24 @@ export default function DomainCheckerPage() {
   const [bulkDomains, setBulkDomains] = useState('');
   const [bulkMode, setBulkMode] = useState(false);
   const [bulkResults, setBulkResults] = useState([]);
-  const [history, setHistory] = useState([]);
-  const [watchlist, setWatchlist] = useState([]);
+  const [history, setHistory] = useState(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const savedHistory = JSON.parse(localStorage.getItem('dc_history') || '[]');
+      return Array.isArray(savedHistory) ? savedHistory : [];
+    } catch {
+      return [];
+    }
+  });
+  const [watchlist, setWatchlist] = useState(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const savedWatchlist = JSON.parse(localStorage.getItem('dc_watchlist') || '[]');
+      return Array.isArray(savedWatchlist) ? savedWatchlist : [];
+    } catch {
+      return [];
+    }
+  });
   const [suggestions, setSuggestions] = useState([]);
   const [whoisKeyIndex, setWhoisKeyIndex] = useState(0);
   const [whoisUsage, setWhoisUsage] = useState([0, 0, 0]);
@@ -149,17 +165,76 @@ export default function DomainCheckerPage() {
   const domainBase = getBaseKeyword(domain);
   const deferredBase = useMemo(() => getBaseKeyword(nameGeneratorInput || domain), [domain, nameGeneratorInput]);
 
-  useEffect(() => {
+  const fetchJsonWithFallback = useCallback(async (urls, options) => {
+    let lastError = null;
+    for (const url of urls) {
+      try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+          lastError = new Error(`HTTP ${response.status}`);
+          continue;
+        }
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          return await response.json();
+        }
+        const text = await response.text();
+        return JSON.parse(text);
+      } catch (errorInstance) {
+        lastError = errorInstance;
+      }
+    }
+    throw lastError || new Error('Request failed');
+  }, []);
+
+  const checkDomainAvailability = useCallback(async (fullDomain) => {
+    const currentDomain = normalizeDomain(fullDomain);
+    const tld = currentDomain.slice(currentDomain.indexOf('.')) || '';
     try {
-      const savedHistory = JSON.parse(localStorage.getItem('dc_history') || '[]');
-      const savedWatchlist = JSON.parse(localStorage.getItem('dc_watchlist') || '[]');
-      setHistory(Array.isArray(savedHistory) ? savedHistory : []);
-      setWatchlist(Array.isArray(savedWatchlist) ? savedWatchlist : []);
+      const response = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(currentDomain)}&type=A`, {
+        cache: 'no-store',
+      });
+      const data = await response.json();
+      if (data.Status === 3) {
+        return {
+          domain: currentDomain,
+          tld,
+          available: true,
+          label: 'Available',
+          registrarUrl: `https://www.namecheap.com/domains/registration/results/?domain=${encodeURIComponent(currentDomain)}`,
+        };
+      }
+      if (data.Status === 2) {
+        return { domain: currentDomain, tld, available: null, label: 'Unknown' };
+      }
+      return { domain: currentDomain, tld, available: false, label: 'Taken', records: data.Answer || [] };
     } catch {
-      setHistory([]);
-      setWatchlist([]);
+      return { domain: currentDomain, tld, available: null, label: 'Unknown' };
     }
   }, []);
+
+  const fetchAvailability = useCallback(async (baseKeyword) => {
+    if (!baseKeyword) return;
+    const total = TLDS.length;
+    setLoading((prev) => ({ ...prev, availability: true }));
+    setAvailabilityProgress({ done: 0, total, label: `Checking ${total} extensions...` });
+    setResults((prev) => ({ ...prev, availability: [], domain: `${baseKeyword}.com` }));
+
+    let completed = 0;
+    await Promise.all(
+      TLDS.map(async (tld) => {
+        const lookup = await checkDomainAvailability(`${baseKeyword}${tld}`);
+        completed += 1;
+        setResults((prev) => ({
+          ...prev,
+          availability: [...(prev.availability || []).filter((item) => item.domain !== lookup.domain), lookup],
+        }));
+        setAvailabilityProgress({ done: completed, total, label: `Checking ${total} extensions...` });
+      }),
+    );
+
+    setLoading((prev) => ({ ...prev, availability: false }));
+  }, [checkDomainAvailability]);
 
   useEffect(() => {
     try {
@@ -215,7 +290,63 @@ export default function DomainCheckerPage() {
     return () => {
       cancelled = true;
     };
-  }, [domainBase]);
+  }, [checkDomainAvailability, domainBase]);
+
+  const handleBulkCheck = useCallback(async () => {
+    const rawItems = bulkMode
+      ? bulkDomains.split('\n').map((item) => normalizeDomain(item)).filter(Boolean)
+      : TLDS.map((tld) => `${getBaseKeyword(domain)}${tld}`);
+
+    const items = Array.from(new Set(rawItems)).slice(0, 20);
+    if (!items.length || items.some((item) => !isValidDomain(item))) {
+      setError('Please enter valid domain');
+      return;
+    }
+
+    setError('');
+    setBulkResults([]);
+    setBulkProgress({ done: 0, total: items.length });
+    setLoading((prev) => ({ ...prev, bulk: true }));
+
+    let completed = 0;
+    await Promise.all(items.map(async (item) => {
+      const lookup = await checkDomainAvailability(item);
+      completed += 1;
+      setBulkResults((prev) => [...prev.filter((row) => row.domain !== item), lookup]);
+      setBulkProgress({ done: completed, total: items.length });
+    }));
+
+    setLoading((prev) => ({ ...prev, bulk: false }));
+  }, [bulkDomains, bulkMode, checkDomainAvailability, domain]);
+
+  const runPrimarySearch = useCallback(async (customDomain) => {
+    const lookupValue = normalizeDomain(customDomain || domain);
+    if (!lookupValue || !isValidDomain(lookupValue)) {
+      setError('Please enter valid domain');
+      return;
+    }
+
+    setError('');
+    const keyword = getBaseKeyword(lookupValue);
+    const timestamp = new Date().toLocaleString();
+
+    setResults({
+      domain: lookupValue,
+      summary: { checkedAt: timestamp },
+      whois: null,
+      dns: null,
+      ssl: null,
+      ip: null,
+      status: null,
+      social: null,
+      analyzer: null,
+      availability: [],
+    });
+
+    pushHistory({ domain: lookupValue, checkedAt: timestamp });
+    await fetchAvailability(keyword);
+    setResults((prev) => ({ ...prev, domain: lookupValue, analyzer: true }));
+  }, [domain, fetchAvailability]);
 
   useEffect(() => {
     const onKeyDown = (event) => {
@@ -238,7 +369,70 @@ export default function DomainCheckerPage() {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [activeTab, bulkMode, domain, bulkDomains, results]);
+  }, [activeTab, bulkMode, domain, bulkDomains, handleBulkCheck, results, runPrimarySearch]);
+
+  const fetchIp = useCallback(async (targetDomain) => {
+    setLoading((prev) => ({ ...prev, ip: true }));
+    try {
+      const data = await fetchJsonWithFallback([
+        `https://cors.isomorphic-git.org/http://ip-api.com/json/${encodeURIComponent(targetDomain)}`,
+        `https://r.jina.ai/http://ip-api.com/json/${encodeURIComponent(targetDomain)}`,
+      ], { cache: 'no-store' });
+
+      if (data.status && String(data.status).toLowerCase() === 'fail') {
+        throw new Error(data.message || 'IP lookup failed');
+      }
+
+      setResults((prev) => ({ ...prev, ip: data }));
+    } catch (errorInstance) {
+      setResults((prev) => ({ ...prev, ip: { error: `${errorInstance.message}. IP geolocation may be blocked by browser/CORS.` } }));
+    } finally {
+      setLoading((prev) => ({ ...prev, ip: false }));
+    }
+  }, [fetchJsonWithFallback]);
+
+  const fetchSsl = useCallback(async (targetDomain) => {
+    setLoading((prev) => ({ ...prev, ssl: true }));
+    try {
+      const data = await fetchJsonWithFallback([
+        `https://crt.sh/?q=${encodeURIComponent(targetDomain)}&output=json`,
+        `https://r.jina.ai/http://crt.sh/?q=${encodeURIComponent(targetDomain)}&output=json`,
+      ], { cache: 'no-store' });
+
+      const rows = Array.isArray(data) ? data : [];
+      const sorted = [...rows]
+        .filter((row) => row.not_after || row.entry_timestamp)
+        .sort((a, b) => new Date(b.not_after || b.entry_timestamp) - new Date(a.not_after || a.timestamp));
+
+      let httpsActive = false;
+      try {
+        await fetch(`https://${targetDomain}`, { method: 'HEAD', mode: 'no-cors' });
+        httpsActive = true;
+      } catch {}
+
+      const latest = sorted[0] || {};
+      const coveredNames = Array.from(new Set(
+        sorted.flatMap((row) => String(row.name_value || '').split('\n').filter(Boolean)),
+      ));
+
+      setResults((prev) => ({
+        ...prev,
+        ssl: {
+          valid: Boolean(latest.not_after),
+          httpsActive,
+          issuer: latest.issuer_name || 'Unknown issuer',
+          expires: latest.not_after || null,
+          daysRemaining: daysBetween(latest.not_after),
+          covered: coveredNames,
+          crtUrl: `https://crt.sh/?q=${encodeURIComponent(targetDomain)}`,
+        },
+      }));
+    } catch (errorInstance) {
+      setResults((prev) => ({ ...prev, ssl: { error: errorInstance.message } }));
+    } finally {
+      setLoading((prev) => ({ ...prev, ssl: false }));
+    }
+  }, [fetchJsonWithFallback]);
 
   useEffect(() => {
     if (!normalizedDomain || !isValidDomain(normalizedDomain)) return;
@@ -261,7 +455,7 @@ export default function DomainCheckerPage() {
     if (activeTab === 'social' && !results.social && !loading.social) {
       fetchSocial(normalizedDomain);
     }
-  }, [activeTab, normalizedDomain, results, loading]);
+  }, [activeTab, fetchIp, fetchSsl, loading, normalizedDomain, results]);
 
   const availableCount = (results.availability || []).filter((item) => item.available === true).length;
   const takenCount = (results.availability || []).filter((item) => item.available === false).length;
@@ -323,77 +517,6 @@ export default function DomainCheckerPage() {
     return { lengthScore, brandability, seo, memorability, total, grade, note };
   }, [normalizedDomain]);
 
-  async function fetchJsonWithFallback(urls, options) {
-    let lastError = null;
-    for (const url of urls) {
-      try {
-        const response = await fetch(url, options);
-        if (!response.ok) {
-          lastError = new Error(`HTTP ${response.status}`);
-          continue;
-        }
-        const contentType = response.headers.get('content-type') || '';
-        if (contentType.includes('application/json')) {
-          return await response.json();
-        }
-        const text = await response.text();
-        return JSON.parse(text);
-      } catch (errorInstance) {
-        lastError = errorInstance;
-      }
-    }
-    throw lastError || new Error('Request failed');
-  }
-
-  async function checkDomainAvailability(fullDomain) {
-    const currentDomain = normalizeDomain(fullDomain);
-    const tld = currentDomain.slice(currentDomain.indexOf('.')) || '';
-    try {
-      const response = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(currentDomain)}&type=A`, {
-        cache: 'no-store',
-      });
-      const data = await response.json();
-      if (data.Status === 3) {
-        return {
-          domain: currentDomain,
-          tld,
-          available: true,
-          label: 'Available',
-          registrarUrl: `https://www.namecheap.com/domains/registration/results/?domain=${encodeURIComponent(currentDomain)}`,
-        };
-      }
-      if (data.Status === 2) {
-        return { domain: currentDomain, tld, available: null, label: 'Unknown' };
-      }
-      return { domain: currentDomain, tld, available: false, label: 'Taken', records: data.Answer || [] };
-    } catch {
-      return { domain: currentDomain, tld, available: null, label: 'Unknown' };
-    }
-  }
-
-  async function fetchAvailability(baseKeyword) {
-    if (!baseKeyword) return;
-    const total = TLDS.length;
-    setLoading((prev) => ({ ...prev, availability: true }));
-    setAvailabilityProgress({ done: 0, total, label: `Checking ${total} extensions...` });
-    setResults((prev) => ({ ...prev, availability: [], domain: `${baseKeyword}.com` }));
-
-    let completed = 0;
-    await Promise.all(
-      TLDS.map(async (tld) => {
-        const lookup = await checkDomainAvailability(`${baseKeyword}${tld}`);
-        completed += 1;
-        setResults((prev) => ({
-          ...prev,
-          availability: [...(prev.availability || []).filter((item) => item.domain !== lookup.domain), lookup],
-        }));
-        setAvailabilityProgress({ done: completed, total, label: `Checking ${total} extensions...` });
-      }),
-    );
-
-    setLoading((prev) => ({ ...prev, availability: false }));
-  }
-
   async function fetchWhois(targetDomain) {
     setLoading((prev) => ({ ...prev, whois: true }));
     try {
@@ -428,69 +551,6 @@ export default function DomainCheckerPage() {
       setResults((prev) => ({ ...prev, dns: { error: errorInstance.message } }));
     } finally {
       setLoading((prev) => ({ ...prev, dns: false }));
-    }
-  }
-
-  async function fetchSsl(targetDomain) {
-    setLoading((prev) => ({ ...prev, ssl: true }));
-    try {
-      const data = await fetchJsonWithFallback([
-        `https://crt.sh/?q=${encodeURIComponent(targetDomain)}&output=json`,
-        `https://r.jina.ai/http://crt.sh/?q=${encodeURIComponent(targetDomain)}&output=json`,
-      ], { cache: 'no-store' });
-
-      const rows = Array.isArray(data) ? data : [];
-      const sorted = [...rows]
-        .filter((row) => row.not_after || row.entry_timestamp)
-        .sort((a, b) => new Date(b.not_after || b.entry_timestamp) - new Date(a.not_after || a.entry_timestamp));
-
-      let httpsActive = false;
-      try {
-        await fetch(`https://${targetDomain}`, { method: 'HEAD', mode: 'no-cors' });
-        httpsActive = true;
-      } catch {}
-
-      const latest = sorted[0] || {};
-      const coveredNames = Array.from(new Set(
-        sorted.flatMap((row) => String(row.name_value || '').split('\n').filter(Boolean)),
-      ));
-
-      setResults((prev) => ({
-        ...prev,
-        ssl: {
-          valid: Boolean(latest.not_after),
-          httpsActive,
-          issuer: latest.issuer_name || 'Unknown issuer',
-          expires: latest.not_after || null,
-          daysRemaining: daysBetween(latest.not_after),
-          covered: coveredNames,
-          crtUrl: `https://crt.sh/?q=${encodeURIComponent(targetDomain)}`,
-        },
-      }));
-    } catch (errorInstance) {
-      setResults((prev) => ({ ...prev, ssl: { error: errorInstance.message } }));
-    } finally {
-      setLoading((prev) => ({ ...prev, ssl: false }));
-    }
-  }
-
-  async function fetchIp(targetDomain) {
-    setLoading((prev) => ({ ...prev, ip: true }));
-    try {
-      const data = await fetchJsonWithFallback([
-        `https://cors.isomorphic-git.org/http://ip-api.com/json/${encodeURIComponent(targetDomain)}`,
-        `https://r.jina.ai/http://ip-api.com/json/${encodeURIComponent(targetDomain)}`,
-      ], { cache: 'no-store' });
-
-      if (data.status && String(data.status).toLowerCase() === 'fail') {
-        throw new Error(data.message || 'IP lookup failed');
-      }
-
-      setResults((prev) => ({ ...prev, ip: data }));
-    } catch (errorInstance) {
-      setResults((prev) => ({ ...prev, ip: { error: `${errorInstance.message}. IP geolocation may be blocked by browser/CORS.` } }));
-    } finally {
-      setLoading((prev) => ({ ...prev, ip: false }));
     }
   }
 
@@ -557,62 +617,6 @@ export default function DomainCheckerPage() {
       if (prev.some((item) => item.domain === entry.domain)) return prev;
       return [{ domain: entry.domain, status: entry.status, checkedAt: entry.checkedAt }, ...prev].slice(0, 20);
     });
-  }
-
-  async function runPrimarySearch(customDomain) {
-    const lookupValue = normalizeDomain(customDomain || domain);
-    if (!lookupValue || !isValidDomain(lookupValue)) {
-      setError('Please enter valid domain');
-      return;
-    }
-
-    setError('');
-    const keyword = getBaseKeyword(lookupValue);
-    const timestamp = new Date().toLocaleString();
-
-    setResults({
-      domain: lookupValue,
-      summary: { checkedAt: timestamp },
-      whois: null,
-      dns: null,
-      ssl: null,
-      ip: null,
-      status: null,
-      social: null,
-      analyzer: null,
-      availability: [],
-    });
-
-    pushHistory({ domain: lookupValue, checkedAt: timestamp });
-    await fetchAvailability(keyword);
-    setResults((prev) => ({ ...prev, domain: lookupValue, analyzer: true }));
-  }
-
-  async function handleBulkCheck() {
-    const rawItems = bulkMode
-      ? bulkDomains.split('\n').map((item) => normalizeDomain(item)).filter(Boolean)
-      : TLDS.map((tld) => `${getBaseKeyword(domain)}${tld}`);
-
-    const items = Array.from(new Set(rawItems)).slice(0, 20);
-    if (!items.length || items.some((item) => !isValidDomain(item))) {
-      setError('Please enter valid domain');
-      return;
-    }
-
-    setError('');
-    setBulkResults([]);
-    setBulkProgress({ done: 0, total: items.length });
-    setLoading((prev) => ({ ...prev, bulk: true }));
-
-    let completed = 0;
-    await Promise.all(items.map(async (item) => {
-      const lookup = await checkDomainAvailability(item);
-      completed += 1;
-      setBulkResults((prev) => [...prev.filter((row) => row.domain !== item), lookup]);
-      setBulkProgress({ done: completed, total: items.length });
-    }));
-
-    setLoading((prev) => ({ ...prev, bulk: false }));
   }
 
   async function checkWatchlistNow(targetDomain) {

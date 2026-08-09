@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useCallback, useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 const SIZES = [
@@ -100,13 +101,15 @@ export default function PassportPhoto() {
     ctx.putImageData(d,0,0);
   };
 
-  const getFilter = () => {
+  const getFilter = useCallback(() => {
     let f=`brightness(${brightness+exposure}%) contrast(${contrast}%) saturate(${saturation}%)`;
     if (warmth>0) f+=` sepia(${warmth*.3}%)`;
     return f;
-  };
+  }, [brightness, contrast, exposure, saturation, warmth]);
 
-  const drawToCanvas = (canvas, pw, ph, sx=1, sy=1) => {
+
+
+  const drawToCanvas = useCallback((canvas, pw, ph, sx=1, sy=1) => {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0,0,pw,ph);
     ctx.fillStyle = BG_COLORS[activeBg].value;
@@ -119,7 +122,7 @@ export default function PassportPhoto() {
     ctx.drawImage(src,dx,dy,sw,sh);
     ctx.filter='none';
     if (sharpness>0) applySharpness(ctx,pw,ph,sharpness);
-  };
+  }, [activeBg, bgRemoved, bgRemovedImg, cropScale, cropX, cropY, getFilter, imgInfo, sharpness]);
 
   const drawPreview = useCallback(() => {
     if (!imgInfo||!previewRef.current) return;
@@ -128,7 +131,7 @@ export default function PassportPhoto() {
     const canvas=previewRef.current;
     canvas.width=pw; canvas.height=ph;
     drawToCanvas(canvas,pw,ph);
-  }, [imgInfo,activeSize,activeBg,cropX,cropY,cropScale,brightness,contrast,saturation,sharpness,warmth,exposure,bgRemoved,bgRemovedImg]);
+  }, [activeSize, drawToCanvas, imgInfo]);
 
   useEffect(() => { drawPreview(); }, [drawPreview]);
 
@@ -600,7 +603,7 @@ export default function PassportPhoto() {
             {imgInfo && (
               <div className="mobile-upload-preview">
                 <div className="mobile-upload-thumb">
-                  <img src={bgRemoved && bgRemovedImg ? bgRemovedImg.src : image} alt="selected preview" />
+                  <Image src={bgRemoved && bgRemovedImg ? bgRemovedImg.src : image} alt="selected preview" width={240} height={320} unoptimized />
                 </div>
                 <div className="mobile-upload-preview-copy">
                   <div className="mobile-upload-preview-title">{imgInfo.name}</div>
@@ -653,7 +656,7 @@ export default function PassportPhoto() {
                   </div>
                 ) : (
                   <div className="thumb" onClick={()=>fileRef.current?.click()}>
-                    <img src={bgRemoved&&bgRemovedImg?bgRemovedImg.src:image} alt="photo"/>
+                    <Image src={bgRemoved&&bgRemovedImg?bgRemovedImg.src:image} alt="photo" width={240} height={320} unoptimized />
                     <div className="tov"><div style={{fontSize:'20px'}}>🔄</div><div className="tov-l">Change</div></div>
                   </div>
                 )}
@@ -762,8 +765,7 @@ export default function PassportPhoto() {
                   <div className="out-preview">
                     <div className="out-img-wrap">
                       <div className="out-badge">Preview</div>
-                      <img className="out-img" src={output.url} alt="output"
-                        style={{width:Math.min(100,Math.round(100*output.size.w/output.size.h)),height:'auto',maxHeight:130}}/>
+                      <Image className="out-img" src={output.url} alt="output" width={Math.min(100,Math.round(100*output.size.w/output.size.h))} height={130} unoptimized />
                     </div>
                     <div className="out-info">
                       <div className="out-title">Photo Ready! ✅</div>

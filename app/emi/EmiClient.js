@@ -942,21 +942,17 @@ export default function EMIPage() {
   const [lumpSum, setLumpSum] = useState(0);
   const [inflation, setInflation] = useState(6);
 
-  const [emi, setEmi] = useState(0);
-  const [totalInterest, setTotalInterest] = useState(0);
-  const [totalPayment, setTotalPayment] = useState(0);
+  const emi = resolvedEmi;
+  const totalInterest = resolvedTotalInterest;
+  const totalPayment = resolvedTotalPayment;
 
-  const [schedule, setSchedule] = useState([]);
-  const [history, setHistory] = useState([]);
-  const [favorites, setFavorites] = useState([]);
-
+  const schedule = resolvedSchedule;
   const [viewMode, setViewMode] = useState('standard');
   const [chartType, setChartType] = useState('pie');
 
   const [targetEMI, setTargetEMI] = useState(12000);
   const [scheduleMode, setScheduleMode] = useState('month');
   const [scheduleSearch, setScheduleSearch] = useState('');
-  const [highContrast, setHighContrast] = useState(false);
   const [monthlyIncome, setMonthlyIncome] = useState(80000);
   const [copied, setCopied] = useState('');
   const [selectedFav, setSelectedFav] = useState('');
@@ -966,17 +962,33 @@ export default function EMIPage() {
     { id: 'C', amount: 650000, rate: 8.1, tenure: 6 },
   ]);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
+  const [history, setHistory] = useState(() => {
+    if (typeof window === 'undefined') return [];
     try {
       const stored = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
-      if (Array.isArray(stored.history)) setHistory(stored.history);
-      if (Array.isArray(stored.favorites)) setFavorites(stored.favorites);
-      if (typeof stored.highContrast === 'boolean') setHighContrast(stored.highContrast);
+      return Array.isArray(stored.history) ? stored.history : [];
     } catch {
-      // ignore invalid storage
+      return [];
     }
-  }, []);
+  });
+  const [favorites, setFavorites] = useState(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const stored = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
+      return Array.isArray(stored.favorites) ? stored.favorites : [];
+    } catch {
+      return [];
+    }
+  });
+  const [highContrast, setHighContrast] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      const stored = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '{}');
+      return typeof stored.highContrast === 'boolean' ? stored.highContrast : false;
+    } catch {
+      return false;
+    }
+  });
 
   useEffect(() => {
     saveStorage({ history, favorites, highContrast });
@@ -1051,31 +1063,36 @@ export default function EMIPage() {
     };
   }, [loanAmount, interestRate, tenure, extraEMI, lumpSum, targetEMI, viewMode]);
 
-  useEffect(() => {
-    setEmi(derived.resolvedEMI);
-    setTotalInterest(derived.currentSchedule.totalInterest);
-    setTotalPayment(derived.currentSchedule.totalPayment);
-    setSchedule(derived.currentSchedule.schedule);
-  }, [derived]);
+  const derivedSummary = useMemo(() => ({
+    emi: derived.resolvedEMI,
+    totalInterest: derived.currentSchedule.totalInterest,
+    totalPayment: derived.currentSchedule.totalPayment,
+    schedule: derived.currentSchedule.schedule,
+  }), [derived]);
+
+  const resolvedEmi = derivedSummary.emi;
+  const resolvedTotalInterest = derivedSummary.totalInterest;
+  const resolvedTotalPayment = derivedSummary.totalPayment;
+  const resolvedSchedule = derivedSummary.schedule;
 
   const invalidState = useMemo(() => {
     if (derived.amount <= 0 && viewMode !== 'budget') return 'Loan amount should be greater than zero.';
     if (derived.rate < 0) return 'Interest rate cannot be negative.';
     if (viewMode !== 'tenure' && derived.years <= 0) return 'Tenure should be greater than zero.';
     if (derived.modeError) return derived.modeError;
-    if (!Number.isFinite(emi) || !Number.isFinite(totalInterest) || !Number.isFinite(totalPayment)) return 'This setup overflows the calculator. Increase EMI or reduce the loan load.';
+    if (!Number.isFinite(resolvedEmi) || !Number.isFinite(resolvedTotalInterest) || !Number.isFinite(resolvedTotalPayment)) return 'This setup overflows the calculator. Increase EMI or reduce the loan load.';
     return '';
-  }, [derived, emi, totalInterest, totalPayment, viewMode]);
+  }, [derived, resolvedEmi, resolvedTotalInterest, resolvedTotalPayment, viewMode]);
 
-  const ratio = monthlyIncome > 0 ? (emi / monthlyIncome) * 100 : 0;
+  const ratio = monthlyIncome > 0 ? (resolvedEmi / monthlyIncome) * 100 : 0;
   const recommendedMin = monthlyIncome * 0.2;
   const recommendedMax = monthlyIncome * 0.35;
   const challengeScore = Math.min(100, Math.round((derived.savings / Math.max(derived.baseSchedule.totalInterest || 1, 1)) * 100));
-  const inflationAdjustedCost = totalPayment * ((100 + inflation) / 100);
+  const inflationAdjustedCost = resolvedTotalPayment * ((100 + inflation) / 100);
 
   const scheduleRows = useMemo(() => {
     const rows = scheduleMode === 'year'
-      ? Object.values(schedule.reduce((acc, row) => {
+      ? Object.values(resolvedSchedule.reduce((acc, row) => {
         const key = `Year ${row.year}`;
         if (!acc[key]) {
           acc[key] = {
@@ -1097,10 +1114,10 @@ export default function EMIPage() {
         acc[key].interestRatio = acc[key].payment > 0 ? acc[key].interest / acc[key].payment : 0;
         return acc;
       }, {}))
-      : schedule;
+      : resolvedSchedule;
 
     return rows.filter((row) => row.label.toLowerCase().includes(scheduleSearch.toLowerCase()));
-  }, [schedule, scheduleMode, scheduleSearch]);
+  }, [resolvedSchedule, scheduleMode, scheduleSearch]);
 
   const chartPoints = useMemo(() => {
     const sample = schedule.filter((_, index) => index % Math.max(1, Math.ceil(schedule.length / 10)) === 0 || index === schedule.length - 1);

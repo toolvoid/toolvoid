@@ -1154,7 +1154,7 @@ export default function WordCounterAnalyzer() {
       {/* FEATURES */}
       <section className="wc-section wc-features-bg" id="wc-features">
         <div className="wc-section-inner">
-          <div className="wc-section-label">✦ What's Inside</div>
+          <div className="wc-section-label">✦ What&apos;s Inside</div>
           <h2 className="wc-section-title">Every Writing Metric</h2>
           <p className="wc-section-sub">From basic word counts to AI detection — all pure JavaScript, all private.</p>
           <div className="wc-features-grid">

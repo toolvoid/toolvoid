@@ -10,6 +10,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated application bundles are not source files.
+    "app/capsule-manager/dist/**",
+    "app/capsule-manager/src/dist/**",
   ]),
 ]);
 

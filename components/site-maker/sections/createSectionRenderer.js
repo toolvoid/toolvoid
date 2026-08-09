@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { Rnd } from 'react-rnd';
 import { Copy, ImagePlus, Layers3, Trash2, Type } from 'lucide-react';
@@ -28,7 +29,7 @@ function ElementContent({ element, editable, selected, onChange, onMediaChange, 
   if (element.type === 'form') return <FormElement element={element} />;
   if (element.type === 'social') return <SocialLinksElement element={element} />;
   if (element.type === 'code') return <CodeElement element={element} editable={editable && selected} editorMode={editable} onChange={onChange} />;
-  if (element.type === 'image') return <>{element.content ? <img src={element.content} alt="" className="sm-element-image" style={visual} /> : <div className="sm-image-placeholder" style={{ ...visual, background: 'linear-gradient(135deg,rgba(167,139,250,.34),rgba(56,189,248,.2))', border: '2px dashed rgba(255,255,255,.7)', borderRadius: 14 }}><ImagePlus size={30} /><strong style={{ fontSize: 14 }}>Add an image</strong><span style={{ fontSize: 11 }}>Select this block to upload</span></div>}{editable && selected && <ImageUploader value={element.content} onChange={onMediaChange} />}</>;
+  if (element.type === 'image') return <>{element.content ? <Image unoptimized src={element.content} alt="" width={320} height={220} className="sm-element-image" style={visual} /> : <div className="sm-image-placeholder" style={{ ...visual, background: 'linear-gradient(135deg,rgba(167,139,250,.34),rgba(56,189,248,.2))', border: '2px dashed rgba(255,255,255,.7)', borderRadius: 14 }}><ImagePlus size={30} /><strong style={{ fontSize: 14 }}>Add an image</strong><span style={{ fontSize: 11 }}>Select this block to upload</span></div>}{editable && selected && <ImageUploader value={element.content} onChange={onMediaChange} />}</>;
   if (element.type === 'button') return <div className="sm-element-button" style={visual} contentEditable={editable && selected} suppressContentEditableWarning onBlur={(event) => onChange(event.currentTarget.textContent || 'Button')}>{element.content}</div>;
   const Tag = element.type === 'heading' ? 'h2' : 'p';
   return <Tag className={`sm-element-${element.type}`} style={visual} contentEditable={editable && selected} suppressContentEditableWarning onBlur={(event) => onChange(event.currentTarget.textContent || '')}>{element.content}</Tag>;

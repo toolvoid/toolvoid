@@ -1,5 +1,6 @@
 'use client';
-import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { useEffect } from 'react';
 
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap');
@@ -357,14 +358,7 @@ const PRESETS_DATA = {
 };
 
 export default function ImageToolkitPage() {
-  const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
     const root = document.getElementById('it-root');
     if (!root) return;
 
@@ -1180,27 +1174,9 @@ export default function ImageToolkitPage() {
     });
 
     return () => { timers.forEach(clearTimeout); };
-  }, [mounted]);
+  }, []);
 
   // ─── JSX ─────────────────────────────────────────────────────────────────
-  if (!mounted) {
-    return (
-      <div id="it-root" className="it-root">
-        <style dangerouslySetInnerHTML={{ __html: CSS }} />
-        <section className="it-hero" style={{ minHeight: '100vh', padding: '6rem 1.5rem' }}>
-          <div className="it-hero-content">
-            <div className="it-hero-badge">100% Browser-Based · Zero Upload · Zero Cost</div>
-            <h1>
-              Resize. Compress.<br />
-              <span className="ha">Edit. Free.</span>
-            </h1>
-            <p className="it-hero-sub">Loading editor…</p>
-          </div>
-        </section>
-      </div>
-    );
-  }
-
   return (
     <div id="it-root" className="it-root">
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
@@ -1287,7 +1263,7 @@ export default function ImageToolkitPage() {
 
               {/* File Card */}
               <div className="it-file-card">
-                <img className="it-file-thumb" id="it-file-thumb" src={null} alt="" />
+                <Image className="it-file-thumb" id="it-file-thumb" src="" alt="" width={44} height={44} unoptimized />
                 <div className="it-file-info">
                   <div className="it-file-dim" id="it-file-dim">—</div>
                   <div className="it-file-size" id="it-file-size">—</div>
@@ -1608,16 +1584,16 @@ export default function ImageToolkitPage() {
               {/* Image Canvas */}
               <div className="it-preview-img-wrap">
                 <div className="it-preview-canvas" id="it-preview-canvas">
-                  <img id="it-preview-img" alt="Preview" />
+                  <Image id="it-preview-img" alt="Preview" src="" width={1200} height={800} unoptimized />
                   <div id="it-preview-placeholder">
                     <div className="it-ph-icon" aria-hidden="true">⤡</div>
                     <div className="it-ph-text">Upload an image to begin</div>
                   </div>
                   {/* Compare overlay */}
                   <div className="it-compare-wrap" id="it-compare-wrap">
-                    <div className="it-compare-before"><img id="it-cmp-before-img" alt="Original" draggable={false} style={{maxWidth:'100%',maxHeight:'62vh',objectFit:'contain'}} /></div>
+                    <div className="it-compare-before"><Image id="it-cmp-before-img" alt="Original" src="" width={1200} height={800} unoptimized draggable={false} style={{maxWidth:'100%',maxHeight:'62vh',objectFit:'contain'}} /></div>
                     <div className="it-compare-after" id="it-cmp-after" style={{clipPath:'inset(0 50% 0 0)'}}>
-                      <img id="it-cmp-after-img" alt="Edited" draggable={false} style={{maxWidth:'100%',maxHeight:'62vh',objectFit:'contain'}} />
+                      <Image id="it-cmp-after-img" alt="Edited" src="" width={1200} height={800} unoptimized draggable={false} style={{maxWidth:'100%',maxHeight:'62vh',objectFit:'contain'}} />
                     </div>
                     <div className="it-compare-divider" id="it-cmp-divider" style={{left:'50%'}}>
                       <div className="it-compare-handle">⟺</div>
