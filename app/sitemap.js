@@ -21,7 +21,7 @@ export default function sitemap() {
     '/privacy',
     '/qr',
     '/resume',
-    '/story-generator',
+    '/story',
     '/terms',
     '/tools',
     '/tts',
