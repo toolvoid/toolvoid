@@ -38,6 +38,11 @@ export default function RootLayout({ children }) {
     <html lang="en" className="h-full">
       <head>
         <link rel="manifest" href="/site.webmanifest" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5587383552747687"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className="app-body min-h-full flex flex-col">
         <AuthSessionProvider>

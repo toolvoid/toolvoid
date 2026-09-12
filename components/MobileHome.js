@@ -311,7 +311,7 @@ export default function MobileHome() {
 
           {/* ── Stats Bar ── */}
           <div className="m-stats-bar" ref={statsRef}>
-            {[['21','Tools'],['₹0','Forever'],['3s','To Start'],['24/7','Access']].map(([n,l])=>(
+            {[[tools.length, 'Tools'],['₹0','Forever'],['3s','To Start'],['24/7','Access']].map(([n,l])=>(
               <div key={l} className="m-stat">
                 <div className="m-stat-n">{n}</div>
                 <div className="m-stat-l">{l}</div>
