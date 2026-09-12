@@ -163,7 +163,7 @@ export default function MobileHome() {
 
         /* ── Nav ── */
         .m-nav{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:12px 0 16px;background:linear-gradient(180deg,rgba(6,6,9,.95),rgba(6,6,9,.8),transparent);animation:fadeUp .4s both}
-        .m-logo{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:1px;text-decoration:none;color:white}
+        .m-logo{font-family:'Bebas Neue',sans-serif;font-size:36px;line-height:1;letter-spacing:1px;text-decoration:none;color:white}
         .m-logo em{color:var(--green);font-style:normal}
         .m-pill{padding:7px 12px;border-radius:999px;border:1px solid rgba(0,255,178,.22);background:rgba(0,255,178,.08);color:var(--green);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
 

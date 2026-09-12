@@ -13,15 +13,16 @@ const faqs = [
 
 export const metadata = {
   ...createToolMetadata('story'),
-  title: "Script Writer — AI Video Production Scripts | ToolVoid",
-  description: "Create production-ready AI video scripts with editable narration, standalone visual prompts, and timed SRT captions for Shorts, Reels, and long-form video.",
-  keywords: ["AI script writer", "AI video production script", "visual prompt generator", "video narration script", "SRT caption generator"],
+  title: 'Story Generator for Short Video Scripts | ToolVoid',
+  description: 'Create short video stories and scripts fast with ToolVoid. Turn a prompt into a clear story outline, scene flow, and engaging content in seconds.',
+  alternates: { canonical: 'https://toolvoid.com/story' },
   openGraph: {
-    title: "Script Writer | ToolVoid",
-    description: "Create AI-video production scripts with narration, scene visual prompts, and timed captions.",
-    url: "https://toolvoid.com/story",
+    title: 'Story Generator for Short Video Scripts | ToolVoid',
+    description: 'Create short video stories and scripts fast with ToolVoid using a clear scene-based workflow.',
+    url: 'https://toolvoid.com/story',
+    type: 'website',
   },
-}
+};
 
 export default function Page() {
   const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(([name, text]) => ({ '@type': 'Question', name, acceptedAnswer: { '@type': 'Answer', text } })) };
@@ -61,6 +62,9 @@ export default function Page() {
 
         <section className="sw-seo-section sw-seo-faq">
           <div className="sw-seo-heading"><span>FAQ</span><h2>Questions about Script Writer.</h2></div>
+          <p style={{ margin: '18px 0 0', color: '#50586b', fontSize: 14 }}>
+            Related tools: <a href="/keyword" style={{ color: '#4f46e5' }}>Keyword generator</a> · <a href="/tts" style={{ color: '#4f46e5' }}>Text to speech</a>
+          </p>
           <div className="sw-seo-faq-list">{faqs.map(([question, answer], index) => <details key={question} open={index === 0}><summary>{question}<i>+</i></summary><p>{answer}</p></details>)}</div>
         </section>
       </div>

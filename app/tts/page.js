@@ -2,16 +2,17 @@ import TtsClient from './TtsClient'
 import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
-  title: "Free Text to Speech Converter Online — ToolVoid",
-  description: "Convert text to natural-sounding speech online for free with our text to speech converter. Choose from multiple voices and languages. No sign-up needed.",
-  keywords: ["free text to speech converter online", "text to speech", "TTS online", "speech generator", "text to voice"],
-  openGraph: {
-    title: "Free Text to Speech Converter | ToolVoid",
-    description: "Convert text to natural-sounding speech online for free. Multiple voices and languages available.",
-    url: "https://toolvoid.com/tts",
-  },
   ...createToolMetadata('tts'),
-}
+  title: 'Text to Speech Converter for Natural Audio | ToolVoid',
+  description: 'Convert text to natural speech instantly with ToolVoid. Choose a voice, adjust speed, and download audio for free with no signup required.',
+  alternates: { canonical: 'https://toolvoid.com/tts' },
+  openGraph: {
+    title: 'Text to Speech Converter for Natural Audio | ToolVoid',
+    description: 'Convert text to natural speech instantly with ToolVoid and download audio with no signup.',
+    url: 'https://toolvoid.com/tts',
+    type: 'website',
+  },
+};
 
 export default function Page() {
   return (
@@ -23,6 +24,9 @@ export default function Page() {
         </p>
       </div>
       <TtsClient />
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 1.5rem 1.25rem', color: '#6b6b85' }}>
+        Related tools: <a href="/story" style={{ color: '#7dd3fc' }}>Story generator</a> · <a href="/keyword" style={{ color: '#7dd3fc' }}>Keyword generator</a>
+      </div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "FAQPage",

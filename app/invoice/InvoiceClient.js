@@ -284,7 +284,7 @@ function initApp() {
       <div style="height:5px;background:linear-gradient(90deg,${state.accentColor},${state.accentColor}66)"></div>
       <div style="padding:32px 44px 24px;display:flex;justify-content:space-between;align-items:flex-start">
         <div>
-          ${state.fromLogo?`<img src="${state.fromLogo}" style="max-height:52px;max-width:150px;object-fit:contain;margin-bottom:10px;display:block">`:''}
+          ${state.fromLogo?`<img src="${state.fromLogo}" alt="Business logo for invoice preview" style="max-height:52px;max-width:150px;object-fit:contain;margin-bottom:10px;display:block">`:''}
           <div style="font-size:22px;font-weight:800;color:#1a1a2e;font-family:'Space Grotesk',sans-serif">${state.fromName||'Your Business'}</div>
           <div style="font-size:12px;color:#888;margin-top:2px;line-height:1.8">
             ${[state.fromEmail,state.fromPhone,state.fromAddress,state.fromCity].filter(Boolean).join(' &middot; ')}
@@ -316,7 +316,7 @@ function initApp() {
     return `<div class="inv-doc" id="inv-document">
       <div style="padding:32px 44px 18px;border-bottom:3px solid ${state.accentColor};display:flex;justify-content:space-between;align-items:center">
         <div style="display:flex;align-items:center;gap:14px">
-          ${state.fromLogo?`<img src="${state.fromLogo}" style="max-height:46px;max-width:130px;object-fit:contain">`:''}
+          ${state.fromLogo?`<img src="${state.fromLogo}" alt="Business logo on classic invoice" style="max-height:46px;max-width:130px;object-fit:contain">`:''}
           <div>
             <div style="font-size:20px;font-weight:800;color:#1a1a2e;font-family:'Space Grotesk',sans-serif">${state.fromName||'Your Company'}</div>
             ${state.fromGST?`<div style="font-size:11px;color:#aaa">GST: ${state.fromGST}</div>`:''}
@@ -356,7 +356,7 @@ function initApp() {
       <div style="padding:48px 56px 0">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px">
           <div>
-            ${state.fromLogo?`<img src="${state.fromLogo}" style="max-height:40px;max-width:130px;object-fit:contain;margin-bottom:12px;display:block">`:''}
+            ${state.fromLogo?`<img src="${state.fromLogo}" alt="Business logo on minimal invoice" style="max-height:40px;max-width:130px;object-fit:contain;margin-bottom:12px;display:block">`:''}
             <div style="font-size:16px;font-weight:700;color:#1a1a2e">${state.fromName||'Your Business'}</div>
             <div style="font-size:12px;color:#aaa;margin-top:3px;line-height:1.8">${[state.fromAddress,state.fromCity,state.fromEmail,state.fromPhone].filter(Boolean).join(' · ')}</div>
           </div>
@@ -392,7 +392,7 @@ function initApp() {
     return `<div class="inv-doc" id="inv-document">
       <div style="background:${state.accentColor};padding:28px 40px;display:flex;justify-content:space-between;align-items:flex-start">
         <div>
-          ${state.fromLogo?`<img src="${state.fromLogo}" style="max-height:48px;max-width:140px;object-fit:contain;margin-bottom:8px;display:block;filter:brightness(0) invert(1)">`:''}
+          ${state.fromLogo?`<img src="${state.fromLogo}" alt="Business logo on bold invoice" style="max-height:48px;max-width:140px;object-fit:contain;margin-bottom:8px;display:block;filter:brightness(0) invert(1)">`:''}
           <div style="font-size:24px;font-weight:900;color:#fff;font-family:'Space Grotesk',sans-serif;letter-spacing:-1px">${state.fromName||'Your Business'}</div>
           <div style="font-size:12px;color:rgba(255,255,255,.75);margin-top:4px;line-height:1.7">${[state.fromAddress,state.fromCity,state.fromEmail,state.fromPhone].filter(Boolean).join(' · ')}</div>
           ${state.fromGST?`<div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:4px">GST: ${state.fromGST}</div>`:''}
@@ -455,7 +455,7 @@ function initApp() {
     <div class="inv-section">
       <div class="inv-section-title">🏢 Your Business</div>
       <div class="inv-logo-upload" style="margin-bottom:14px">
-        <div class="inv-logo-preview" id="logo-preview">${state.fromLogo?`<img src="${state.fromLogo}" alt="">`:'🏷️'}</div>
+        <div class="inv-logo-preview" id="logo-preview">${state.fromLogo?`<img src="${state.fromLogo}" alt="Uploaded business logo preview">`:'🏷️'}</div>
         <div style="flex:1">
           <div style="font-size:13px;font-weight:600;margin-bottom:4px">Company Logo</div>
           <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:8px">PNG, JPG · click to upload</div>

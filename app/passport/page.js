@@ -2,16 +2,17 @@ import PassportClient from './PassportClient'
 import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
-  title: "Free Passport Photo Maker Online — ToolVoid",
-  description: "Create passport-size photos online for free with our passport photo maker. Crop, resize, and adjust photos to meet official passport, visa, and ID card requirements.",
-  keywords: ["free passport photo maker online", "passport photo maker", "passport size photo", "visa photo maker", "ID photo creator"],
-  openGraph: {
-    title: "Free Passport Photo Maker | ToolVoid",
-    description: "Create passport-size photos online for free. Crop and resize to meet official requirements.",
-    url: "https://toolvoid.com/passport",
-  },
   ...createToolMetadata('passport'),
-}
+  title: 'Passport Photo Maker for Visa and ID Photos | ToolVoid',
+  description: 'Create passport and ID photos in seconds with ToolVoid. Resize, crop, and export print-ready images for free with instant results and no signup.',
+  alternates: { canonical: 'https://toolvoid.com/passport' },
+  openGraph: {
+    title: 'Passport Photo Maker for Visa and ID Photos | ToolVoid',
+    description: 'Create passport and ID photos in seconds with ToolVoid and export print-ready images instantly.',
+    url: 'https://toolvoid.com/passport',
+    type: 'website',
+  },
+};
 
 export default function Page() {
   return (
@@ -23,6 +24,9 @@ export default function Page() {
         </p>
       </div>
       <PassportClient />
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 1.5rem 1.25rem', color: '#6b6b85' }}>
+        Related tools: <a href="/keyword" style={{ color: '#7dd3fc' }}>Keyword generator</a> · <a href="/tts" style={{ color: '#7dd3fc' }}>Text to speech</a>
+      </div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "FAQPage",

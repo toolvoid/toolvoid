@@ -612,7 +612,7 @@ export default function Home() {
     .wrap{position:relative;z-index:2;max-width:1240px;margin:0 auto;padding:0 24px 80px}
     .nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;height:76px;background:linear-gradient(180deg,rgba(6,6,9,.94),rgba(6,6,9,.78),transparent);backdrop-filter:blur(10px)}
     .nav.scrolled{background:rgba(6,6,9,.9);backdrop-filter:blur(28px);border-bottom:1px solid rgba(255,255,255,.04)}
-    .logo{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:#fff;text-decoration:none}
+    .logo{font-family:'Bebas Neue',sans-serif;font-size:42px;line-height:1;letter-spacing:1px;color:#fff;text-decoration:none}
     .logo em{color:var(--g);font-style:normal}
     .nav-right{display:flex;align-items:center;gap:14px}
     .nav-pill{padding:8px 14px;border-radius:999px;border:1px solid rgba(0,255,178,.24);background:rgba(0,255,178,.08);color:var(--g);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
@@ -744,7 +744,7 @@ export default function Home() {
             <div className="spotlight" />
             <div className="wrap">
               <nav id="nv" className="nav">
-                <Link href="/" className="m-logo"><em>Tool</em> Void</Link>
+                <Link href="/" className="logo"><em>Tool</em> Void</Link>
                 <div className="nav-right">
                   <div className="nav-pill">22 Free Tools</div>
                   <a className="nav-link" href="#tools">Tools</a>
