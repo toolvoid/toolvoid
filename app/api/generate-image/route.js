@@ -95,7 +95,7 @@ async function callPollinationsImage(prompt, ratio = '1:1') {
     const seed = Math.floor(Math.random() * 1_000_000_000);
     const url = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&nologo=true&enhance=true&seed=${seed}`;
     try {
-      const response = await fetch(url, { headers: { 'Accept': 'image/*', 'User-Agent': 'toolsite-imagegen/1.0' }, signal: AbortSignal.timeout(60000), cache: 'no-store' });
+      const response = await fetch(url, { headers: { 'Accept': 'image/*', 'User-Agent': 'toolvoid-imagegen/1.0' }, signal: AbortSignal.timeout(60000), cache: 'no-store' });
       if (response.status === 429) {
         if (attempt < 4) { await sleep(attempt * 4000 + Math.random() * 2000); continue; }
         lastError = 'Image server busy, please try again in 30 seconds';

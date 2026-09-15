@@ -445,10 +445,10 @@ const CSS = `
 }
 `;
 
-const STORAGE_KEY = 'toolsite-json-workbench-v1';
+const STORAGE_KEY = 'toolvoid-json-workbench-v1';
 
 const SAMPLE_JSON = `{
-  "project": "toolsite",
+  "project": "toolvoid",
   "owner": {
     "name": "Sparsh",
     "active": true

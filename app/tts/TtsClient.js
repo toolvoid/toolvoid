@@ -329,7 +329,7 @@ export default function TextToSpeech() {
 
   return (
     <>
-      <style precedence="default" href="toolsite-tts-styles">{`
+      <style precedence="default" href="toolvoid-tts-styles">{`
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap');
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         html,body{background:#050a14;color:#dde8f5;font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden}

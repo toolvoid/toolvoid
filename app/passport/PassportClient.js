@@ -261,7 +261,7 @@ export default function PassportPhoto() {
       ctx.fillStyle='rgba(0,0,0,.18)';
       ctx.font=`${Math.round(5*MM_PX)}px sans-serif`;
       ctx.textAlign='center';
-      ctx.fillText(`${photoMM.label} | ${sheetCols}×${sheetRows} photos | ${page.label} | 300 DPI | toolsite.com`,pageW/2,pageH-Math.round(2.5*MM_PX));
+      ctx.fillText(`${photoMM.label} | ${sheetCols}×${sheetRows} photos | ${page.label} | 300 DPI | toolvoid.com`,pageW/2,pageH-Math.round(2.5*MM_PX));
 
       const a=document.createElement('a');
       a.href=c.toDataURL('image/jpeg',.96);
@@ -278,7 +278,7 @@ export default function PassportPhoto() {
 
   return (
     <>
-      <style precedence="default" href="toolsite-passport-styles">{`
+      <style precedence="default" href="toolvoid-passport-styles">{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         :root{

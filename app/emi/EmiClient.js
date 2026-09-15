@@ -649,7 +649,7 @@ const CSS = `
 }
 `;
 
-const STORAGE_KEY = 'toolsite-emi-calculator-v1';
+const STORAGE_KEY = 'toolvoid-emi-calculator-v1';
 const HISTORY_LIMIT = 8;
 
 const currency = new Intl.NumberFormat('en-IN', {

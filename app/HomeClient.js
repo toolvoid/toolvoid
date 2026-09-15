@@ -899,6 +899,7 @@ export default function Home() {
                   <div className="footer-legal-links">
                     <Link href="/privacy">Privacy Policy</Link>
                     <Link href="/terms">Terms of Service</Link>
+                    <Link href="/contact">Contact</Link>
                   </div>
                   <div className="footer-legal-copy">© 2026 ToolVoid. All rights reserved.</div>
                 </div>

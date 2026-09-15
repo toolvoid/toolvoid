@@ -580,7 +580,7 @@ const CSS = `
 }
 `;
 
-const STORAGE_KEY = 'toolsite-loan-eligibility-v1';
+const STORAGE_KEY = 'toolvoid-loan-eligibility-v1';
 const HISTORY_LIMIT = 20;
 
 const currency = new Intl.NumberFormat('en-IN', {

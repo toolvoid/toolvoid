@@ -136,7 +136,7 @@ export default function MobileHome() {
 
   return (
     <>
-      <style precedence="default" href="toolsite-mobile-v2">{`
+      <style precedence="default" href="toolvoid-mobile-v2">{`
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Bebas+Neue&family=JetBrains+Mono:wght@500;700&display=swap');
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         :root{--bg:#060609;--fg:#f8fbff;--muted:#8893a3;--green:#00FFB2;--line:rgba(255,255,255,.1)}

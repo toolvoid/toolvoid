@@ -1175,7 +1175,7 @@ export default function DomainCheckerPage() {
                   <div className="dc-search-row">
                     <input
                       className="dc-input"
-                      placeholder="toolsite.com"
+                      placeholder="toolvoid.com"
                       value={domain}
                       onChange={(event) => setDomain(event.target.value)}
                     />
@@ -1199,7 +1199,7 @@ export default function DomainCheckerPage() {
                     id="bulk-domains"
                     className="dc-textarea"
                     rows={7}
-                    placeholder={'toolsite.com\ntoolsite.in\ntoolsite.io'}
+                    placeholder={'toolvoid.com\ntoolvoid.in\ntoolvoid.io'}
                     value={bulkDomains}
                     onChange={(event) => setBulkDomains(event.target.value)}
                   />

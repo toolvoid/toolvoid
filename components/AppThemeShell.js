@@ -7,7 +7,7 @@ export default function AppThemeShell() {
     document.documentElement.dataset.appTheme = 'dark';
     document.body.dataset.appTheme = 'dark';
     document.documentElement.style.colorScheme = 'dark';
-    window.dispatchEvent(new CustomEvent('toolsite-theme-change', { detail: { theme: 'dark' } }));
+    window.dispatchEvent(new CustomEvent('toolvoid-theme-change', { detail: { theme: 'dark' } }));
   }, []);
 
   return null;
