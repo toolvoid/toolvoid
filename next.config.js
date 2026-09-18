@@ -3,15 +3,15 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/story-generator',
+        destination: '/story',
+        permanent: true,
+      },
+      {
         source: '/capsule-manager-page',
         destination: '/capsule-manager',
         permanent: true,
       },
-    ];
-  },
-  async rewrites() {
-    return [
-      { source: '/capsule-manager', destination: '/capsule-manager-page' },
     ];
   },
 };

@@ -1,6 +1,6 @@
 export default function sitemap() {
   const base = 'https://toolvoid.com';
-  
+
   const routes = [
     '',
     '/about',
@@ -33,5 +33,7 @@ export default function sitemap() {
   return routes.map((route) => ({
     url: `${base}${route}`,
     lastModified: new Date(),
+    changefreq: 'weekly',
+    priority: route === '' ? 1 : 0.7,
   }));
 }
