@@ -10,6 +10,7 @@ export default function sitemap() {
     '/emi',
     '/hashtag-generator',
     '/image-generator',
+    '/indian-forms',
     '/image-tools',
     '/invoice',
     '/json',

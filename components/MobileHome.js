@@ -5,13 +5,14 @@ import { useEffect, useRef, useState } from 'react';
 
 const tools = [
   { name: 'Site Maker',           href: '/site-maker',   desc: 'Build a responsive website visually — no code needed',   color: '#22D3EE', tag: 'NEW' },
-  { name: 'Script Generator',     href: '/story-generator', desc: 'Generate timed AI video scripts with narration & visuals', color: '#A78BFA', tag: 'AI' },
+  { name: 'Script Generator',     href: '/story', desc: 'Generate timed AI video scripts with narration & visuals', color: '#A78BFA', tag: 'AI' },
   { name: 'Hashtag Generator',   href: '/hashtag',      desc: 'Smart hashtags for Instagram, YouTube & Twitter',        color: '#FF6B6B', tag: 'AI' },
   { name: 'Image Generator',     href: '/imagegen',     desc: 'Generate AI images with daily free credits',            color: '#F59E0B', tag: 'AI' },
   { name: 'Keyword Generator',   href: '/keyword',      desc: 'Find best SEO keywords for your content instantly',      color: '#34D399', tag: 'SEO' },
   { name: 'Image Toolkit',       href: '/image-tools',  desc: 'Resize, compress & convert images — all in one',        color: '#FFD93D', tag: 'Image' },
   { name: 'PDF to Image',        href: '/pdf',          desc: 'Extract high-quality images from any PDF file',         color: '#FF9A3C', tag: 'Image' },
   { name: 'Passport Photo',      href: '/passport',     desc: 'Resize any photo to passport size instantly free',      color: '#60A5FA', tag: 'Image' },
+  { name: 'Indian Form Photos',  href: '/indian-forms', desc: 'Prepare photo & signature files for Indian forms',      color: '#2563EB', tag: 'Image' },
   { name: 'QR Generator',        href: '/qr',           desc: 'Generate QR codes for any URL or text instantly',       color: '#00FFB2', tag: 'Utility' },
   { name: 'Password Generator',  href: '/password',     desc: 'Generate strong, secure random passwords instantly',    color: '#F472B6', tag: 'Security' },
   { name: 'Domain Checker',      href: '/domain',       desc: 'Check domain availability across all extensions',       color: '#00C9FF', tag: 'Utility' },
@@ -27,6 +28,7 @@ const tools = [
   { name: 'Resume Builder',      href: '/resume',       desc: 'Multiple templates · PDF download · Quick workflow',    color: '#FF6B6B', tag: 'Career' },
   { name: 'Capsule Manager',     href: '/capsule-manager', desc: 'Save AI conversations as capsules. Never lose context again.', color: '#a78bfa', tag: 'NEW' },
 ];
+const toolCount = 23;
 
 const ALL_TAGS = ['All', 'NEW', 'AI', 'Image', 'Dev', 'Finance', 'Utility', 'Content', 'Business', 'Media'];
 
@@ -64,13 +66,6 @@ const faqs = [
   { q: 'Will more tools be added?',   a: 'Yes. The site grows with more utilities and polish over time.' },
 ];
 
-const supports = [
-  { title: 'Email Support',     desc: 'Send a message if something feels broken or confusing.',       link: 'mailto:0voidtool0@gmail.com', cta: 'Email Us →',    color: '#00FFB2' },
-  { title: 'Community Help',    desc: 'Share feedback, ideas and common issues by email for now.',   link: 'mailto:0voidtool0@gmail.com?subject=Tool%20Void%20Community', cta: 'Join In →', color: '#4D96FF' },
-  { title: 'Bug Reports',       desc: 'Point out a broken flow and it gets fixed faster.',           link: 'mailto:0voidtool0@gmail.com?subject=Tool%20Void%20Bug%20Report', cta: 'Report It →', color: '#FF6B6B' },
-  { title: 'Feature Requests',  desc: 'If a missing tool would help you, ask for it directly.',      link: 'mailto:0voidtool0@gmail.com?subject=Tool%20Void%20Feature%20Request', cta: 'Suggest One →', color: '#FFD93D' },
-];
-
 // ── Tool Icon SVGs (inline, no 3D dep on mobile) ──────────
 function MobileToolIcon({ href, color }) {
   const s = { stroke: color, strokeWidth: '2.4', strokeLinecap: 'round', strokeLinejoin: 'round', fill: 'none' };
@@ -78,13 +73,14 @@ function MobileToolIcon({ href, color }) {
   const base = { width: 44, height: 44, viewBox: '0 0 44 44', fill: 'none', xmlns: 'http://www.w3.org/2000/svg' };
 
   const icons = {
-    '/story-generator': <svg {...base}><path d="M10 10C13 9 16 9 20 10V34C16 33 13 33 10 34V10Z" {...s}/><path d="M24 10C28 9 31 9 34 10V34C31 33 28 33 24 34V10Z" {...s}/><path d="M22 10V34" {...s}/><path d="M32 8L33.5 11.5L37 13L33.5 14.5L32 18L30.5 14.5L27 13L30.5 11.5L32 8Z" {...f} fill={color}/></svg>,
+    '/story': <svg {...base}><path d="M10 10C13 9 16 9 20 10V34C16 33 13 33 10 34V10Z" {...s}/><path d="M24 10C28 9 31 9 34 10V34C31 33 28 33 24 34V10Z" {...s}/><path d="M22 10V34" {...s}/><path d="M32 8L33.5 11.5L37 13L33.5 14.5L32 18L30.5 14.5L27 13L30.5 11.5L32 8Z" {...f} fill={color}/></svg>,
     '/hashtag':     <svg {...base}><path d="M16 7L12 37" {...s}/><path d="M30 7L26 37" {...s}/><path d="M8 16H34" {...s}/><path d="M6 28H32" {...s}/></svg>,
     '/imagegen':    <svg {...base}><rect x="8" y="8" width="28" height="28" rx="5" {...s}/><circle cx="29" cy="16" r="3" {...f} fill={color}/><path d="M13 29L19 23L24 27L30 20L34 24" {...s}/></svg>,
     '/keyword':     <svg {...base}><circle cx="19" cy="19" r="9" {...s}/><path d="M25.5 25.5L34 34" {...s}/><path d="M16 19H22" {...s}/><path d="M19 16V22" {...s}/></svg>,
     '/image-tools': <svg {...base}><rect x="6" y="10" width="20" height="16" rx="3" {...s}/><rect x="10" y="14" width="20" height="16" rx="3" {...s} strokeOpacity="0.6"/><rect x="14" y="18" width="20" height="16" rx="3" {...s} strokeOpacity="0.3"/><path d="M10 22L14 18L18 22L22 16L26 20" {...s}/></svg>,
     '/pdf':         <svg {...base}><path d="M14 6H26L34 14V34C34 36.2 32.2 38 30 38H14C11.8 38 10 36.2 10 34V10C10 7.8 11.8 6 14 6Z" {...s}/><path d="M26 6V14H34" {...s}/><path d="M22 30V36" {...s}/><path d="M18 33L22 38L26 33" {...s}/></svg>,
     '/passport':    <svg {...base}><rect x="10" y="7" width="24" height="30" rx="4" {...s}/><circle cx="22" cy="17" r="5" {...s}/><path d="M14 31C16 27 19 25 22 25C25 25 28 27 30 31" {...s}/></svg>,
+    '/indian-forms': <svg {...base}><rect x="10" y="6" width="24" height="32" rx="4" {...s}/><path d="M16 14H28M16 20H28M16 26H23" {...s}/><circle cx="29" cy="30" r="6" {...f} fill={color}/><path d="M26.5 30L28.5 32L32 28" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>,
     '/qr':          <svg {...base}><rect x="6" y="6" width="10" height="10" rx="2" {...s}/><rect x="28" y="6" width="10" height="10" rx="2" {...s}/><rect x="6" y="28" width="10" height="10" rx="2" {...s}/><rect x="10" y="10" width="3" height="3" rx="1" {...f} fill={color}/><rect x="32" y="10" width="3" height="3" rx="1" {...f} fill={color}/><rect x="10" y="32" width="3" height="3" rx="1" {...f} fill={color}/><rect x="24" y="24" width="4" height="4" rx="1" {...f} fill={color}/><rect x="30" y="24" width="4" height="4" rx="1" {...f} fill={color}/><rect x="24" y="30" width="4" height="4" rx="1" {...f} fill={color}/></svg>,
     '/password':    <svg {...base}><rect x="12" y="20" width="20" height="14" rx="4" {...s}/><path d="M16 20V16C16 13.8 18 12 22 12C26 12 28 13.8 28 16V20" {...s}/><circle cx="22" cy="27" r="2" {...f} fill={color}/><path d="M22 27V31" {...s}/></svg>,
     '/domain':      <svg {...base}><circle cx="19" cy="19" r="11" {...s}/><path d="M8 19H30" {...s}/><path d="M19 8C22 11 23 15 23 19C23 23 22 27 19 30" {...s}/><path d="M19 8C16 11 15 15 15 19C15 23 16 27 19 30" {...s}/><circle cx="31" cy="31" r="5" {...s}/><path d="M34.5 34.5L38 38" {...s}/></svg>,
@@ -149,6 +145,8 @@ export default function MobileHome() {
         @keyframes driftGrid{0%{transform:perspective(500px) rotateX(75deg) translateY(0)}100%{transform:perspective(500px) rotateX(75deg) translateY(36px)}}
         @keyframes orbA{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(18px,-24px,0)}}
         @keyframes orbB{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-16px,22px,0)}}
+        @keyframes mysteryMobileSpin{to{transform:rotate(360deg)}}
+        @keyframes mysteryMobilePulse{0%,100%{transform:scale(1) rotate(-4deg)}50%{transform:scale(1.08) rotate(4deg)}}
 
         /* ── Page bg ── */
         .m-page{--bg-shift:0px;--bg-shift-soft:0px;position:relative;min-height:100vh;background:radial-gradient(circle at 18% 12%,rgba(52,211,153,.14),transparent 26%),radial-gradient(circle at 82% 22%,rgba(96,165,250,.12),transparent 24%),linear-gradient(180deg,#08090c 0%,#060609 100%);overflow:hidden}
@@ -162,9 +160,11 @@ export default function MobileHome() {
         .m-wrap{position:relative;z-index:1;padding:18px 18px 80px;max-width:560px;margin:0 auto}
 
         /* ── Nav ── */
-        .m-nav{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:12px 0 16px;background:linear-gradient(180deg,rgba(6,6,9,.95),rgba(6,6,9,.8),transparent);animation:fadeUp .4s both}
+        .m-nav{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0 16px;background:linear-gradient(180deg,rgba(6,6,9,.95),rgba(6,6,9,.8),transparent);animation:fadeUp .4s both}
         .m-logo{font-family:'Bebas Neue',sans-serif;font-size:36px;line-height:1;letter-spacing:1px;text-decoration:none;color:white}
         .m-logo em{color:var(--green);font-style:normal}
+        .m-nav-links{display:flex;align-items:center;gap:10px;margin-left:auto}
+        .m-nav-link{color:#cbd5e1;text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase}
         .m-pill{padding:7px 12px;border-radius:999px;border:1px solid rgba(0,255,178,.22);background:rgba(0,255,178,.08);color:var(--green);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
 
         /* ── Hero ── */
@@ -218,6 +218,16 @@ export default function MobileHome() {
         .m-tool-card.featured .m-tool-name{font-size:16px}
         .m-tool-card.featured .m-tool-desc{-webkit-line-clamp:3;font-size:12px}
         .m-tool-card.featured .m-tool-body{flex:1}
+        .m-mystery-card{grid-column:span 2;position:relative;min-height:154px;display:flex;align-items:center;gap:14px;overflow:hidden;padding:20px 16px;border:1px solid rgba(255,255,255,.2);border-radius:20px;background:#0b0c15;isolation:isolate}
+        .m-mystery-card::before{content:'';position:absolute;inset:-2px;z-index:-2;background:conic-gradient(#00ffb2,#4d96ff,#c77dff,#ff4ecd,#ffd93d,#00ffb2);animation:mysteryMobileSpin 6s linear infinite}
+        .m-mystery-card::after{content:'';position:absolute;inset:1px;z-index:-1;border-radius:19px;background:#0b0c15}
+        .m-mystery-glow{position:absolute;width:180px;height:180px;right:-35px;bottom:-100px;border-radius:50%;background:radial-gradient(circle,#ff4ecd,transparent 68%);opacity:.65;animation:mysteryMobilePulse 4s ease-in-out infinite}
+        .m-mystery-core{display:grid;place-items:center;flex:0 0 56px;width:56px;height:56px;border-radius:16px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:36px;background:conic-gradient(#00ffb2,#4d96ff,#c77dff,#ff4ecd,#ffd93d,#00ffb2);box-shadow:0 0 24px rgba(167,139,250,.35);animation:mysteryMobilePulse 2.8s ease-in-out infinite}
+        .m-mystery-body{position:relative;z-index:1}
+        .m-mystery-label{color:#fff;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase}
+        .m-mystery-name{margin:6px 0 4px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1}
+        .m-mystery-copy{color:var(--muted);font-size:11px;line-height:1.5}
+        .m-mystery-status{position:absolute;right:14px;bottom:14px;color:#fff;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase}
 
         /* No results */
         .m-no-results{grid-column:span 2;text-align:center;padding:40px 20px;color:var(--muted);font-size:14px}
@@ -289,14 +299,14 @@ export default function MobileHome() {
           {/* ── Nav ── */}
           <div className="m-nav">
             <Link href="/" className="m-logo"><em>Tool</em> Void</Link>
-            <div className="m-pill">22 Tools</div>
+            <div className="m-pill">{toolCount} Tools</div>
           </div>
 
           {/* ── Hero ── */}
           <section className="m-hero">
             <div className="m-eyebrow">Free tools for creators & builders</div>
             <div className="m-title">
-              <span className="green">22 Tools.</span>
+              <span className="green">{toolCount} Tools.</span>
               <span>Zero Cost.</span>
               <span>Always.</span>
             </div>
@@ -304,14 +314,14 @@ export default function MobileHome() {
               AI tools, image editors, dev utilities, finance calculators — fast browser tools with daily AI credits.
             </div>
             <div className="m-actions">
-              <a href="#tools" className="m-cta primary">Explore All 22 Tools ⚡</a>
+              <a href="#tools" className="m-cta primary">Explore All {toolCount} Tools ⚡</a>
               <a href="#how" className="m-cta secondary">See How It Works →</a>
             </div>
           </section>
 
           {/* ── Stats Bar ── */}
           <div className="m-stats-bar" ref={statsRef}>
-            {[[tools.length, 'Tools'],['₹0','Forever'],['3s','To Start'],['24/7','Access']].map(([n,l])=>(
+            {[[toolCount, 'Tools'],['₹0','Forever'],['3s','To Start'],['24/7','Access']].map(([n,l])=>(
               <div key={l} className="m-stat">
                 <div className="m-stat-n">{n}</div>
                 <div className="m-stat-l">{l}</div>
@@ -323,7 +333,7 @@ export default function MobileHome() {
 
           {/* ── Tools ── */}
           <section className="m-section" id="tools">
-            <h2 className="m-sh">All 22 Tools</h2>
+            <h2 className="m-sh">All {toolCount} Tools</h2>
             <p className="m-sp">AI generators, image editors, dev tools, finance calculators — all free.</p>
 
             {/* Search */}
@@ -349,6 +359,16 @@ export default function MobileHome() {
 
             {/* Grid */}
             <div className="m-tools-grid">
+              <div className="m-mystery-card" aria-label="Mystery tool coming soon">
+                <div className="m-mystery-glow" />
+                <div className="m-mystery-core">?</div>
+                <div className="m-mystery-body">
+                  <div className="m-mystery-label">Mystery Tool</div>
+                  <div className="m-mystery-name">Something new is coming</div>
+                  <div className="m-mystery-copy">A colorful surprise is taking shape.</div>
+                </div>
+                <div className="m-mystery-status">Coming Soon</div>
+              </div>
               {filteredTools.length === 0 && (
                 <div className="m-no-results">No tools found. Try a different search.</div>
               )}
@@ -389,7 +409,7 @@ export default function MobileHome() {
           <div className="m-divider" />
 
           {/* ── Audiences ── */}
-          <section className="m-section" id="audience">
+          <section className="m-section" id="about">
             <h2 className="m-sh">Built For Everyone</h2>
             <p className="m-sp">Students, creators, developers and freelancers all have tools here.</p>
             <div className="m-stack">
@@ -482,30 +502,12 @@ export default function MobileHome() {
 
           <div className="m-divider" />
 
-          {/* ── Support ── */}
-          <section className="m-section" id="support">
-            <h2 className="m-sh">Support</h2>
-            <p className="m-sp">If something breaks, there is a clear next step.</p>
-            <div className="m-stack">
-              {supports.map((s, i) => (
-                <a key={s.title} href={s.link} className="m-panel" style={{ textDecoration:'none', borderColor:`${s.color}1e`, animationDelay:`${0.05+i*0.04}s` }}>
-                  <div className="m-panel-tag">Support</div>
-                  <div className="m-panel-title" style={{ color: s.color }}>{s.title}</div>
-                  <div className="m-panel-copy">{s.desc}</div>
-                  <div className="m-panel-link" style={{ color: s.color }}>{s.cta}</div>
-                </a>
-              ))}
-            </div>
-          </section>
-
-          <div className="m-divider" />
-
           {/* ── Final CTA ── */}
           <section className="m-section" id="cta">
             <div className="m-cta-box">
               <div className="m-cta-kicker">{'// Ready to go?'}</div>
               <div className="m-cta-title">Stop Waiting<br/><span>Start Building</span></div>
-              <div className="m-cta-copy">22 tools. Free daily AI credits. Just open a tab and get moving.</div>
+              <div className="m-cta-copy">{toolCount} tools. Free daily AI credits. Just open a tab and get moving.</div>
               <div className="m-cta-btns">
                 <a href="#tools" className="m-cta primary">Try Free Tools ⚡</a>
                 <a href="#faq" className="m-cta secondary">Read FAQs →</a>
@@ -516,7 +518,7 @@ export default function MobileHome() {
           {/* ── Footer ── */}
           <footer className="m-footer">
             <div className="m-footer-brand"><em>Tool</em>void</div>
-            <div className="m-footer-copy">22 tools for creators, builders and hustlers. Fast workflows, clear daily AI limits.</div>
+            <div className="m-footer-copy">{toolCount} tools for creators, builders and hustlers. Fast workflows, clear daily AI limits.</div>
             <div className="m-footer-cols">
               <div className="m-footer-col">
                 <h4>AI Tools</h4>

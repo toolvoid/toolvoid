@@ -3,8 +3,8 @@ import { useEffect, useRef } from 'react';
 
 // ── Color map for all tools ──
 const TOOL_COLORS = {
-  '/story':'#A78BFA','/story-generator':'#A78BFA','/hashtag':'#FF6B6B','/imagegen':'#F59E0B','/keyword':'#34D399',
-  '/image-tools':'#FFD93D','/pdf':'#FF9A3C','/passport':'#60A5FA','/qr':'#00FFB2',
+  '/story':'#A78BFA','/hashtag':'#FF6B6B','/imagegen':'#F59E0B','/keyword':'#34D399',
+  '/image-tools':'#FFD93D','/pdf':'#FF9A3C','/passport':'#60A5FA','/indian-forms':'#2563EB','/qr':'#00FFB2',
   '/password':'#F472B6','/domain':'#00C9FF','/unit':'#6BCB77','/base64':'#C77DFF',
   '/emi':'#FB923C','/loan':'#E879F9','/invoice':'#38BDF8','/word-counter':'#4D96FF',
   '/json':'#86EFAC','/tts':'#4D96FF','/video':'#FF4ECD','/resume':'#FF6B6B',
@@ -103,7 +103,7 @@ function drawToolIcon2D(ctx, href, cx, cy, s, t, hov, color) {
     ctx.beginPath(); ctx.arc(0,0,18,0,Math.PI*2); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(-4,-9); ctx.lineTo(11,0); ctx.lineTo(-4,9); ctx.closePath(); ctx.fill();
 
-  } else if (href === '/story' || href === '/story-generator') {
+  } else if (href === '/story') {
     ctx.lineWidth=2.5;
     ctx.beginPath(); ctx.roundRect(-18,-14,14,28,3); ctx.stroke();
     ctx.beginPath(); ctx.roundRect(4,-14,14,28,3); ctx.stroke();
@@ -134,6 +134,13 @@ function drawToolIcon2D(ctx, href, cx, cy, s, t, hov, color) {
     ctx.beginPath(); ctx.arc(0,-4,6,0,Math.PI*2); ctx.stroke();
     ctx.beginPath(); ctx.roundRect(-8,4,16,10,4); ctx.stroke();
     [[-14,-18],[14,-18],[-14,18],[14,18]].forEach(([x,y]) => { ctx.fillRect(x-2,y-2,4,4); });
+
+  } else if (href === '/indian-forms') {
+    ctx.beginPath(); ctx.roundRect(-14, -18, 28, 36, 4); ctx.stroke();
+    [-8, -1, 6].forEach(y => { ctx.beginPath(); ctx.moveTo(-7, y); ctx.lineTo(7, y); ctx.stroke(); });
+    ctx.beginPath(); ctx.arc(11, 12, 7, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(8, 12); ctx.lineTo(10.5, 14.5); ctx.lineTo(14.5, 9.5); ctx.stroke();
 
   } else if (href === '/password') {
     ctx.beginPath(); ctx.roundRect(-12,0,24,18,4); ctx.fill();

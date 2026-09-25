@@ -7,19 +7,19 @@ import MobileHome from '../components/MobileHome';
 import ToolIcon3D, {
   AudienceIcon3D,
   FeatureIcon3D,
-  SupportIcon3D,
   SharedRendererProvider,
 } from '../components/ToolIcon3D';
 
 const tools = [
   { name: 'Site Maker', desc: 'Build a responsive website visually with drag, drop and no code', href: '/site-maker', tag: 'NEW', delay: '.02s', color: '#22D3EE', featured: true },
-  { name: 'Script Generator', desc: 'Generate timed AI video scripts with narration & visuals', href: '/story-generator', tag: 'AI', delay: '.05s', color: '#A78BFA', featured: true },
+  { name: 'Script Generator', desc: 'Generate timed AI video scripts with narration & visuals', href: '/story', tag: 'AI', delay: '.05s', color: '#A78BFA', featured: true },
   { name: 'Hashtag Generator', desc: 'Smart hashtags for Instagram, YouTube & Twitter', href: '/hashtag', tag: 'AI', delay: '.1s', color: '#FF6B6B' },
   { name: 'Image Generator', desc: 'Generate AI images from text prompts with daily free credits', href: '/imagegen', tag: 'AI', delay: '.15s', color: '#F59E0B' },
   { name: 'Keyword Generator', desc: 'Find best SEO keywords for your content instantly', href: '/keyword', tag: 'SEO', delay: '.2s', color: '#34D399' },
   { name: 'Image Toolkit', desc: 'Resize, compress & convert images in one place', href: '/image-tools', tag: 'Image', delay: '.25s', color: '#FFD93D' },
   { name: 'PDF to Image', desc: 'Extract high-quality images from any PDF file', href: '/pdf', tag: 'PDF', delay: '.3s', color: '#FF9A3C' },
   { name: 'Passport Photo', desc: 'Resize photos to passport size instantly free', href: '/passport', tag: 'Photo', delay: '.35s', color: '#60A5FA' },
+  { name: 'Indian Form Photo Compressor', desc: 'Resize photos and signatures for NEET, SSC, PAN, banking and more', href: '/indian-forms', tag: 'Photo', delay: '.38s', color: '#2563EB' },
   { name: 'QR Generator', desc: 'Generate QR codes for any URL or text instantly', href: '/qr', tag: 'Utility', delay: '.4s', color: '#00FFB2' },
   { name: 'Password Generator', desc: 'Generate strong, secure random passwords instantly', href: '/password', tag: 'Security', delay: '.45s', color: '#F472B6' },
   { name: 'Domain Checker', desc: 'Check domain availability across all extensions', href: '/domain', tag: 'Utility', delay: '.5s', color: '#00C9FF' },
@@ -38,6 +38,7 @@ const tools = [
 
 const toolsByHref = Object.fromEntries(tools.map((tool) => [tool.href, tool]));
 const pickTools = (hrefs) => hrefs.map((href) => toolsByHref[href]).filter(Boolean);
+const toolCount = 23;
 
 const toolCategories = [
   {
@@ -48,7 +49,7 @@ const toolCategories = [
   {
     id: 'content-creator',
     label: '🎨 Content Creator Tools',
-    tools: pickTools(['/story-generator', '/hashtag', '/imagegen', '/keyword', '/word-counter', '/tts', '/video']),
+    tools: pickTools(['/story', '/hashtag', '/imagegen', '/keyword', '/word-counter', '/tts', '/video']),
   },
   {
     id: 'developer',
@@ -63,7 +64,7 @@ const toolCategories = [
   {
     id: 'image-photo',
     label: '🖼️ Image & Photo Tools',
-    tools: pickTools(['/image-tools', '/passport']),
+    tools: pickTools(['/image-tools', '/passport', '/indian-forms']),
   },
   {
     id: 'finance',
@@ -96,13 +97,6 @@ const comparisons = [
   { feature: 'Instant Results', us: 'Built for speed', them: 'Depends on workflow' },
 ];
 
-const supports = [
-  { type: 'email', t: 'Email Support', d: 'Drop a message when something feels broken or confusing.', l: 'Email Us →', h: 'mailto:0voidtool0@gmail.com', color: '#00FFB2' },
-  { type: 'community', t: 'Community', d: 'Share feedback, ideas, and common issues by email for now.', l: 'Join In →', h: 'mailto:0voidtool0@gmail.com?subject=Tool%20Void%20Community', color: '#4D96FF' },
-  { type: 'bug', t: 'Bug Reports', d: 'Point out a broken flow and it gets fixed faster.', l: 'Report It →', h: 'mailto:0voidtool0@gmail.com?subject=Tool%20Void%20Bug%20Report', color: '#FF6B6B' },
-  { type: 'feature', t: 'Feature Requests', d: 'Ask for the next utility you want to see shipped.', l: 'Suggest One →', h: 'mailto:0voidtool0@gmail?subject=Tool%20Void%20Feature%20Request', color: '#FFD93D' },
-];
-
 function AudienceCard({ a }) {
   return (
     <div className="aud-card reveal">
@@ -120,17 +114,6 @@ function FeatureCard({ f }) {
       <div className="fc-title" style={{ color: f.color }}>{f.t}</div>
       <div className="fc-desc">{f.d}</div>
     </div>
-  );
-}
-
-function SupportCard({ s }) {
-  return (
-    <a href={s.h} className="sc2 reveal" style={{ textDecoration: 'none' }}>
-      <div className="sc2-icon"><SupportIcon3D type={s.type} color={s.color} /></div>
-      <div className="sct" style={{ color: s.color }}>{s.t}</div>
-      <div className="scd">{s.d}</div>
-      <div className="scl" style={{ color: s.color }}>{s.l}</div>
-    </a>
   );
 }
 
@@ -192,6 +175,23 @@ function ToolCard({ tool, index }) {
   );
 }
 
+function MysteryToolCard() {
+  return (
+    <div className="mystery-tool-card reveal" aria-label="Mystery tool coming soon">
+      <div className="mystery-orbit mystery-orbit-one" />
+      <div className="mystery-orbit mystery-orbit-two" />
+      <div className="mystery-orbit mystery-orbit-three" />
+      <div className="mystery-core">?</div>
+      <div className="mystery-copy">
+        <div className="mystery-label">Mystery Tool</div>
+        <h3>Something new is taking shape.</h3>
+        <p>Can you guess what we are building next?</p>
+      </div>
+      <span className="mystery-status">Coming Soon</span>
+    </div>
+  );
+}
+
 export default function Home() {
   useEffect(() => {
     const elements = Array.from(document.querySelectorAll('.reveal'));
@@ -209,17 +209,12 @@ export default function Home() {
     };
 
     window.addEventListener('mousemove', onMouseMove);
-    const onPageShow = (event) => {
-      if (event.persisted) window.location.reload();
-    };
-    window.addEventListener('pageshow', onPageShow);
-
     const onVisChange = () => {
-      if (document.visibilityState === 'visible') {
-        const canvas = document.getElementById('bgc');
-        if (canvas && parseFloat(canvas.style.opacity || '0') < 0.5) {
-          window.location.reload();
-        }
+      if (document.visibilityState !== 'visible') return;
+
+      const canvas = document.getElementById('bgc');
+      if (canvas && parseFloat(canvas.style.opacity || '0') < 0.5 && !bgRenderer) {
+        initBG();
       }
     };
     document.addEventListener('visibilitychange', onVisChange);
@@ -553,7 +548,6 @@ export default function Home() {
     return () => {
       observer.disconnect();
       window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('pageshow', onPageShow);
       document.removeEventListener('visibilitychange', onVisChange);
       document.removeEventListener('mousemove', onMouse);
       window.removeEventListener('scroll', onScroll);
@@ -643,6 +637,25 @@ export default function Home() {
     .sp{font-size:15px;line-height:1.8;color:#8b94a2}
     .tools-categories{display:grid;gap:38px}
     .tool-category{min-width:0}
+    .mystery-tool-card{position:relative;display:flex;align-items:center;gap:24px;min-height:170px;margin-bottom:38px;padding:28px 32px;overflow:hidden;border:1px solid rgba(255,255,255,.16);border-radius:24px;background:linear-gradient(105deg,rgba(255,255,255,.08),rgba(255,255,255,.025));isolation:isolate}
+    .mystery-tool-card::before{content:'';position:absolute;inset:-2px;z-index:-2;background:conic-gradient(from 90deg,#00ffb2,#4d96ff,#c77dff,#ff4ecd,#ffd93d,#00ffb2);animation:mysterySpin 7s linear infinite;opacity:.8}
+    .mystery-tool-card::after{content:'';position:absolute;inset:1px;z-index:-1;border-radius:23px;background:#090a12}
+    .mystery-orbit{position:absolute;border-radius:50%;filter:blur(1px);opacity:.8;mix-blend-mode:screen;pointer-events:none}
+    .mystery-orbit-one{width:180px;height:180px;left:7%;top:-76px;background:radial-gradient(circle,#00ffb2,transparent 65%);animation:mysteryFloatOne 5s ease-in-out infinite}
+    .mystery-orbit-two{width:220px;height:220px;left:38%;top:-120px;background:radial-gradient(circle,#a78bfa,transparent 65%);animation:mysteryFloatTwo 6s ease-in-out infinite}
+    .mystery-orbit-three{width:190px;height:190px;right:10%;bottom:-120px;background:radial-gradient(circle,#ff4ecd,transparent 65%);animation:mysteryFloatThree 5.5s ease-in-out infinite}
+    .mystery-core{display:grid;place-items:center;position:relative;flex:0 0 86px;width:86px;height:86px;border:2px solid rgba(255,255,255,.75);border-radius:24px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:54px;line-height:1;background:conic-gradient(from 0deg,#00ffb2,#4d96ff,#c77dff,#ff4ecd,#ffd93d,#00ffb2);box-shadow:0 0 32px rgba(167,139,250,.35);animation:mysteryPulse 2.8s ease-in-out infinite}
+    .mystery-core::after{content:'';position:absolute;inset:5px;border-radius:20px;background:#0b0c15;z-index:-1}
+    .mystery-copy{position:relative;z-index:1}
+    .mystery-label{color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+    .mystery-copy h3{margin:8px 0 6px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;line-height:1}
+    .mystery-copy p{color:#a7afbf;font-size:14px;line-height:1.6}
+    .mystery-status{position:relative;z-index:1;margin-left:auto;border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:9px 13px;color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;background:rgba(255,255,255,.06)}
+    @keyframes mysterySpin{to{transform:rotate(360deg)}}
+    @keyframes mysteryPulse{0%,100%{transform:rotate(-5deg) scale(1)}50%{transform:rotate(5deg) scale(1.08)}}
+    @keyframes mysteryFloatOne{50%{transform:translate(50px,55px) scale(1.2)}}
+    @keyframes mysteryFloatTwo{50%{transform:translate(-30px,70px) scale(.8)}}
+    @keyframes mysteryFloatThree{50%{transform:translate(-70px,-55px) scale(1.15)}}
     .tool-category-head{font-size:22px;font-weight:800;color:#fff;margin:0 0 14px;letter-spacing:0}
     .tool-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;padding:2px 0 14px;margin:0}
     .tool-row .tc{width:100%}
@@ -713,6 +726,10 @@ export default function Home() {
       .mob{display:block}
     }
     @media (max-width:640px){
+      .mystery-tool-card{align-items:flex-start;gap:16px;min-height:180px;padding:24px 20px}
+      .mystery-core{flex-basis:64px;width:64px;height:64px;border-radius:18px;font-size:40px}
+      .mystery-copy h3{font-size:28px}
+      .mystery-status{position:absolute;right:20px;bottom:20px}
       .nav-right{gap:10px}
       .nav-pill{display:none}
       .footer-legal{flex-direction:column;align-items:flex-start;gap:8px}
@@ -746,10 +763,7 @@ export default function Home() {
               <nav id="nv" className="nav">
                 <Link href="/" className="logo"><em>Tool</em> Void</Link>
                 <div className="nav-right">
-                  <div className="nav-pill">22 Free Tools</div>
-                  <a className="nav-link" href="#tools">Tools</a>
-                  <a className="nav-link" href="#features">Why Us</a>
-                  <a className="nav-link" href="#support">Support</a>
+                  <div className="nav-pill">{toolCount} Free Tools</div>
                 </div>
               </nav>
 
@@ -778,7 +792,7 @@ export default function Home() {
                   </div>
                   <div className="hp-grid">
                     <div className="mini">
-                      <strong>22</strong>
+                      <strong>{toolCount}</strong>
                       <span>Live Utilities</span>
                     </div>
                     <div className="mini">
@@ -805,6 +819,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="tools-categories">
+                  <MysteryToolCard />
                   {toolCategories.map((category) => (
                     <div key={category.id} className="tool-category">
                       <h3 className="tool-category-head reveal">{category.label}</h3>
@@ -816,7 +831,7 @@ export default function Home() {
                 </div>
               </section>
 
-              <section className="section">
+              <section className="section" id="about">
                 <div className="section-head">
                   <div className="section-copy reveal">
                     <h2 className="sh">Built For Real People</h2>
@@ -858,18 +873,6 @@ export default function Home() {
                 </div>
               </section>
 
-              <section className="section" id="support">
-                <div className="section-head">
-                  <div className="section-copy reveal">
-                    <h2 className="sh">Support Paths</h2>
-                    <div className="sp">If something breaks or feels missing, there should be a clean next step.</div>
-                  </div>
-                </div>
-                <div className="support-grid">
-                  {supports.map((s, i) => <SupportCard key={s.t} s={s} index={i} />)}
-                </div>
-              </section>
-
               <section className="section">
                 <div className="cta-box reveal">
                   <div className="cta-kicker">Ready To Start?</div>
@@ -888,7 +891,7 @@ export default function Home() {
                 </div>
                 <div className="footer-copy">A growing set of free browser tools for creators, developers, students and freelancers.</div>
                 <div className="footer-links">
-                  <Link href="/story-generator">Script Generator</Link>
+                  <Link href="/story">Script Generator</Link>
                   <Link href="/imagegen">Image Gen</Link>
                   <Link href="/pdf">PDF</Link>
                   <Link href="/qr">QR</Link>

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 
 export default function StoryGuidePage() {
-  return <Guide title="Script Generator Guide" toolHref="/story-generator" limit="3 free scripts per day" items={['Select a genre', 'Fill characters', 'Set the scene', 'Add plot details', 'Set duration & pace', 'Generate script with segments']} tips={['Set a specific topic for better results.', 'Use custom instructions to override genre defaults.', 'Choose the right pace for your content type.']} />
+  return <Guide title="Script Generator Guide" toolHref="/story" limit="3 free scripts per day" items={['Select a genre', 'Fill characters', 'Set the scene', 'Add plot details', 'Set duration & pace', 'Generate script with segments']} tips={['Set a specific topic for better results.', 'Use custom instructions to override genre defaults.', 'Choose the right pace for your content type.']} />
 }
 
 function Guide({ title, toolHref, limit, items, tips }) {

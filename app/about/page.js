@@ -29,7 +29,7 @@ export default function AboutPage() {
         </p>
 
         <div style={{ display: 'grid', gap: '1rem', marginTop: '2rem' }}>
-          <Link href="/story-generator" style={{ display: 'block', padding: '1rem 1.15rem', border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, color: 'inherit', textDecoration: 'none', background: '#0c0c1a' }}>
+          <Link href="/story" style={{ display: 'block', padding: '1rem 1.15rem', border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, color: 'inherit', textDecoration: 'none', background: '#0c0c1a' }}>
             <strong>Script Generator</strong>
             <div style={{ color: 'rgba(255,255,255,.62)', marginTop: '.35rem' }}>Turn a topic into structured AI video ideas and scripts.</div>
           </Link>

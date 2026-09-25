@@ -7,7 +7,7 @@ export default function AppHomeButton() {
   const pathname = usePathname();
   const aiToolPaths = [
     '/story',
-    '/story-generator',
+    '/story',
     '/hashtag',
     '/hashtag-generator',
     '/keyword',

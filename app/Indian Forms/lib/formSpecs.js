@@ -1,0 +1,171 @@
+// Requirements can change with each notification. Confirm the current notice before upload.
+// Shared specs deliberately keep matching portals consistent.
+export const SPECS = {
+  idPhoto: { width: 413, height: 531, minKB: 20, maxKB: 200, format: "jpeg", requiresWhiteBg: true },
+  panPhoto: { width: 213, height: 213, minKB: 20, maxKB: 50, format: "jpeg", requiresWhiteBg: true },
+  passportPhoto: { width: 630, height: 810, minKB: 50, maxKB: 1024, format: "jpeg", requiresWhiteBg: true },
+  passportSizePhoto: { width: 602, height: 602, minKB: 20, maxKB: 300, format: "jpeg", requiresWhiteBg: true },
+  drivingLicencePhoto: { width: 420, height: 525, minKB: 10, maxKB: 20, format: "jpeg", requiresWhiteBg: false },
+  bankingPhoto: { width: 200, height: 230, minKB: 20, maxKB: 50, format: "jpeg", requiresWhiteBg: false },
+  bankingSignature: { width: 140, height: 60, minKB: 10, maxKB: 20, format: "jpeg", requiresWhiteBg: false },
+  ntaPhoto: { width: 200, height: 230, minKB: 10, maxKB: 200, format: "jpeg", requiresWhiteBg: false },
+  ntaSignature: { width: 140, height: 60, minKB: 4, maxKB: 30, format: "jpeg", requiresWhiteBg: false },
+  sscPhoto: { width: 413, height: 531, minKB: 20, maxKB: 50, format: "jpeg", requiresWhiteBg: false },
+  sscSignature: { width: 413, height: 177, minKB: 10, maxKB: 20, format: "jpeg", requiresWhiteBg: false },
+  upscPhoto: { width: 350, height: 450, minKB: 20, maxKB: 300, format: "jpeg", requiresWhiteBg: false },
+  upscSignature: { width: 350, height: 100, minKB: 20, maxKB: 300, format: "jpeg", requiresWhiteBg: false },
+  rrbPhoto: { width: 413, height: 531, minKB: 20, maxKB: 50, format: "jpeg", requiresWhiteBg: false },
+  rrbSignature: { width: 413, height: 177, minKB: 10, maxKB: 40, format: "jpeg", requiresWhiteBg: false },
+  clatPhoto: { width: 200, height: 230, minKB: 20, maxKB: 50, format: "jpeg", requiresWhiteBg: false },
+  clatSignature: { width: 140, height: 60, minKB: 10, maxKB: 20, format: "jpeg", requiresWhiteBg: false },
+  catPhoto: { width: 200, height: 230, minKB: 20, maxKB: 120, format: "jpeg", requiresWhiteBg: false },
+  catSignature: { width: 140, height: 60, minKB: 10, maxKB: 80, format: "jpeg", requiresWhiteBg: false },
+  genericPhoto: { width: 200, height: 230, minKB: 20, maxKB: 100, format: "jpeg", requiresWhiteBg: false },
+  genericSignature: { width: 140, height: 60, minKB: 10, maxKB: 50, format: "jpeg", requiresWhiteBg: false },
+};
+
+const form = (id, name, category, aliases, spec, signatureSpec, extra = {}) => ({
+  id, name, category, aliases, spec, ...(signatureSpec ? { signatureSpec } : {}), ...extra,
+});
+
+// 50 frequently used Indian application forms and examinations.
+export const FORMS = [
+  form("aadhaar-card", "Aadhaar Card", "Government ID", ["aadhar", "aadhaar update", "uidai", "aadhaar enrolment"], "idPhoto", undefined, {
+    photoUploadAvailable: false,
+    notice: "Aadhaar photograph and biometric updates are captured at an Aadhaar Enrolment or Seva Kendra. Do not use a prepared upload for this service.",
+  }),
+  form("pan-card", "PAN Card", "Government ID", ["pan application", "form 49a", "permanent account number", "protean pan"], "panPhoto", "bankingSignature"),
+  form("passport", "Indian Passport", "Government ID", ["passport seva", "passport application", "mea passport"], "passportPhoto"),
+  form("voter-id", "Voter ID", "Government ID", ["epic", "nvsp", "election card", "voter registration"], "idPhoto"),
+  form("driving-licence", "Driving Licence", "Government ID", ["dl", "parivahan", "driving license", "sarathi"], "drivingLicencePhoto", undefined, {
+    notice: "Sarathi guidance: 420 × 525 px preferred, JPEG, 10–20 KB. State portals may publish a different current requirement.",
+  }),
+  form("ration-card", "Ration Card", "Government ID", ["food security card", "pds", "ration card application"], "idPhoto"),
+  form("passport-size-photo", "Passport Size Photo", "Photo Utility", ["2x2 photo", "51x51mm photo", "white background photo", "passport photo"], "passportSizePhoto"),
+
+  form("sbi-po", "SBI PO", "Banking", ["sbi probationary officer", "state bank po"], "bankingPhoto", "bankingSignature"),
+  form("sbi-clerk", "SBI Clerk", "Banking", ["sbi junior associate", "state bank clerk"], "bankingPhoto", "bankingSignature"),
+  form("ibps-po", "IBPS PO", "Banking", ["ibps probationary officer", "bank po", "crp po"], "bankingPhoto", "bankingSignature"),
+  form("ibps-clerk", "IBPS Clerk", "Banking", ["ibps csa", "crp clerk", "bank clerk"], "bankingPhoto", "bankingSignature"),
+  form("ibps-rrb", "IBPS RRB", "Banking", ["regional rural bank", "rrb po", "rrb clerk"], "bankingPhoto", "bankingSignature"),
+  form("rbi-grade-b", "RBI Grade B", "Banking", ["reserve bank grade b", "rbi officer"], "bankingPhoto", "bankingSignature"),
+  form("nabard-grade-a", "NABARD Grade A", "Banking", ["nabard assistant manager", "nabard officer"], "bankingPhoto", "bankingSignature"),
+
+  form("neet-ug", "NEET UG", "Entrance Exam", ["neet", "national eligibility cum entrance test", "medical entrance"], "ntaPhoto", "ntaSignature"),
+  form("jee-main", "JEE Main", "Entrance Exam", ["jee", "joint entrance examination", "engineering entrance", "nta jee"], "ntaPhoto", "ntaSignature"),
+  form("jee-advanced", "JEE Advanced", "Entrance Exam", ["iit jee", "jee adv", "iit entrance"], "ntaPhoto", "ntaSignature"),
+  form("cuet-ug", "CUET UG", "Entrance Exam", ["common university entrance test", "cuet", "nta cuet"], "ntaPhoto", "ntaSignature"),
+  form("clat", "CLAT", "Entrance Exam", ["common law admission test", "law entrance", "consortium clat"], "clatPhoto", "clatSignature"),
+  form("state-cet", "State CET", "Entrance Exam", ["mht cet", "kcet", "ts eamcet", "state entrance test"], "genericPhoto", "genericSignature"),
+
+  form("ssc-cgl", "SSC CGL", "Government Exam", ["staff selection commission cgl", "combined graduate level"], "sscPhoto", "sscSignature"),
+  form("ssc-chsl", "SSC CHSL", "Government Exam", ["combined higher secondary level", "ssc 12th pass"], "sscPhoto", "sscSignature"),
+  form("ssc-mts", "SSC MTS", "Government Exam", ["multi tasking staff", "ssc havaldar"], "sscPhoto", "sscSignature"),
+  form("ssc-gd", "SSC GD", "Government Exam", ["general duty constable", "ssc constable", "gd constable"], "sscPhoto", "sscSignature"),
+  form("upsc-cse", "UPSC CSE", "Government Exam", ["ias exam", "civil services examination", "upsc civil services"], "upscPhoto", "upscSignature"),
+  form("upsc-cds", "UPSC CDS", "Government Exam", ["combined defence services", "cds exam"], "upscPhoto", "upscSignature"),
+  form("upsc-nda", "UPSC NDA", "Government Exam", ["national defence academy", "nda exam"], "upscPhoto", "upscSignature"),
+  form("state-psc", "State PSC", "Government Exam", ["mpsc", "bpsc", "uppsc", "state public service commission"], "upscPhoto", "upscSignature"),
+  form("rrb-ntpc", "Railway RRB NTPC", "Government Exam", ["railway ntpc", "non technical popular categories", "rrb"], "rrbPhoto", "rrbSignature"),
+  form("rrb-group-d", "Railway RRB Group D", "Government Exam", ["railway group d", "rrc group d", "railway level 1"], "rrbPhoto", "rrbSignature"),
+
+  form("agniveer-army", "Agniveer Army", "Defence", ["indian army agniveer", "army recruitment", "agnipath army"], "bankingPhoto", "bankingSignature"),
+  form("agniveer-navy", "Agniveer Navy", "Defence", ["indian navy agniveer", "navy recruitment", "agnipath navy"], "bankingPhoto", "bankingSignature"),
+  form("agniveer-air-force", "Agniveer Air Force", "Defence", ["indian air force agniveer", "airforce recruitment", "agnipath air force"], "bankingPhoto", "bankingSignature"),
+
+  form("college-admission", "College Admission Form", "University & Education", ["university admission", "ug admission", "college application"], "genericPhoto", "genericSignature"),
+  form("scholarship", "Scholarship Form", "University & Education", ["national scholarship portal", "nsp scholarship", "student scholarship"], "genericPhoto", "genericSignature"),
+  form("govt-job", "Government Job Application", "Employment", ["sarkari job", "government recruitment", "job application"], "genericPhoto", "genericSignature"),
+  form("private-job", "Private Sector Application", "Employment", ["private job", "company application", "employment form"], "genericPhoto", "genericSignature"),
+
+  form("ugc-net", "UGC NET", "Competitive Exam", ["national eligibility test", "nta net", "assistant professor exam"], "ntaPhoto", "ntaSignature"),
+  form("ctet", "CTET", "Competitive Exam", ["central teacher eligibility test", "teacher eligibility test"], "ntaPhoto", "ntaSignature"),
+  form("gate", "GATE", "Entrance Exam", ["graduate aptitude test in engineering", "iit gate"], "genericPhoto", "genericSignature"),
+  form("cat", "CAT", "Entrance Exam", ["common admission test", "iim cat", "mba entrance"], "catPhoto", "catSignature"),
+  form("xat", "XAT", "Entrance Exam", ["xavier aptitude test", "xlri xat", "mba xat"], "catPhoto", "catSignature"),
+  form("nift", "NIFT Entrance", "Entrance Exam", ["national institute of fashion technology", "nift exam", "fashion entrance"], "ntaPhoto", "ntaSignature"),
+  form("nchm-jee", "NCHM JEE", "Entrance Exam", ["hotel management entrance", "nchmct", "hotel management jee"], "ntaPhoto", "ntaSignature"),
+  form("icar-aieea", "ICAR AIEEA", "Entrance Exam", ["icar entrance", "agriculture entrance", "aieea"], "ntaPhoto", "ntaSignature"),
+  form("cuet-pg", "CUET PG", "Entrance Exam", ["common university entrance test pg", "nta cuet pg"], "ntaPhoto", "ntaSignature"),
+  form("afcat", "AFCAT", "Defence", ["air force common admission test", "indian air force officer"], "bankingPhoto", "bankingSignature"),
+  form("capf-ac", "UPSC CAPF (AC)", "Defence", ["central armed police forces", "assistant commandant", "capf"], "upscPhoto", "upscSignature"),
+  form("esic-udc", "ESIC UDC", "Government Exam", ["employees state insurance", "upper division clerk", "esic recruitment"], "sscPhoto", "sscSignature"),
+  form("lic-aao", "LIC AAO", "Employment", ["life insurance aao", "lic assistant administrative officer", "lic recruitment"], "bankingPhoto", "bankingSignature"),
+
+  form("rrb-alp", "Railway RRB ALP", "Government Exam", ["assistant loco pilot", "railway alp", "rrb assistant loco pilot"], "rrbPhoto", "rrbSignature"),
+  form("rrb-je", "Railway RRB JE", "Government Exam", ["railway junior engineer", "rrb junior engineer", "railway je"], "rrbPhoto", "rrbSignature"),
+  form("rrb-technician", "Railway RRB Technician", "Government Exam", ["railway technician", "rrb tech"], "rrbPhoto", "rrbSignature"),
+  form("rpf-constable", "RPF Constable", "Government Exam", ["railway protection force", "railway constable", "rpf recruitment"], "rrbPhoto", "rrbSignature"),
+  form("rpf-si", "RPF Sub Inspector", "Government Exam", ["railway protection force si", "rpf sub inspector"], "rrbPhoto", "rrbSignature"),
+  form("railway-apprentice", "Railway Apprentice", "Employment", ["rrc apprentice", "railway apprentice recruitment"], "rrbPhoto", "rrbSignature"),
+
+  form("ssc-cpo", "SSC CPO", "Government Exam", ["ssc sub inspector", "delhi police si", "capf si"], "sscPhoto", "sscSignature"),
+  form("ssc-je", "SSC JE", "Government Exam", ["ssc junior engineer", "government engineer exam"], "sscPhoto", "sscSignature"),
+  form("ssc-stenographer", "SSC Stenographer", "Government Exam", ["ssc steno", "stenographer grade c", "stenographer grade d"], "sscPhoto", "sscSignature"),
+  form("ssc-selection-post", "SSC Selection Post", "Government Exam", ["ssc phase", "ssc selection phase", "ssc post"], "sscPhoto", "sscSignature"),
+  form("delhi-police-constable", "Delhi Police Constable", "Government Exam", ["delhi police", "dp constable", "delhi constable"], "sscPhoto", "sscSignature"),
+  form("delhi-police-head-constable", "Delhi Police Head Constable", "Government Exam", ["dp head constable", "delhi police hcm"], "sscPhoto", "sscSignature"),
+  form("delhi-police-driver", "Delhi Police Driver", "Government Exam", ["dp driver", "delhi police driver constable"], "sscPhoto", "sscSignature"),
+
+  form("ibps-so", "IBPS SO", "Banking", ["ibps specialist officer", "bank specialist officer", "crp spl"], "bankingPhoto", "bankingSignature"),
+  form("rbi-assistant", "RBI Assistant", "Banking", ["reserve bank assistant", "rbi clerk"], "bankingPhoto", "bankingSignature"),
+  form("sbi-sco", "SBI SCO", "Banking", ["sbi specialist cadre officer", "sbi specialist officer"], "bankingPhoto", "bankingSignature"),
+  form("sebi-grade-a", "SEBI Grade A", "Banking", ["sebi assistant manager", "sebi officer"], "bankingPhoto", "bankingSignature"),
+  form("sidbi-grade-a", "SIDBI Grade A", "Banking", ["sidbi assistant manager", "sidbi officer"], "bankingPhoto", "bankingSignature"),
+  form("lic-assistant", "LIC Assistant", "Employment", ["life insurance assistant", "lic clerk"], "bankingPhoto", "bankingSignature"),
+  form("lic-ado", "LIC ADO", "Employment", ["lic apprentice development officer", "lic development officer"], "bankingPhoto", "bankingSignature"),
+  form("niacl-ao", "NIACL AO", "Employment", ["new india assurance ao", "niacl administrative officer"], "bankingPhoto", "bankingSignature"),
+  form("nicl-ao", "NICL AO", "Employment", ["national insurance ao", "nicl administrative officer"], "bankingPhoto", "bankingSignature"),
+  form("uiic-ao", "UIIC AO", "Employment", ["united india insurance ao", "uiic administrative officer"], "bankingPhoto", "bankingSignature"),
+  form("ecgc-po", "ECGC PO", "Banking", ["export credit guarantee po", "ecgc probationary officer"], "bankingPhoto", "bankingSignature"),
+
+  form("up-police-constable", "UP Police Constable", "Police Recruitment", ["uttar pradesh police constable", "upp constable", "upprpb constable"], "genericPhoto", "genericSignature"),
+  form("up-police-si", "UP Police Sub Inspector", "Police Recruitment", ["uttar pradesh police si", "upp si", "daroga recruitment"], "genericPhoto", "genericSignature"),
+  form("bihar-police-constable", "Bihar Police Constable", "Police Recruitment", ["csbc constable", "bihar sipahi"], "genericPhoto", "genericSignature"),
+  form("bihar-police-si", "Bihar Police Sub Inspector", "Police Recruitment", ["bpssc si", "bihar daroga"], "genericPhoto", "genericSignature"),
+  form("rajasthan-police", "Rajasthan Police Constable", "Police Recruitment", ["rajasthan constable", "raj police recruitment"], "genericPhoto", "genericSignature"),
+  form("mp-police-constable", "MP Police Constable", "Police Recruitment", ["madhya pradesh police", "mp aarakshak", "mp constable"], "genericPhoto", "genericSignature"),
+
+  form("kvs-recruitment", "KVS Recruitment", "Education Recruitment", ["kendriya vidyalaya recruitment", "kvs teacher", "kvs pgt tgt prt"], "genericPhoto", "genericSignature"),
+  form("nvs-recruitment", "NVS Recruitment", "Education Recruitment", ["navodaya recruitment", "nvs teacher", "navodaya teacher"], "genericPhoto", "genericSignature"),
+  form("dsssb", "DSSSB Recruitment", "Education Recruitment", ["delhi subordinate services", "dsssb teacher", "dsssb recruitment"], "genericPhoto", "genericSignature"),
+  form("reet", "REET", "Teaching Exam", ["rajasthan teacher eligibility test", "reet exam"], "genericPhoto", "genericSignature"),
+  form("uptet", "UPTET", "Teaching Exam", ["uttar pradesh teacher eligibility test", "up teacher eligibility"], "genericPhoto", "genericSignature"),
+  form("super-tet", "UP Super TET", "Teaching Exam", ["uttar pradesh super tet", "up assistant teacher"], "genericPhoto", "genericSignature"),
+
+  form("uppsc-pcs", "UPPSC PCS", "State PSC", ["uttar pradesh pcs", "uppsc civil services"], "upscPhoto", "upscSignature"),
+  form("bpsc-cce", "BPSC CCE", "State PSC", ["bihar public service commission", "bpsc civil services"], "upscPhoto", "upscSignature"),
+  form("mpsc-rajyaseva", "MPSC Rajyaseva", "State PSC", ["maharashtra public service commission", "mpsc civil services"], "upscPhoto", "upscSignature"),
+  form("rpsc-ras", "RPSC RAS", "State PSC", ["rajasthan administrative service", "rpsc ras"], "upscPhoto", "upscSignature"),
+  form("tnpsc-group-1", "TNPSC Group 1", "State PSC", ["tamil nadu public service commission", "tnpsc civil services"], "upscPhoto", "upscSignature"),
+  form("mppsc-sse", "MPPSC State Service", "State PSC", ["madhya pradesh public service commission", "mppsc sse"], "upscPhoto", "upscSignature"),
+  form("wbpsc-wbcs", "WBPSC WBCS", "State PSC", ["west bengal civil service", "wbpsc civil services"], "upscPhoto", "upscSignature"),
+  form("tspsc-group-1", "TSPSC Group 1", "State PSC", ["telangana public service commission", "tspsc group 1"], "upscPhoto", "upscSignature"),
+  form("appsc-group-1", "APPSC Group 1", "State PSC", ["andhra pradesh public service commission", "appsc group 1"], "upscPhoto", "upscSignature"),
+  form("kpsc-kas", "KPSC KAS", "State PSC", ["kerala administrative service", "kerala psc kas"], "upscPhoto", "upscSignature"),
+
+  form("bitsat", "BITSAT", "Entrance Exam", ["bits admission test", "bits pilani entrance"], "genericPhoto", "genericSignature"),
+  form("viteee", "VITEEE", "Entrance Exam", ["vit engineering entrance", "vellore institute entrance"], "genericPhoto", "genericSignature"),
+  form("wbjee", "WBJEE", "Entrance Exam", ["west bengal joint entrance", "wbjee exam"], "genericPhoto", "genericSignature"),
+  form("ojee", "OJEE", "Entrance Exam", ["odisha joint entrance", "ojee exam"], "genericPhoto", "genericSignature"),
+  form("ap-eapcet", "AP EAPCET", "Entrance Exam", ["ap eamcet", "andhra pradesh engineering entrance"], "genericPhoto", "genericSignature"),
+  form("ts-eamcet", "TS EAMCET", "Entrance Exam", ["telangana eamcet", "ts eapcet"], "genericPhoto", "genericSignature"),
+  form("nid-dat", "NID DAT", "Entrance Exam", ["national institute of design", "nid entrance", "design aptitude test"], "genericPhoto", "genericSignature"),
+  form("uceed", "UCEED", "Entrance Exam", ["undergraduate common entrance examination for design", "iit design entrance"], "genericPhoto", "genericSignature"),
+  form("ceed", "CEED", "Entrance Exam", ["common entrance examination for design", "iit ceed"], "genericPhoto", "genericSignature"),
+  form("csir-net", "CSIR UGC NET", "Competitive Exam", ["csir net", "csir ugc net", "science net"], "ntaPhoto", "ntaSignature"),
+  form("iit-jam", "IIT JAM", "Entrance Exam", ["joint admission test for masters", "jam exam"], "genericPhoto", "genericSignature"),
+  form("mat", "MAT", "Entrance Exam", ["management aptitude test", "aima mat", "mba mat"], "catPhoto", "catSignature"),
+  form("cmat", "CMAT", "Entrance Exam", ["common management admission test", "nta cmat"], "ntaPhoto", "ntaSignature"),
+  form("nmat", "NMAT", "Entrance Exam", ["narsee monjee management aptitude test", "mba nmat"], "catPhoto", "catSignature"),
+];
+
+export function getFormById(id) {
+  const selected = FORMS.find((item) => item.id === id);
+  if (!selected) return null;
+  return {
+    ...selected,
+    spec: SPECS[selected.spec],
+    signatureSpec: selected.signatureSpec ? SPECS[selected.signatureSpec] : null,
+  };
+}
