@@ -1,1 +1,5 @@
-export { default } from '../imagegen/ImageGeneratorClient'
+import { permanentRedirect } from 'next/navigation';
+
+export default function ImageGeneratorAlias() {
+	permanentRedirect('/imagegen');
+}

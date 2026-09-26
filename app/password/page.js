@@ -23,7 +23,7 @@ export default function Page() {
         </p>
       </div>
       <PasswordClient />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify({
+      <script type="application/json" dangerouslySetInnerHTML={{__html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "FAQPage",
         "mainEntity": [

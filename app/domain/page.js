@@ -14,6 +14,14 @@ const faqs = [
     question: 'Can I check WHOIS information for an existing domain?',
     answer: 'Yes. The tool provides WHOIS lookups for existing domains, including available registration details and expiry information.',
   },
+  {
+    question: 'Does an availability result reserve the domain?',
+    answer: 'No. Results can change; complete registration through a registrar to secure a name.',
+  },
+  {
+    question: 'Should I check brand rights before registering?',
+    answer: 'Yes. Research relevant trademark and brand conflicts before using a name commercially.',
+  },
 ]
 
 export const metadata = {

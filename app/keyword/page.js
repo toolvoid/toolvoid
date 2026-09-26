@@ -1,5 +1,6 @@
 import { createToolMetadata } from '../../lib/toolMetadata';
 import KeywordClient from './KeywordClient';
+import ToolLandingDetails from '../../components/ToolLandingDetails';
 
 const faqs = [
   {
@@ -13,6 +14,14 @@ const faqs = [
   {
     question: 'Is the SEO keyword generator free to use?',
     answer: 'Yes. You can generate keyword ideas online without creating an account.',
+  },
+  {
+    question: 'Are suggestions verified search-volume data?',
+    answer: 'No. Treat suggestions as research ideas and verify volume and intent with current sources.',
+  },
+  {
+    question: 'Should every phrase become a separate page?',
+    answer: 'No. Group similar phrases by reader need and avoid pages that answer the same question.',
   },
 ];
 
@@ -33,6 +42,7 @@ export default function Page() {
   return (
     <>
       <KeywordClient />
+      <ToolLandingDetails tool="keyword" />
       <section style={{ maxWidth: 960, margin: '0 auto', padding: '4rem 1.5rem 5rem', color: '#dce4ef' }}>
         <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', margin: '0 0 1rem' }}>Generate keywords for SEO, blogs, and websites</h2>
         <p style={{ maxWidth: 760, color: '#9aa4b2', lineHeight: 1.75 }}>

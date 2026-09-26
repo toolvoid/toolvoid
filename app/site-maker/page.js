@@ -28,7 +28,6 @@ const faqs = [
   ['Is Site Maker free?', 'Yes. You can open the editor and create a site with the available visual building tools at no cost.'],
   ['Can I use my own images?', 'Yes. Image and video elements support uploads, and image elements can also use a URL.'],
   ['Can I download my site?', 'Yes. Use Export ZIP in the builder to download your current site as HTML, CSS, and uploaded media files.'],
-  ['Can I use my own domain?', 'Site Maker helps you design the website itself. Connecting a custom domain requires publishing the finished site through a hosting provider.'],
   ['Can I edit it later?', 'Yes. The editor is built for iteration: you can return to adjust sections, content, element placement, and styling whenever you need.'],
 ];
 

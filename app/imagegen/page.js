@@ -1,5 +1,6 @@
 import { createToolMetadata } from '../../lib/toolMetadata';
 import ImageGeneratorClient from './ImageGeneratorClient';
+import ToolLandingDetails from '../../components/ToolLandingDetails';
 
 export const metadata = {
   title: "Free AI Image Generator Online — ToolVoid",
@@ -14,5 +15,5 @@ export const metadata = {
 }
 
 export default function Page() {
-  return <ImageGeneratorClient />;
+  return <><ImageGeneratorClient /><ToolLandingDetails tool="imagegen" /></>;
 }

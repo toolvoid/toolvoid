@@ -1,1 +1,5 @@
-export { default } from '../hashtag/HashtagClient'
+import { permanentRedirect } from 'next/navigation';
+
+export default function HashtagGeneratorAlias() {
+	permanentRedirect('/hashtag');
+}

@@ -1,6 +1,7 @@
 import { createToolMetadata } from '../../lib/toolMetadata';
 import { isMaintenanceMode } from '../../lib/maintenanceMode';
 import HashtagClient from './HashtagClient';
+import ToolLandingDetails from '../../components/ToolLandingDetails';
 
 const baseMetadata = createToolMetadata('hashtag');
 
@@ -22,8 +23,9 @@ export default function Page() {
   return (
     <>
       <HashtagClient maintenanceMode={isMaintenanceMode('hashtag')} />
+      <ToolLandingDetails tool="hashtag" />
       <script
-        type="application/ld+json"
+        type="application/json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',

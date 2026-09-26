@@ -27,7 +27,7 @@ export default function Page() {
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 1.5rem 1.25rem', color: '#6b6b85' }}>
         Related tools: <a href="/keyword" style={{ color: '#7dd3fc' }}>Keyword generator</a> · <a href="/tts" style={{ color: '#7dd3fc' }}>Text to speech</a>
       </div>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify({
+      <script type="application/json" dangerouslySetInnerHTML={{__html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "FAQPage",
         "mainEntity": [

@@ -13,5 +13,15 @@ export const metadata = {
 };
 
 export default function IndianFormsLayout({ children }) {
-  return children;
+  const faqs = [
+    ['Are my photos uploaded to a server?', 'No. Processing happens in your browser. Background removal downloads its free browser model when you choose that option.'],
+    ['Can I use this for NEET, JEE, SSC, UPSC, and banking forms?', 'Yes. The tool includes common presets for these forms. Always check the notification for your current application cycle.'],
+    ['What happens after I upload a photo?', 'You see the original file name and size, then a before-and-after result showing output pixels and file size before downloading.'],
+  ];
+
+  return <>{children}<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(([name, text]) => ({ '@type': 'Question', name, acceptedAnswer: { '@type': 'Answer', text } })),
+  }) }} /></>;
 }
