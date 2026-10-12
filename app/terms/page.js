@@ -6,7 +6,7 @@ export default function TermsOfService() {
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '60px 24px', color: '#f8fafc', fontFamily: 'Inter, sans-serif', lineHeight: '1.8' }}>
       <h1 style={{ fontSize: '42px', fontWeight: '800', marginBottom: '8px' }}>Terms of Service</h1>
-      <p style={{ color: '#8b94a2', marginBottom: '40px', fontSize: '14px' }}>Last updated: September 2026</p>
+      <p style={{ color: '#8b94a2', marginBottom: '40px', fontSize: '14px' }}>Last updated: October 2026</p>
 
       <h2 style={{ fontSize: '22px', fontWeight: '700', marginTop: '36px', marginBottom: '10px', color: '#00FFB2' }}>1. Use of Tools</h2>
       <p style={{ color: '#9aa4b2' }}>ToolVoid provides free browser-based utilities for productivity, content creation, and workflow support. You agree to use the platform only for lawful purposes and in a way that does not interfere with the operation of the service or abuse shared daily credit limits.</p>

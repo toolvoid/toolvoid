@@ -6,7 +6,7 @@ export default function PrivacyPolicy() {
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '60px 24px', color: '#f8fafc', fontFamily: 'Inter, sans-serif', lineHeight: '1.8' }}>
       <h1 style={{ fontSize: '42px', fontWeight: '800', marginBottom: '8px' }}>Privacy Policy</h1>
-      <p style={{ color: '#8b94a2', marginBottom: '40px', fontSize: '14px' }}>Last updated: September 2026</p>
+      <p style={{ color: '#8b94a2', marginBottom: '40px', fontSize: '14px' }}>Last updated: October 2026</p>
 
       <h2 style={{ fontSize: '22px', fontWeight: '700', marginTop: '36px', marginBottom: '10px', color: '#00FFB2' }}>1. Information We Collect</h2>
       <p style={{ color: '#9aa4b2' }}>ToolVoid does not require account creation for most tools. Many features run in your browser, and we do not maintain a general user account database. We do not intentionally keep a long-term archive of your files, text, images, or generated results on our servers for routine app operation.</p>
