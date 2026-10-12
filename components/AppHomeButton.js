@@ -11,9 +11,7 @@ export default function AppHomeButton() {
     '/hashtag',
     '/hashtag-generator',
     '/keyword',
-    '/keyword-generator',
     '/imagegen',
-    '/image-generator',
   ];
 
   if (pathname === '/' || pathname?.startsWith('/resume') || aiToolPaths.includes(pathname)) return null;

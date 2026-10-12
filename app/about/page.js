@@ -37,7 +37,7 @@ export default function AboutPage() {
             <strong>Hashtag Generator</strong>
             <div style={{ color: 'rgba(255,255,255,.62)', marginTop: '.35rem' }}>Draft social content ideas in seconds.</div>
           </Link>
-          <Link href="/keyword-generator" style={{ display: 'block', padding: '1rem 1.15rem', border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, color: 'inherit', textDecoration: 'none', background: '#0c0c1a' }}>
+          <Link href="/keyword" style={{ display: 'block', padding: '1rem 1.15rem', border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, color: 'inherit', textDecoration: 'none', background: '#0c0c1a' }}>
             <strong>Keyword Generator</strong>
             <div style={{ color: 'rgba(255,255,255,.62)', marginTop: '.35rem' }}>Generate SEO-friendly keyword ideas for content work.</div>
           </Link>

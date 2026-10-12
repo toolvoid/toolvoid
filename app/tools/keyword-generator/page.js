@@ -11,7 +11,7 @@ export default function KeywordGuidePage() {
       <h2>How To Use</h2>
       <ol><li>Enter a topic or niche.</li><li>Select content type, audience, and country.</li><li>Add an optional seed keyword.</li><li>Generate, filter, copy, or export keywords.</li></ol>
       <p style={styles.muted}>Daily limit: 10 free per day.</p>
-      <Link href="/keyword-generator" style={styles.cta}>Open Tool</Link>
+      <Link href="/keyword" style={styles.cta}>Open Tool</Link>
     </div></main>
   )
 }

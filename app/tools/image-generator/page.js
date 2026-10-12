@@ -11,7 +11,7 @@ export default function ImageGuidePage() {
       <h2>How To Use</h2>
       <ol><li>Describe the image you want.</li><li>Choose a style, mood, and ratio.</li><li>Optionally add a negative prompt.</li><li>Generate and download the image.</li></ol>
       <p style={styles.muted}>Daily limit: 6 free per day.</p>
-      <Link href="/image-generator" style={styles.cta}>Open Tool</Link>
+      <Link href="/imagegen" style={styles.cta}>Open Tool</Link>
     </div></main>
   )
 }

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 
 const TRACKING_PARAMS = new Set([
-  'ref',
   'utm_source',
   'utm_medium',
   'utm_campaign',
