@@ -1,4 +1,11 @@
 const DETAILS = {
+  'one-brain': {
+    title: 'A private, local-first memory for your AI tools',
+    paragraphs: [
+      'One Brain is a desktop app with an encrypted SQLite database, a master-password vault, smart search, built-in chat, an MCP server, a local memory proxy, Quick Context, import, pending memories, and Insights. Search combines SQLite full-text search with multilingual MiniLM semantic embeddings. The first search needs internet once to download the approximately 130 MB local model; after that, the app works fully offline.',
+      'Review context before sending it to an AI. One Brain has no cloud server, though an online AI provider receives context you send to it. The browser extension is coming soon and will pair with the desktop app.',
+    ],
+  },
   'capsule-manager': {
     title: 'A working memory for projects that span multiple AI chats',
     paragraphs: [
@@ -70,9 +77,13 @@ export default function ToolLandingDetails({ tool }) {
   if (!details) return null;
 
   return (
-    <section aria-labelledby={`${tool}-details-title`} style={{ maxWidth: 1100, margin: '0 auto', padding: '2rem 1.5rem', color: 'inherit', lineHeight: 1.75 }}>
-      <h2 id={`${tool}-details-title`} style={{ fontSize: '1.5rem', fontWeight: 750, marginBottom: '1rem' }}>{details.title}</h2>
-      {details.paragraphs.map((paragraph) => <p key={paragraph.slice(0, 40)} style={{ margin: '0 0 1rem' }}>{paragraph}</p>)}
+    <section
+      className={tool === 'one-brain' ? 'ob-details' : undefined}
+      aria-labelledby={`${tool}-details-title`}
+      style={tool === 'one-brain' ? undefined : { maxWidth: 1100, margin: '0 auto', padding: '2rem 1.5rem', color: 'inherit', lineHeight: 1.75 }}
+    >
+      <h2 id={`${tool}-details-title`} style={tool === 'one-brain' ? undefined : { fontSize: '1.5rem', fontWeight: 750, marginBottom: '1rem' }}>{details.title}</h2>
+      {details.paragraphs.map((paragraph) => <p key={paragraph.slice(0, 40)} style={tool === 'one-brain' ? undefined : { margin: '0 0 1rem' }}>{paragraph}</p>)}
     </section>
   );
 }

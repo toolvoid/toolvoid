@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import MobileHome from '../components/MobileHome';
+import useTilt from '../components/useTilt';
 import ToolIcon3D, {
   AudienceIcon3D,
   FeatureIcon3D,
@@ -118,40 +119,28 @@ function FeatureCard({ f }) {
 }
 
 function ToolCard({ tool, index }) {
-  const cardRef = useRef(null);
-  const [rot, setRot] = useState({ x: 0, y: 0 });
+  const { ref: tiltRef, onPointerMove, onPointerLeave } = useTilt(7);
   const [hovered, setHovered] = useState(false);
-  const [iconMouse, setIconMouse] = useState({ x: 0, y: 0 });
-
-  const onMove = (event) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const nx = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
-    const ny = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
-    setRot({ x: -ny * 12, y: nx * 14 });
-    setIconMouse({ x: nx, y: -ny });
-  };
 
   return (
     <Link
       href={tool.href}
-      ref={cardRef}
-      onMouseMove={onMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => { setRot({ x: 0, y: 0 }); setHovered(false); setIconMouse({ x: 0, y: 0 }); }}
+      ref={tiltRef}
+      onPointerMove={onPointerMove}
+      onPointerEnter={() => setHovered(true)}
+      onPointerLeave={() => { onPointerLeave(); setHovered(false); }}
       className={`tc reveal ${tool.featured ? 'tc-feat' : ''}`}
-      style={{ transitionDelay: `${(index % 4) * 0.06}s` }}
+      style={{ '--reveal-delay': `${(index % 4) * 0.06}s`, '--tilt-angle': '5deg' }}
     >
       <div
         className="tc-inner"
         style={{
-          transform: `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`,
           borderColor: hovered ? `${tool.color}55` : tool.featured ? `${tool.color}33` : 'rgba(255,255,255,0.1)',
           boxShadow: hovered ? `0 22px 55px ${tool.color}25` : tool.featured ? `0 0 30px ${tool.color}14` : 'none',
           background: hovered ? 'rgba(255,255,255,0.08)' : tool.featured ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.045)',
         }}
       >
-        <div className="tc-glow" style={{ background: `radial-gradient(circle at ${50 + (iconMouse.x * 22)}% ${50 - (iconMouse.y * 22)}%, ${tool.color}22, transparent 45%)`, opacity: hovered ? 1 : 0.55 }} />
+        <div className="tc-glow" style={{ background: `radial-gradient(circle at var(--mx,50%) var(--my,50%), ${tool.color}25, rgba(45,212,191,.05) 24%, transparent 55%)`, opacity: hovered ? 1 : 0.55 }} />
         <div className="tct">{tool.tag}</div>
         <div
           className="tc-icon"
@@ -161,7 +150,7 @@ function ToolCard({ tool, index }) {
             '--tool-shadow': `${tool.color}40`,
           }}
         >
-          <ToolIcon3D href={tool.href} color={tool.color} hovered={hovered} mouseX={iconMouse.x} mouseY={iconMouse.y} />
+          <ToolIcon3D href={tool.href} color={tool.color} hovered={hovered} />
         </div>
         <div className="tc-copy" style={{ transform: hovered ? 'translateZ(18px)' : 'translateZ(0px)' }}>
           <div className="tch">{tool.name}</div>
@@ -175,19 +164,30 @@ function ToolCard({ tool, index }) {
   );
 }
 
-function MysteryToolCard() {
+function OneBrainFeaturedCard() {
+  const { ref: tiltRef, onPointerMove, onPointerLeave } = useTilt(10);
   return (
-    <div className="mystery-tool-card reveal" aria-label="Mystery tool coming soon">
+    <div ref={tiltRef} onPointerMove={onPointerMove} onPointerLeave={onPointerLeave} className="mystery-tool-card reveal ob-home-tilt" aria-label="One Brain desktop app featured banner">
       <div className="mystery-orbit mystery-orbit-one" />
       <div className="mystery-orbit mystery-orbit-two" />
       <div className="mystery-orbit mystery-orbit-three" />
-      <div className="mystery-core">?</div>
-      <div className="mystery-copy">
-        <div className="mystery-label">Mystery Tool</div>
-        <h3>Something new is taking shape.</h3>
-        <p>Can you guess what we are building next?</p>
+      <div className="mystery-core" aria-hidden="true">
+        <svg className="ob-banner-icon" viewBox="0 0 100 100" role="presentation">
+          <g className="ob-banner-graph" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M50 50 50 13M50 50 82 31M50 50 82 69M50 50 50 87M50 50 18 69M50 50 18 31" opacity=".7" />
+            <circle cx="50" cy="13" r="5" fill="#2dd4bf"/><circle cx="82" cy="31" r="5" fill="#a78bfa"/>
+            <circle cx="82" cy="69" r="5" fill="#2dd4bf"/><circle cx="50" cy="87" r="5" fill="#a78bfa"/>
+            <circle cx="18" cy="69" r="5" fill="#2dd4bf"/><circle cx="18" cy="31" r="5" fill="#a78bfa"/>
+            <circle cx="50" cy="50" r="8" fill="#eafffc" stroke="#2dd4bf" strokeWidth="3"/>
+          </g>
+        </svg>
       </div>
-      <span className="mystery-status">Coming Soon</span>
+      <div className="mystery-copy">
+        <div className="mystery-label">New Desktop App</div>
+        <h3><Link href="/one-brain">One Brain: One Memory for Every AI.</Link></h3>
+        <p>A private, local-first memory for your AI tools. Free for Linux, Windows and macOS.</p>
+      </div>
+      <Link className="mystery-status" href="/one-brain#download">Download</Link>
     </div>
   );
 }
@@ -202,6 +202,11 @@ export default function Home() {
     }, { threshold: 0.08 });
 
     elements.forEach((element) => observer.observe(element));
+    const banner = document.querySelector('.ob-home-tilt');
+    const bannerMotionObserver = banner ? new IntersectionObserver((entries) => {
+      entries.forEach((entry) => entry.target.classList.toggle('motion-near', entry.isIntersecting));
+    }, { rootMargin: '80px' }) : null;
+    if (banner) bannerMotionObserver?.observe(banner);
 
     const onMouseMove = (event) => {
       document.documentElement.style.setProperty('--mx', `${event.clientX}px`);
@@ -210,6 +215,7 @@ export default function Home() {
 
     window.addEventListener('mousemove', onMouseMove);
     const onVisChange = () => {
+      document.body.classList.toggle('motion-suspended', document.visibilityState !== 'visible');
       if (document.visibilityState !== 'visible') return;
 
       const canvas = document.getElementById('bgc');
@@ -547,6 +553,7 @@ export default function Home() {
 
     return () => {
       observer.disconnect();
+      bannerMotionObserver?.disconnect();
       window.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('visibilitychange', onVisChange);
       document.removeEventListener('mousemove', onMouse);
@@ -638,31 +645,47 @@ export default function Home() {
     .tools-categories{display:grid;gap:38px}
     .tool-category{min-width:0}
     .mystery-tool-card{position:relative;display:flex;align-items:center;gap:24px;min-height:170px;margin-bottom:38px;padding:28px 32px;overflow:hidden;border:1px solid rgba(255,255,255,.16);border-radius:24px;background:linear-gradient(105deg,rgba(255,255,255,.08),rgba(255,255,255,.025));isolation:isolate}
-    .mystery-tool-card::before{content:'';position:absolute;inset:-2px;z-index:-2;background:conic-gradient(from 90deg,#00ffb2,#4d96ff,#c77dff,#ff4ecd,#ffd93d,#00ffb2);animation:mysterySpin 7s linear infinite;opacity:.8}
+    .ob-home-tilt{--mx:50%;--my:50%;--rx:0deg;--ry:0deg;transform:perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry));transform-style:preserve-3d;will-change:transform;transition:transform .4s cubic-bezier(.2,.7,.2,1)}
+    .ob-home-tilt:hover{transition-duration:90ms}
+    .mystery-tool-card.ob-home-tilt::after{background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(45,212,191,.12),rgba(167,139,250,.045) 38%,#090a12 78%)}
+    .ob-home-tilt .mystery-core{translate:calc((50% - var(--mx)) * .06) calc((50% - var(--my)) * .06) 30px}
+    .ob-home-tilt .ob-banner-icon{translate:none;transform:none}
+    .ob-home-tilt .mystery-orbit{translate:calc((var(--mx) - 50%) * .025) calc((var(--my) - 50%) * .025)}
+    .ob-home-tilt .mystery-copy{transform:none}
+    .ob-home-tilt .mystery-status{transform:translateZ(20px)}
+    .ob-home-tilt:focus-within{outline:2px solid #2dd4bf;outline-offset:4px}
+    .mystery-tool-card:not(.motion-near)::before,.mystery-tool-card:not(.motion-near) .mystery-orbit,.mystery-tool-card:not(.motion-near) .mystery-core,.mystery-tool-card:not(.motion-near) .ob-banner-graph,body.motion-suspended .mystery-tool-card::before,body.motion-suspended .mystery-orbit,body.motion-suspended .mystery-core,body.motion-suspended .ob-banner-graph{animation-play-state:paused}
+    .mystery-tool-card::before{content:'';position:absolute;inset:-2px;z-index:-2;background:conic-gradient(from 90deg,#2dd4bf,#a78bfa,#2dd4bf);animation:mysterySpin 7s linear infinite;opacity:.8}
     .mystery-tool-card::after{content:'';position:absolute;inset:1px;z-index:-1;border-radius:23px;background:#090a12}
     .mystery-orbit{position:absolute;border-radius:50%;filter:blur(1px);opacity:.8;mix-blend-mode:screen;pointer-events:none}
-    .mystery-orbit-one{width:180px;height:180px;left:7%;top:-76px;background:radial-gradient(circle,#00ffb2,transparent 65%);animation:mysteryFloatOne 5s ease-in-out infinite}
+    .mystery-orbit-one{width:180px;height:180px;left:7%;top:-76px;background:radial-gradient(circle,#2dd4bf,transparent 65%);animation:mysteryFloatOne 5s ease-in-out infinite}
     .mystery-orbit-two{width:220px;height:220px;left:38%;top:-120px;background:radial-gradient(circle,#a78bfa,transparent 65%);animation:mysteryFloatTwo 6s ease-in-out infinite}
-    .mystery-orbit-three{width:190px;height:190px;right:10%;bottom:-120px;background:radial-gradient(circle,#ff4ecd,transparent 65%);animation:mysteryFloatThree 5.5s ease-in-out infinite}
-    .mystery-core{display:grid;place-items:center;position:relative;flex:0 0 86px;width:86px;height:86px;border:2px solid rgba(255,255,255,.75);border-radius:24px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:54px;line-height:1;background:conic-gradient(from 0deg,#00ffb2,#4d96ff,#c77dff,#ff4ecd,#ffd93d,#00ffb2);box-shadow:0 0 32px rgba(167,139,250,.35);animation:mysteryPulse 2.8s ease-in-out infinite}
+    .mystery-orbit-three{width:190px;height:190px;right:10%;bottom:-120px;background:radial-gradient(circle,#a78bfa,transparent 65%);animation:mysteryFloatThree 5.5s ease-in-out infinite}
+    .mystery-core{display:grid;place-items:center;position:relative;flex:0 0 86px;width:86px;height:86px;border:1px solid rgba(45,212,191,.65);border-radius:24px;color:#2dd4bf;background:linear-gradient(145deg,rgba(45,212,191,.18),rgba(167,139,250,.17));box-shadow:0 0 32px rgba(45,212,191,.3);animation:mysteryPulse 2.8s ease-in-out infinite}
+    .ob-banner-icon{width:68px;height:68px;overflow:visible;filter:drop-shadow(0 0 8px rgba(45,212,191,.7))}
+    .ob-banner-graph{transform-origin:50px 50px;animation:mysterySpin 24s linear infinite}
     .mystery-core::after{content:'';position:absolute;inset:5px;border-radius:20px;background:#0b0c15;z-index:-1}
     .mystery-copy{position:relative;z-index:1}
     .mystery-label{color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
-    .mystery-copy h3{margin:8px 0 6px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;line-height:1}
+    .mystery-copy h3{margin:8px 0 6px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;line-height:1;text-transform:uppercase}
+    .mystery-copy h3 a{color:inherit;text-decoration:none}
     .mystery-copy p{color:#a7afbf;font-size:14px;line-height:1.6}
-    .mystery-status{position:relative;z-index:1;margin-left:auto;border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:9px 13px;color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;background:rgba(255,255,255,.06)}
+    .mystery-status{position:relative;z-index:1;margin-left:auto;border:1px solid rgba(45,212,191,.45);border-radius:999px;padding:11px 17px;color:#061312;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;text-decoration:none;background:linear-gradient(135deg,#2dd4bf,#a7f3e8);box-shadow:0 8px 24px rgba(45,212,191,.2)}
     @keyframes mysterySpin{to{transform:rotate(360deg)}}
     @keyframes mysteryPulse{0%,100%{transform:rotate(-5deg) scale(1)}50%{transform:rotate(5deg) scale(1.08)}}
     @keyframes mysteryFloatOne{50%{transform:translate(50px,55px) scale(1.2)}}
     @keyframes mysteryFloatTwo{50%{transform:translate(-30px,70px) scale(.8)}}
     @keyframes mysteryFloatThree{50%{transform:translate(-70px,-55px) scale(1.15)}}
+    @media (prefers-reduced-motion:reduce){.mystery-tool-card::before,.mystery-orbit,.mystery-core,.ob-banner-graph{animation:none!important}}
+    @media (prefers-reduced-motion:reduce),(pointer:coarse){.ob-home-tilt,.tc{transform:none!important;transition:none!important;will-change:auto}.ob-home-tilt .mystery-core,.ob-home-tilt .mystery-orbit,.ob-home-tilt .ob-banner-icon{translate:none!important}.tc:active{transform:scale(.985)!important}}
     .tool-category-head{font-size:22px;font-weight:800;color:#fff;margin:0 0 14px;letter-spacing:0}
     .tool-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;padding:2px 0 14px;margin:0}
     .tool-row .tc{width:100%}
-    .tc{display:block;perspective:1000px;text-decoration:none}
-    .tc-inner{position:relative;height:100%;min-height:260px;border-radius:24px;padding:22px;overflow:hidden;border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(12px);transform-style:preserve-3d;transition:transform .12s,border-color .2s,box-shadow .2s,background .2s}
+    .tc{display:block;perspective:1000px;text-decoration:none;--mx:50%;--my:50%;--rx:0deg;--ry:0deg;will-change:transform;transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);transition:transform 90ms cubic-bezier(.2,.7,.2,1)}
+    .tc-inner{position:relative;height:100%;min-height:260px;border-radius:24px;padding:22px;overflow:hidden;border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(12px);transform-style:preserve-3d;transition:border-color .2s,box-shadow .2s,background .2s}
     .tc-feat .tc-inner{min-height:286px}
     .tc-glow{position:absolute;inset:0;border-radius:24px;pointer-events:none;transition:opacity .25s}
+    .tc:focus-visible{outline:2px solid #2dd4bf;outline-offset:4px;border-radius:24px}
     .tct{display:inline-flex;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8b94a2}
     .tc-icon{position:relative;width:78px;height:78px;margin:18px 0 14px;border-radius:20px;display:grid;place-items:center;isolation:isolate;overflow:hidden;border:1px solid color-mix(in srgb,var(--tool-color) 42%,rgba(255,255,255,.18));background:linear-gradient(135deg,color-mix(in srgb,var(--tool-color) 28%,rgba(255,255,255,.06)),rgba(34,211,238,.12) 52%,rgba(167,139,250,.18));box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 10px 22px var(--tool-shadow),0 2px 6px rgba(0,0,0,.28);transition:transform .18s,box-shadow .2s,border-color .2s}
     .tc-icon::before{content:'';position:absolute;inset:1px;border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.16),transparent 38%);pointer-events:none;z-index:-1}
@@ -701,8 +724,11 @@ export default function Home() {
     .footer-copy{font-size:14px;line-height:1.8;color:#8b94a2;margin-top:8px}
     .footer-links{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px}
     .footer-links a{color:#cbd5e1;text-decoration:none;font-size:14px}
-    .reveal{opacity:0;transform:translateY(22px);transition:opacity .5s,transform .5s}
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .5s var(--reveal-delay,0s),transform .5s var(--reveal-delay,0s)}
     .reveal.vis{opacity:1;transform:none}
+    .reveal.vis.tc{transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);transition:transform 65ms cubic-bezier(.2,.7,.2,1),opacity .5s var(--reveal-delay,0s)}
+    .reveal.vis.ob-home-tilt{transform:perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry));transition:transform 120ms ease-out,opacity .5s var(--reveal-delay,0s)}
+    .reveal.vis.ob-home-tilt:hover{transition-duration:70ms,.5s}
     @media (max-width:1200px){
       .hero{grid-template-columns:minmax(0,1fr) minmax(360px,.92fr);gap:24px}
       .tool-row .tc{flex-basis:260px;min-width:260px}
@@ -819,7 +845,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="tools-categories">
-                  <MysteryToolCard />
+                  <OneBrainFeaturedCard />
                   {toolCategories.map((category) => (
                     <div key={category.id} className="tool-category">
                       <h3 className="tool-category-head reveal">{category.label}</h3>

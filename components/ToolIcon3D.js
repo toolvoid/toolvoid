@@ -246,14 +246,37 @@ export default function ToolIcon3D({ href, hovered, mouseX, mouseY }) {
 
     let t = 0;
     let raf = null;
-    const loop = () => {
+    let inView = false;
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const paint = () => {
       t += 0.022;
       ctx.clearRect(0, 0, 72, 72);
       drawToolIcon2D(ctx, href, 36, 36, 72, t, hoveredRef.current, color);
+    };
+    const loop = () => {
+      raf = null;
+      if (!inView || document.visibilityState !== 'visible' || motion.matches) return;
+      paint();
       raf = requestAnimationFrame(loop);
     };
-    loop();
-    return () => { if (raf) cancelAnimationFrame(raf); };
+    const start = () => { if (inView && !raf && document.visibilityState === 'visible' && !motion.matches) raf = requestAnimationFrame(loop); };
+    const stop = () => { if (raf) cancelAnimationFrame(raf); raf = null; };
+    paint();
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      if (inView) start(); else stop();
+    }, { rootMargin: '40px' });
+    observer.observe(canvas);
+    const onVisibility = () => { if (document.visibilityState === 'visible') start(); else stop(); };
+    const onMotion = () => { if (motion.matches) { stop(); paint(); } else start(); };
+    document.addEventListener('visibilitychange', onVisibility);
+    motion.addEventListener('change', onMotion);
+    return () => {
+      stop();
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+      motion.removeEventListener('change', onMotion);
+    };
   }, [href]);
 
   return (
@@ -281,14 +304,34 @@ function Icon2D({ draw, size, hovered, color }) {
     canvas.width = size * dpr; canvas.height = size * dpr;
     canvas.style.width = `${size}px`; canvas.style.height = `${size}px`;
     ctx.scale(dpr, dpr);
-    const loop = () => {
+    let inView = false;
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const paint = () => {
       currentState.t += 0.022;
       ctx.clearRect(0,0,size,size);
       draw(ctx,size/2,size/2,size,currentState.t,currentState.hovered,color);
+    };
+    const loop = () => {
+      currentState.raf = null;
+      if (!inView || document.visibilityState !== 'visible' || motion.matches) return;
+      paint();
       currentState.raf = requestAnimationFrame(loop);
     };
-    loop();
-    return () => cancelAnimationFrame(currentState.raf);
+    const start = () => { if (inView && !currentState.raf && document.visibilityState === 'visible' && !motion.matches) currentState.raf = requestAnimationFrame(loop); };
+    const stop = () => { if (currentState.raf) cancelAnimationFrame(currentState.raf); currentState.raf = null; };
+    paint();
+    const observer = new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; if (inView) start(); else stop(); }, { rootMargin: '40px' });
+    observer.observe(canvas);
+    const onVisibility = () => { if (document.visibilityState === 'visible') start(); else stop(); };
+    const onMotion = () => { if (motion.matches) { stop(); paint(); } else start(); };
+    document.addEventListener('visibilitychange', onVisibility);
+    motion.addEventListener('change', onMotion);
+    return () => {
+      stop();
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+      motion.removeEventListener('change', onMotion);
+    };
   }, [color, draw, size]);
   useEffect(() => { state.current.hovered = hovered; }, [hovered]);
   return (

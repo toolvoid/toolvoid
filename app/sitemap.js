@@ -16,6 +16,7 @@ export default function sitemap() {
     '/json',
     '/keyword',
     '/loan',
+    '/one-brain',
     '/passport',
     '/password',
     '/pdf',

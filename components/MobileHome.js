@@ -147,6 +147,7 @@ export default function MobileHome() {
         @keyframes orbB{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-16px,22px,0)}}
         @keyframes mysteryMobileSpin{to{transform:rotate(360deg)}}
         @keyframes mysteryMobilePulse{0%,100%{transform:scale(1) rotate(-4deg)}50%{transform:scale(1.08) rotate(4deg)}}
+        @keyframes obMobileGraphSpin{to{transform:rotate(360deg)}}
 
         /* ── Page bg ── */
         .m-page{--bg-shift:0px;--bg-shift-soft:0px;position:relative;min-height:100vh;background:radial-gradient(circle at 18% 12%,rgba(52,211,153,.14),transparent 26%),radial-gradient(circle at 82% 22%,rgba(96,165,250,.12),transparent 24%),linear-gradient(180deg,#08090c 0%,#060609 100%);overflow:hidden}
@@ -219,15 +220,20 @@ export default function MobileHome() {
         .m-tool-card.featured .m-tool-desc{-webkit-line-clamp:3;font-size:12px}
         .m-tool-card.featured .m-tool-body{flex:1}
         .m-mystery-card{grid-column:span 2;position:relative;min-height:154px;display:flex;align-items:center;gap:14px;overflow:hidden;padding:20px 16px;border:1px solid rgba(255,255,255,.2);border-radius:20px;background:#0b0c15;isolation:isolate}
-        .m-mystery-card::before{content:'';position:absolute;inset:-2px;z-index:-2;background:conic-gradient(#00ffb2,#4d96ff,#c77dff,#ff4ecd,#ffd93d,#00ffb2);animation:mysteryMobileSpin 6s linear infinite}
+        .m-mystery-card::before{content:'';position:absolute;inset:-2px;z-index:-2;background:conic-gradient(#2dd4bf,#a78bfa,#2dd4bf);animation:mysteryMobileSpin 6s linear infinite}
         .m-mystery-card::after{content:'';position:absolute;inset:1px;z-index:-1;border-radius:19px;background:#0b0c15}
-        .m-mystery-glow{position:absolute;width:180px;height:180px;right:-35px;bottom:-100px;border-radius:50%;background:radial-gradient(circle,#ff4ecd,transparent 68%);opacity:.65;animation:mysteryMobilePulse 4s ease-in-out infinite}
-        .m-mystery-core{display:grid;place-items:center;flex:0 0 56px;width:56px;height:56px;border-radius:16px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:36px;background:conic-gradient(#00ffb2,#4d96ff,#c77dff,#ff4ecd,#ffd93d,#00ffb2);box-shadow:0 0 24px rgba(167,139,250,.35);animation:mysteryMobilePulse 2.8s ease-in-out infinite}
+        .m-mystery-glow{position:absolute;width:180px;height:180px;right:-35px;bottom:-100px;border-radius:50%;background:radial-gradient(circle,#2dd4bf,transparent 68%);opacity:.65;animation:mysteryMobilePulse 4s ease-in-out infinite}
+        .m-mystery-core{display:grid;place-items:center;flex:0 0 56px;width:56px;height:56px;border:1px solid rgba(45,212,191,.65);border-radius:16px;color:#2dd4bf;background:linear-gradient(145deg,rgba(45,212,191,.2),rgba(167,139,250,.2));box-shadow:0 0 24px rgba(45,212,191,.35);animation:mysteryMobilePulse 2.8s ease-in-out infinite}
+        .m-ob-icon{width:46px;height:46px;overflow:visible;filter:drop-shadow(0 0 6px rgba(45,212,191,.7))}
+        .m-ob-graph{transform-origin:50px 50px;animation:obMobileGraphSpin 24s linear infinite}
         .m-mystery-body{position:relative;z-index:1}
         .m-mystery-label{color:#fff;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase}
-        .m-mystery-name{margin:6px 0 4px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1}
+        .m-mystery-name{margin:6px 0 4px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1;text-transform:uppercase}
+        .m-mystery-name a{color:inherit;text-decoration:none}
         .m-mystery-copy{color:var(--muted);font-size:11px;line-height:1.5}
         .m-mystery-status{position:absolute;right:14px;bottom:14px;color:#fff;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase}
+        .m-mystery-status{border:1px solid rgba(45,212,191,.45);border-radius:999px;padding:7px 10px;color:#061312;font-weight:800;text-decoration:none;background:linear-gradient(135deg,#2dd4bf,#a7f3e8)}
+        @media(prefers-reduced-motion:reduce){.m-mystery-card::before,.m-mystery-glow,.m-mystery-core,.m-ob-graph{animation:none!important}}
 
         /* No results */
         .m-no-results{grid-column:span 2;text-align:center;padding:40px 20px;color:var(--muted);font-size:14px}
@@ -359,15 +365,20 @@ export default function MobileHome() {
 
             {/* Grid */}
             <div className="m-tools-grid">
-              <div className="m-mystery-card" aria-label="Mystery tool coming soon">
+              <div className="m-mystery-card" aria-label="One Brain desktop app featured banner">
                 <div className="m-mystery-glow" />
-                <div className="m-mystery-core">?</div>
+                <div className="m-mystery-core" aria-hidden="true"><svg className="m-ob-icon" viewBox="0 0 100 100">
+                  <g className="m-ob-graph" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M50 50 50 13M50 50 82 31M50 50 82 69M50 50 50 87M50 50 18 69M50 50 18 31" opacity=".7" />
+                    <circle cx="50" cy="13" r="5" fill="#2dd4bf"/><circle cx="82" cy="31" r="5" fill="#a78bfa"/><circle cx="82" cy="69" r="5" fill="#2dd4bf"/><circle cx="50" cy="87" r="5" fill="#a78bfa"/><circle cx="18" cy="69" r="5" fill="#2dd4bf"/><circle cx="18" cy="31" r="5" fill="#a78bfa"/><circle cx="50" cy="50" r="8" fill="#eafffc" stroke="#2dd4bf" strokeWidth="3"/>
+                  </g>
+                </svg></div>
                 <div className="m-mystery-body">
-                  <div className="m-mystery-label">Mystery Tool</div>
-                  <div className="m-mystery-name">Something new is coming</div>
-                  <div className="m-mystery-copy">A colorful surprise is taking shape.</div>
+                  <div className="m-mystery-label">New Desktop App</div>
+                  <div className="m-mystery-name"><Link href="/one-brain">One Brain: One Memory for Every AI.</Link></div>
+                  <div className="m-mystery-copy">A private, local-first memory for your AI tools. Free for Linux, Windows and macOS.</div>
                 </div>
-                <div className="m-mystery-status">Coming Soon</div>
+                <Link href="/one-brain#download" className="m-mystery-status">Download</Link>
               </div>
               {filteredTools.length === 0 && (
                 <div className="m-no-results">No tools found. Try a different search.</div>

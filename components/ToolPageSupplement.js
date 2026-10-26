@@ -1,4 +1,15 @@
 const SUPPLEMENTS = {
+  'one-brain': {
+    example: 'Search for a saved memory, then review its context before sending it to an online AI provider.',
+    steps: ['Download the build for your system.', 'Install or run One Brain.', 'Create a vault with a master password and save the recovery file somewhere safe.', 'Add or import memories.', 'Search; the first search needs internet once to download the approximately 130 MB local model.', 'Open Settings → Connections to connect an MCP client, local proxy, or browser extension.', 'Search, chat with your memories, and review context before sending.'],
+    faqs: [
+      ['Where are One Brain memories stored?', 'They are kept in an encrypted database on your computer; One Brain has no cloud server.'],
+      ['Does semantic search work offline?', 'The first search needs internet once to download the approximately 130 MB local embedding model. After that, One Brain works fully offline.'],
+      ['Is the browser extension available?', 'It is coming soon. Install the desktop app first; the extension will pair with it.'],
+      ['Does an online AI provider receive sent context?', 'Yes. If you send context to an online AI provider, that provider receives it. Review context before sending.'],
+      ['Which computers are supported?', 'Downloads are provided for Linux x64, Windows x64, and macOS Apple Silicon. Intel Macs are not supported.'],
+    ],
+  },
   'capsule-manager': {
     example: 'A developer can preserve an API decision and open migration questions before moving debugging into a fresh chat.',
     steps: ['Write the goal, decisions, constraints, and next action.', 'Save the notes under a project name and useful tags.', 'Search for the capsule when returning to the work.', 'Review and update it before using the saved context.'],
@@ -244,7 +255,7 @@ export default function ToolPageSupplement({ tool }) {
   if (!details) return null;
 
   return (
-    <section aria-labelledby={`${tool}-guide-title`}>
+    <section className={tool === 'one-brain' ? 'ob-supplement' : undefined} aria-labelledby={`${tool}-guide-title`}>
       {details.heading && <h2 id={`${tool}-guide-title`}>{details.heading}</h2>}
       {details.copy && <p>{details.copy}</p>}
       {details.example && <p><strong>Example:</strong> {details.example}</p>}
