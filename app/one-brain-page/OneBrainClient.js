@@ -7,8 +7,8 @@ import useTilt from '../../components/useTilt';
 const OneBrainLightbox = lazy(() => import('./OneBrainLightbox'));
 
 const linuxDownload = 'https://github.com/toolvoid/one-brain/releases/latest/download/One-Brain-linux-x64.AppImage';
-const windowsDownload = 'https://github.com/toolvoid/one-brain/releases/latest/download/One-Brain-win-x64.exe';
-const macDownload = 'https://github.com/toolvoid/one-brain/releases/latest/download/One-Brain-mac-arm64.dmg';
+const windowsDownload = '#';
+const macDownload = '#';
 const githubRepo = 'https://github.com/toolvoid/one-brain';
 const releasesUrl = 'https://github.com/toolvoid/one-brain/releases';
 
@@ -490,7 +490,7 @@ export default function OneBrainClient() {
 
       <section className="ob-section ob-reveal" id="download">
         <div className="ob-wrap">
-          <div className="ob-head"><div><h2 className="ob-h2">Download One Brain</h2><p className="ob-copy">Choose a build for your computer.</p></div></div>
+          <div className="ob-head"><div><h2 className="ob-h2">Download One Brain</h2><p className="ob-copy">Windows and macOS builds are paused while we fix a startup bug. Linux is available.</p></div></div>
           <div className="ob-download">
             {[
               { os: 'Linux', name: 'Linux x64', type: 'AppImage', size: 'Approx. 192 MB', href: linuxDownload },
