@@ -168,6 +168,7 @@ export default function OneBrainClient() {
   const [stars, setStars] = useState(null);
   const [activeShot, setActiveShot] = useState(0);
   const [os, setOs] = useState('Linux');
+  const [browser, setBrowser] = useState('Chrome');
   const [recommendedOs, setRecommendedOs] = useState(null);
   const [activeCategory, setActiveCategory] = useState('All');
   const [lightboxIndex, setLightboxIndex] = useState(null);
@@ -183,6 +184,11 @@ export default function OneBrainClient() {
       .catch(() => {});
     const osDetection = window.setTimeout(() => {
       const ua = navigator.userAgent;
+      const detectedBrowser = /Firefox\//i.test(ua) ? 'Firefox' : /Edg\//i.test(ua) ? 'Edge' : /Chrome\//i.test(ua) ? 'Chrome' : null;
+      if (detectedBrowser) setBrowser(detectedBrowser);
+      if (!/Firefox\//i.test(ua) && !/Edg\//i.test(ua) && navigator.brave?.isBrave) {
+        navigator.brave.isBrave().then((isBrave) => { if (isBrave) setBrowser('Brave'); }).catch(() => {});
+      }
       const detected = /Windows/i.test(ua) ? 'Windows' : /Macintosh|Mac OS/i.test(ua) ? 'macOS' : /Linux|X11/i.test(ua) ? 'Linux' : null;
       if (detected) {
         setRecommendedOs(detected);
@@ -514,13 +520,28 @@ export default function OneBrainClient() {
 
       <section className="ob-section ob-reveal" id="extension">
         <div className="ob-wrap">
-          <div className="ob-head"><div><h2 className="ob-h2">Browser Extension</h2><p className="ob-copy">Pair browser chats with the One Brain desktop app.</p></div></div>
+          <div className="ob-head"><div><h2 className="ob-h2">Install the browser extension</h2><p className="ob-copy">Pair browser chats with the One Brain desktop app.</p></div></div>
           <div className="ob-extension-card">
-            <span className="ob-coming">Coming soon</span>
-            <h3>Extension will be available in a few days.</h3>
-            <p>Install the desktop app first. The Chromium extension for Chrome, Brave, and Edge will add a One Brain button on supported chat sites.</p>
-            <div className="ob-extension-mock"><div className="ob-mock-top"><span>One Brain</span><span aria-hidden="true">•••</span></div><ul className="ob-extension-list">{['Add memory', 'Manual context', 'Remove context', 'Save this chat with a preview before saving', 'Smart save toggle (auto-save is OFF by default)'].map((item) => <li key={item}>{item}</li>)}</ul></div>
-            <div className="ob-badges">{['Claude', 'ChatGPT', 'Gemini', 'DeepSeek', 'Groq', 'Perplexity'].map((name) => <span className="ob-badge" key={name}>{name}</span>)}</div>
+            {(browser === 'Firefox' ? ['Firefox', 'Chrome'] : ['Chrome', 'Firefox']).map((targetBrowser) => targetBrowser === 'Firefox' ? (
+              <div key="firefox">
+                <h3>Firefox</h3>
+                <a className="ob-btn primary" href="https://addons.mozilla.org/en-US/firefox/addon/one-brain/" target="_blank" rel="noreferrer">Install for Firefox</a>
+                <p>This is a permanent install and survives restarts.</p>
+              </div>
+            ) : (
+              <div key="chromium">
+                <h3>Chrome / Brave / Edge</h3>
+                <a className="ob-btn primary" href="/downloads/one-brain-extension.zip" download>Download extension (.zip)</a>
+                <ol className="ob-install-list" style={{ marginTop: 18 }}>
+                  <li>Download and unzip the folder.</li>
+                  <li>Open <code>{browser === 'Brave' ? 'brave://extensions' : 'chrome://extensions'}</code> ({browser === 'Brave' ? 'Brave' : 'Chrome'}; Edge can use <code>edge://extensions</code>).</li>
+                  <li>Turn on Developer mode.</li>
+                  <li>Click “Load unpacked” and select the unzipped folder.</li>
+                  <li>Optional: pin the extension from the puzzle icon.</li>
+                </ol>
+                <div className="ob-note">The extension stays installed after restart. On startup, the browser may show a “developer mode extensions” popup. Click Cancel or X, not “Disable”. If it gets disabled, open your browser’s extensions page and turn it back on. Do not move or delete the unzipped folder; the browser loads the extension from it.</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -535,6 +556,16 @@ export default function OneBrainClient() {
 
       <section className="ob-wrap ob-section ob-reveal" aria-label="Get One Brain">
         <div className="ob-final-cta"><div><h2>Keep your AI context close.</h2><p>Download One Brain or explore the project on GitHub.</p></div><div className="ob-final-actions"><a className="ob-btn primary ob-magnetic" href="#download">Download</a><a className="ob-btn" href={githubRepo} target="_blank" rel="noreferrer">Star on GitHub{starsText}</a></div></div>
+      </section>
+      <section className="ob-wrap ob-section ob-reveal" aria-labelledby="ob-feedback-title">
+        <div className="ob-final-cta">
+          <div>
+            <h2 id="ob-feedback-title">Got feedback or a suggestion?</h2>
+            <p>Tell me what you'd want a shared AI memory to do. Bugs, ideas and recommendations are all welcome.</p>
+            <p>0voidtool0@gmail.com</p>
+          </div>
+          <div className="ob-final-actions"><a className="ob-btn primary ob-magnetic" href="mailto:0voidtool0@gmail.com?subject=One%20Brain%20feedback">Email me</a></div>
+        </div>
       </section>
       {lightboxIndex !== null && <Suspense fallback={null}><OneBrainLightbox images={gallery} index={lightboxIndex} onClose={closeLightbox} onChange={changeLightbox} /></Suspense>}
     </main>
