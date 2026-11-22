@@ -30,6 +30,13 @@ export default function GuidesPage() {
             <span className="guides-index-action">Read the guide →</span>
           </Link>
         </li>
+        <li>
+          <Link className="guides-index-card" href="/guides/photo-signature-size-rules">
+            <span className="guides-index-title">Photo and Signature Size Rules for SBI PO, IBPS PO, SSC CGL, NEET and JEE Main</span>
+            <span className="guides-index-description">Official photo, signature and thumb impression sizes for SBI PO, IBPS PO/MT, SSC CGL, NEET UG and JEE Main, with links to the notices.</span>
+            <span className="guides-index-action">Read the guide →</span>
+          </Link>
+        </li>
       </ul>
     </main>
   );

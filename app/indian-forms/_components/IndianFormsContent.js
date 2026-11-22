@@ -93,6 +93,7 @@ export default function HomePage() {
           <h2 id="supported-forms-title">Supported Indian forms and exams</h2>
           <p>Our photo and signature presets cover {supportedForms}. Upload rules can vary by application cycle, so please verify the latest official notification before submitting your form.</p>
         </section>
+        <p><a href="/guides/photo-signature-size-rules">Photo and signature size rules for SBI PO, IBPS, SSC CGL, NEET and JEE Main</a></p>
       </div>
       
     </main>
