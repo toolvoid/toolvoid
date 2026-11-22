@@ -765,7 +765,7 @@ export default function PDFToolsSuite() {
         case 'unlock': return `<div class="p-opt-group" style="max-width:280px"><label class="p-opt-label">Current Password (if any)</label><input type="password" class="p-opt-input" id="popt-pass" placeholder="Enter PDF password" value="${S.currentPassword}"></div>`;
         case 'info': return S.pdfDoc ? renderInfoOpts() : `<div style="font-family:var(--mono);font-size:.78rem;color:var(--text-muted)">Loading PDF info…</div>`;
         case 'img-pdf': return renderImgPdfOpts();
-        default: return `<div style="font-family:var(--mono);font-size:.78rem;color:var(--text-muted)">Options coming soon.</div>`;
+        default: return '';
       }
     }
 

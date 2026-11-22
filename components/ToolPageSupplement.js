@@ -5,7 +5,6 @@ const SUPPLEMENTS = {
     faqs: [
       ['Where are One Brain memories stored?', 'They are kept in an encrypted database on your computer; One Brain has no cloud server.'],
       ['Does semantic search work offline?', 'The first search needs internet once to download the approximately 130 MB local embedding model. After that, One Brain works fully offline.'],
-      ['Is the browser extension available?', 'It is coming soon. Install the desktop app first; the extension will pair with it.'],
       ['Does an online AI provider receive sent context?', 'Yes. If you send context to an online AI provider, that provider receives it. Review context before sending.'],
       ['Which computers are supported?', 'Downloads are provided for Linux x64, Windows x64, and macOS Apple Silicon. Intel Macs are not supported.'],
     ],
