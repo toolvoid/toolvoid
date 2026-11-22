@@ -309,7 +309,7 @@ const RATIOS = [
 const LOAD_MSGS = ['🎨 Starting generation…','✨ Adding details…','🖌️ Applying style…','🔮 Almost there — image servers can be slow…'];
 const HIST_KEY  = 'ig_history_v1';
 const TRIES_KEY = 'ig_tries_v1';
-const POOLINATION_FREE_LIMIT = 6;
+const POLLINATIONS_FREE_LIMIT = 6;
 const EXTRA_PACKAGES = {
   10: 19,
   40: 39,
@@ -345,11 +345,11 @@ export default function ImageGenPage() {
 
     // ─── State ───────────────────────────────────────────────────────────────
     let state = {
-      prompt:'', style:'Realistic', ratio:'1:1', mood:'Neutral', generator:'poolinations',
+      prompt:'', style:'Realistic', ratio:'1:1', mood:'Neutral', generator:'pollinations',
       negPrompt:'', loading:false, currentImg:null,
       genTime:0, startTime:0, msgIdx:0, msgTimer:null,
       progressTimer:null, progressVal:0,
-      authenticated:false, authChecking:true, quota:{ used:0, remaining:null, limit:POOLINATION_FREE_LIMIT, reset:'Loading…' },
+      authenticated:false, authChecking:true, quota:{ used:0, remaining:null, limit:POLLINATIONS_FREE_LIMIT, reset:'Loading…' },
       resetTime:'', activeThumb:-1, lastEngine:'', lastModel:'',
     };
 
@@ -386,7 +386,7 @@ export default function ImageGenPage() {
 
     if (!textarea) return;
 
-    function getActiveGenerator() { return 'poolinations'; }
+    function getActiveGenerator() { return 'pollinations'; }
 
     refreshQuota();
     renderHistory();
@@ -407,7 +407,7 @@ export default function ImageGenPage() {
         state.quota = {
           used: 0,
           remaining: 0,
-          limit: POOLINATION_FREE_LIMIT,
+          limit: POLLINATIONS_FREE_LIMIT,
           reset: 'Checking account…',
         };
         state.resetTime = state.quota.reset;
@@ -421,7 +421,7 @@ export default function ImageGenPage() {
 
         if (!res.ok) {
           const isAuthError = res.status === 401 || data?.requiresAuth;
-          const fallbackLimit = POOLINATION_FREE_LIMIT;
+          const fallbackLimit = POLLINATIONS_FREE_LIMIT;
           state.authenticated = isAuthError ? false : isSignedIn();
           state.authChecking = false;
           state.quota = {
@@ -441,7 +441,7 @@ export default function ImageGenPage() {
         state.resetTime = data.quota.reset;
         updateTries();
       } catch {
-        const fallbackLimit = POOLINATION_FREE_LIMIT;
+        const fallbackLimit = POLLINATIONS_FREE_LIMIT;
         state.authenticated = isSignedIn();
         state.authChecking = false;
         state.quota = {
@@ -474,7 +474,7 @@ export default function ImageGenPage() {
         state.quota = {
           used: 0,
           remaining: 0,
-          limit: POOLINATION_FREE_LIMIT,
+          limit: POLLINATIONS_FREE_LIMIT,
           reset: 'Checking account…',
         };
         state.resetTime = state.quota.reset;
@@ -489,7 +489,7 @@ export default function ImageGenPage() {
         state.quota = {
           used: 0,
           remaining: 0,
-          limit: POOLINATION_FREE_LIMIT,
+          limit: POLLINATIONS_FREE_LIMIT,
           reset: 'Connect your account to start',
         };
         state.resetTime = state.quota.reset;
@@ -583,7 +583,7 @@ export default function ImageGenPage() {
           style: state.style,
           ratio: state.ratio,
           mood: state.mood,
-          generator: 'poolinations',
+          generator: 'pollinations',
           negPrompt: state.negPrompt,
           variation: isVariation,
           variationSeed: isVariation ? Math.floor(Math.random()*9999) : undefined,
@@ -849,7 +849,7 @@ export default function ImageGenPage() {
       const titleEl = G('ig-modal-title');
       const messageEl = G('ig-modal-text');
       if (titleEl) titleEl.textContent = 'Daily Limit Reached';
-      if (messageEl) messageEl.textContent = `You have used all ${POOLINATION_FREE_LIMIT} free uses for today. Come back tomorrow for more!`;
+      if (messageEl) messageEl.textContent = `You have used all ${POLLINATIONS_FREE_LIMIT} free uses for today. Come back tomorrow for more!`;
       if (modalReset) modalReset.textContent = state.resetTime ? `Resets ${state.resetTime}` : '';
       modal.style.display='flex';
     }
@@ -1138,7 +1138,7 @@ export default function ImageGenPage() {
           </div>
           <div className="ig-faq-list">
             {[
-              { q:'How many free images do I get?',              a:`Pollinations gives ${POOLINATION_FREE_LIMIT} free images per day. After that, Premium packs are 10 images for Rs ${EXTRA_PACKAGES[10]} or 40 images for Rs ${EXTRA_PACKAGES[40]}.` },
+              { q:'How many free images do I get?',              a:`Pollinations gives ${POLLINATIONS_FREE_LIMIT} free images per day. After that, Premium packs are 10 images for Rs ${EXTRA_PACKAGES[10]} or 40 images for Rs ${EXTRA_PACKAGES[40]}.` },
               { q:'What generates the images?',                  a:'Pollinations generates images from your prompt.' },
               { q:'Can I use generated images commercially?',    a:'Images generated are yours to use. However, verify compliance with the service terms for commercial usage in your specific case.' },
               { q:'What\'s the difference between styles?',      a:'Each style changes the visual rendering: Realistic gives photographic results, Digital Art gives illustrated looks, Cinematic adds film-like lighting and composition, etc.' },

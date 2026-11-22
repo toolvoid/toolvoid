@@ -11,6 +11,7 @@ export const metadata = {
     url: "https://toolvoid.com/json",
   },
   ...createToolMetadata('json'),
+  title: "Shape messy JSON into clean, usable data.",
 }
 
 export default function Page() {

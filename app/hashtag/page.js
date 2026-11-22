@@ -16,6 +16,7 @@ export const metadata = {
     description: 'Generate relevant hashtags for Instagram, TikTok, YouTube, LinkedIn, and X with one click using AI.',
     url: 'https://toolvoid.com/hashtag',
   },
+  title: 'Generate Perfect Hashtags. Instantly.',
 };
 
 export default function Page() {

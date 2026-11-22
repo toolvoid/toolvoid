@@ -11,6 +11,7 @@ export const metadata = {
     url: "https://toolvoid.com/emi",
   },
   ...createToolMetadata('emi'),
+  title: "Home Loan EMI Calculator India",
 }
 
 export default function Page() {

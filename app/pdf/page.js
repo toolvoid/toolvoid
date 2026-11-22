@@ -11,6 +11,7 @@ export const metadata = {
     url: "https://toolvoid.com/pdf",
   },
   ...createToolMetadata('pdf'),
+  title: "PDF Tools",
 }
 
 export default function Page() {

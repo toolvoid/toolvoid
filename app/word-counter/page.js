@@ -11,6 +11,7 @@ export const metadata = {
     url: "https://toolvoid.com/word-counter",
   },
   ...createToolMetadata('word-counter'),
+  title: "Count words. Analyze deeply. Write better.",
 }
 
 export default function Page() {

@@ -11,6 +11,7 @@ export const metadata = {
     url: "https://toolvoid.com/imagegen",
   },
   ...createToolMetadata('imagegen'),
+  title: "Turn Your Ideas Into Stunning Art.",
 }
 
 export default function Page() {
