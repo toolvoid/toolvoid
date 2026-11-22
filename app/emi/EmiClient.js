@@ -831,8 +831,8 @@ function downloadFile(name, content, type) {
 function polarToCartesian(cx, cy, radius, angle) {
   const radians = ((angle - 90) * Math.PI) / 180;
   return {
-    x: cx + radius * Math.cos(radians),
-    y: cy + radius * Math.sin(radians),
+    x: Number((cx + radius * Math.cos(radians)).toFixed(6)),
+    y: Number((cy + radius * Math.sin(radians)).toFixed(6)),
   };
 }
 
