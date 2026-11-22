@@ -9,7 +9,7 @@ export default function AppHomeButton() {
     '/story',
     '/story',
     '/hashtag',
-    '/hashtag-generator',
+    '/hashtag',
     '/keyword',
     '/imagegen',
   ];
