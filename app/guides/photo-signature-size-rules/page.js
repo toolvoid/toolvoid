@@ -112,7 +112,7 @@ export default function PhotoSignatureSizeRulesPage() {
           <li>Polaroid and computer-generated photos are not accepted.</li>
           <li>Spectacles are allowed only if you use them regularly.</li>
           <li>The Class 10 certificate, the Class 10 marksheet and the category certificate go in as PDF files of 50 to 300 KB.</li>
-          <li>The postcard-size (4 × 6 inch) photograph in the bulletin is not an upload. The bulletin only advises you to keep 4 to 6 prints.</li>
+          <li>The bulletin tells you to keep 4 to 6 postcard-size (4 × 6 inch) colour photographs. On exam day you must bring one postcard-size colour photograph with a white background, to paste on the proforma you download with your admit card.</li>
         </ul>
 
         <h2 style={styles.h2}>JEE Main 2027</h2>
