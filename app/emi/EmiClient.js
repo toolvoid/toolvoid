@@ -1299,9 +1299,7 @@ export default function EMIPage() {
         <section className="emi-hero">
           <div>
             <div className="emi-badge">Production-ready advanced EMI planner</div>
-            <h1 className="emi-title">
-              Borrow smarter with a <span>QR-coded fintech edge.</span>
-            </h1>
+            <h1 className="emi-title">Home Loan EMI Calculator India</h1>
             <p className="emi-sub">
               This calculator goes beyond monthly EMI. You can switch modes, simulate extra payments, compare loan offers, inspect amortization, export schedules, and use rule-based payoff insights without leaving the page.
             </p>

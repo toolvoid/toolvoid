@@ -1,13 +1,12 @@
 import { createToolMetadata } from '../../lib/toolMetadata';
 import { isMaintenanceMode } from '../../lib/maintenanceMode';
 import HashtagClient from './HashtagClient';
-import ToolLandingDetails from '../../components/ToolLandingDetails';
 
 const baseMetadata = createToolMetadata('hashtag');
 
 export const metadata = {
   ...baseMetadata,
-  title: 'Free AI Hashtag Generator for Instagram, TikTok, YouTube & More — ToolVoid',
+  title: 'Generate Perfect Hashtags. Instantly.',
   description: 'Generate fresh, platform-specific hashtags for Instagram, TikTok, YouTube, LinkedIn, and X with AI. Create a polished hashtag set, copy it instantly, and publish with more confidence.',
   keywords: ['AI hashtag generator', 'hashtag generator free', 'Instagram hashtag generator', 'TikTok hashtag generator', 'YouTube hashtags'],
   alternates: { canonical: 'https://toolvoid.com/hashtag' },
@@ -23,7 +22,6 @@ export default function Page() {
   return (
     <>
       <HashtagClient maintenanceMode={isMaintenanceMode('hashtag')} />
-      <ToolLandingDetails tool="hashtag" />
       <script
         type="application/json"
         dangerouslySetInnerHTML={{

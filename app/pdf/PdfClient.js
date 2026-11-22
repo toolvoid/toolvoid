@@ -2064,7 +2064,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
         <div className="p-hero-orb2" aria-hidden="true" />
         <div className="p-hero-c">
           <div className="p-badge"><span className="p-badge-dot" />19 Tools · Browser-Only · Zero Upload · Free Forever</div>
-          <h1><span className="hm">Everything PDF.</span><span className="ha">All Free.</span></h1>
+          <h1>PDF Tools</h1>
           <p className="p-hero-sub">Convert to Word, Excel, PowerPoint, images. Merge, split, remove pages, watermark — all processed locally in your browser. Files never leave your device.</p>
           <div className="p-hero-acts">
             <a href="#p-app" className="p-btn-pri"><span>Open PDF Suite</span><span>→</span></a>

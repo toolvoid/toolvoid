@@ -766,9 +766,6 @@ export default function Home() {
   return (
     <>
       <style>{css}</style>
-      <div className="mob">
-        <MobileHome />
-      </div>
       <div className="desk">
         <SharedRendererProvider>
           <div className="home">
