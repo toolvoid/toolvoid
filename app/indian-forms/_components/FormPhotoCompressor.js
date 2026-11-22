@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getFormById } from "../lib/formSpecs";
-import { searchForms } from "../lib/searchForms";
-import { processImageForSpec } from "../lib/imageProcessor";
+import { getFormById } from "../_lib/formSpecs";
+import { searchForms } from "../_lib/searchForms";
+import { processImageForSpec } from "../_lib/imageProcessor";
 
 function formatKB(bytes) {
   return (bytes / 1024).toFixed(1) + " KB";

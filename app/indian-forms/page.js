@@ -1,4 +1,4 @@
-import IndianFormsPage from '../Indian Forms/app/page';
+import IndianFormsPage from './_components/IndianFormsContent';
 
 export const metadata = {
   title: 'Indian Form Photo Compressor | ToolVoid',

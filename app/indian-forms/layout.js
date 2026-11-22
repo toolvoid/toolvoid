@@ -1,4 +1,4 @@
-import '../Indian Forms/app/globals.css';
+import './_components/indian-forms.css';
 
 export const metadata = {
   title: 'Indian Form Photo Compressor — ToolVoid',

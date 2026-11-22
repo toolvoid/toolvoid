@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from 'react';
-import FormPhotoCompressor from "../components/FormPhotoCompressor";
-import { FORMS } from "../lib/formSpecs";
+import FormPhotoCompressor from "./FormPhotoCompressor";
+import { FORMS } from "../_lib/formSpecs";
 
 export default function HomePage() {
   useEffect(() => {
