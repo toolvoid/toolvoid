@@ -118,6 +118,7 @@ body {
 }
 
 .site-footer-brand { font-size: 1.05rem; }
+.site-footer-notice { max-width: 460px; color: var(--app-text-muted); font-size: 0.75rem; line-height: 1.45; }
 
 ins.adsbygoogle { min-height: 280px; }
 .sw-tries { min-height: 48px; }
