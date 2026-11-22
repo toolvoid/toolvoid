@@ -2,8 +2,8 @@ import PdfClient from './PdfClient'
 import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
-  title: "PDF Tools",
-  description: "Convert PDF pages to high-quality images online for free. Extract images from PDF, convert PDF to JPG, PNG, and WebP. No upload needed, 100% private.",
+  title: "PDF to Image Converter Online | ToolVoid",
+  description: "Convert selected PDF pages to JPG, PNG, or WebP images in your browser, choose output quality and resolution, and download individual pages or a ZIP.",
   keywords: ["PDF to image converter free", "PDF to JPG", "PDF to PNG", "extract images from PDF", "PDF converter online"],
   openGraph: {
     title: "PDF to Image Converter Free | ToolVoid",
@@ -11,7 +11,8 @@ export const metadata = {
     url: "https://toolvoid.com/pdf",
   },
   ...createToolMetadata('pdf'),
-  title: "PDF Tools",
+  title: "PDF to Image Converter Online | ToolVoid",
+  description: "Convert selected PDF pages to JPG, PNG, or WebP images in your browser, choose output quality and resolution, and download individual pages or a ZIP.",
 }
 
 export default function Page() {

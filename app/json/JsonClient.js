@@ -811,7 +811,7 @@ export default function JsonWorkbenchPage() {
         <section className="json-hero">
           <div>
             <div className="json-badge">Validator + formatter + inspector</div>
-            <h1 className="json-title">Shape messy JSON into clean, usable data.</h1>
+            <h1 className="json-title">JSON Formatter &amp; Validator Online | ToolVoid</h1>
             <p className="json-sub">
               Validate payloads, pretty-print responses, flatten nested keys, inspect deep paths, and generate instant TypeScript shapes from a single live workspace.
             </p>

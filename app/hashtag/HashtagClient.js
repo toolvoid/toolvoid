@@ -849,10 +849,7 @@ export default function HashtagPage({ maintenanceMode = false }) {
         <div className="ht-hero-glow2" aria-hidden="true" />
         <div className="ht-hero-content">
           <div className="ht-badge">AI-Powered Hashtag Engine Active</div>
-          <h1>
-            Generate Perfect<br />
-            <span className="grad">Hashtags. Instantly.</span>
-          </h1>
+          <h1>AI Hashtag Generator for Social Media | ToolVoid</h1>
           <p className="ht-hero-sub">
             Platform-optimized hashtags for Instagram, TikTok, LinkedIn & more —
             sorted by volume, ready to copy in one click.

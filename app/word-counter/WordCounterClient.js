@@ -885,11 +885,7 @@ export default function WordCounterAnalyzer() {
         <div className="wc-hero-orb" aria-hidden="true" />
         <div className="wc-hero-content">
           <div className="wc-hero-badge">Live Analysis · Pure JS · No API · Free tools. AI features have daily limits; optional paid packs for more.</div>
-          <h1>
-            <span className="h1-light">Count words.</span><br />
-            <span className="h1-blue">Analyze deeply.</span><br />
-            <span className="h1-green">Write better.</span>
-          </h1>
+          <h1>Word Counter Online - Words &amp; Characters | ToolVoid</h1>
           <p className="wc-hero-sub">
             Real-time word count, readability scores, keyword extraction, sentiment analysis, AI detection, and 20 text tools — all in your browser.
           </p>

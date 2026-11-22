@@ -2,8 +2,8 @@ import WordCounterClient from './WordCounterClient'
 import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
-  title: "Count words. Analyze deeply. Write better.",
-  description: "Count words, characters, sentences, and paragraphs online for free with our word counter. Check writing stats, reading time, and keyword density instantly.",
+  title: "Word Counter Online - Words & Characters | ToolVoid",
+  description: "Count words, characters, sentences, and paragraphs while checking reading time and keyword density for a draft, caption, assignment, or other text.",
   keywords: ["free word counter online", "word count", "character counter", "word counter tool", "writing stats"],
   openGraph: {
     title: "Free Word Counter | ToolVoid",
@@ -11,7 +11,8 @@ export const metadata = {
     url: "https://toolvoid.com/word-counter",
   },
   ...createToolMetadata('word-counter'),
-  title: "Count words. Analyze deeply. Write better.",
+  title: "Word Counter Online - Words & Characters | ToolVoid",
+  description: "Count words, characters, sentences, and paragraphs while checking reading time and keyword density for a draft, caption, assignment, or other text.",
 }
 
 export default function Page() {

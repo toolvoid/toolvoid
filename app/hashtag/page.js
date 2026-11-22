@@ -6,8 +6,8 @@ const baseMetadata = createToolMetadata('hashtag');
 
 export const metadata = {
   ...baseMetadata,
-  title: 'Generate Perfect Hashtags. Instantly.',
-  description: 'Generate fresh, platform-specific hashtags for Instagram, TikTok, YouTube, LinkedIn, and X with AI. Create a polished hashtag set, copy it instantly, and publish with more confidence.',
+  title: 'AI Hashtag Generator for Social Media | ToolVoid',
+  description: 'Generate platform-specific hashtag suggestions for Instagram, TikTok, YouTube, LinkedIn, and X, then review and copy a set for your post caption.',
   keywords: ['AI hashtag generator', 'hashtag generator free', 'Instagram hashtag generator', 'TikTok hashtag generator', 'YouTube hashtags'],
   alternates: { canonical: 'https://toolvoid.com/hashtag' },
   openGraph: {
@@ -16,7 +16,7 @@ export const metadata = {
     description: 'Generate relevant hashtags for Instagram, TikTok, YouTube, LinkedIn, and X with one click using AI.',
     url: 'https://toolvoid.com/hashtag',
   },
-  title: 'Generate Perfect Hashtags. Instantly.',
+  title: 'AI Hashtag Generator for Social Media | ToolVoid',
 };
 
 export default function Page() {

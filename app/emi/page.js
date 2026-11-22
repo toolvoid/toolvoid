@@ -2,8 +2,8 @@ import EmiClient from './EmiClient'
 import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
-  title: "Home Loan EMI Calculator India",
-  description: "Calculate home loan, personal loan, and car loan EMI instantly with our free EMI calculator for India. Compare interest rates, loan amounts, and tenures. No sign-up needed.",
+  title: "EMI Calculator India - Monthly Loan Instalment | ToolVoid",
+  description: "Estimate monthly instalments for home, personal, or car loans in India, and compare interest costs across loan amounts, rates, and repayment terms.",
   keywords: ["home loan EMI calculator India", "EMI calculator", "loan calculator India", "home loan calculator", "personal loan EMI"],
   openGraph: {
     title: "Home Loan EMI Calculator | ToolVoid",
@@ -11,7 +11,8 @@ export const metadata = {
     url: "https://toolvoid.com/emi",
   },
   ...createToolMetadata('emi'),
-  title: "Home Loan EMI Calculator India",
+  title: "EMI Calculator India - Monthly Loan Instalment | ToolVoid",
+  description: "Estimate monthly instalments for home, personal, or car loans in India, and compare interest costs across loan amounts, rates, and repayment terms.",
 }
 
 export default function Page() {

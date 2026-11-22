@@ -905,7 +905,7 @@ export default function ImageGenPage() {
         <div className="ig-hero-glow2" aria-hidden="true" />
         <div className="ig-hero-content">
           <div className="ig-badge">Image Engine Active</div>
-          <h1>Turn Your Ideas<br /><span className="grad">Into Stunning Art.</span></h1>
+          <h1>AI Image Generator Online | ToolVoid</h1>
           <p className="ig-hero-sub">Describe anything — the image engine renders it in seconds. Realistic photos, anime, oil paintings, cinematic scenes and more.</p>
           <div className="ig-hero-actions">
             <a href="#ig-generator" className="ig-btn-primary"><span>🎨 Start Creating</span></a>

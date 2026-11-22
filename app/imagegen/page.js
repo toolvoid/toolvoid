@@ -2,8 +2,8 @@ import { createToolMetadata } from '../../lib/toolMetadata';
 import ImageGeneratorClient from './ImageGeneratorClient';
 
 export const metadata = {
-  title: "Turn Your Ideas Into Stunning Art.",
-  description: "Generate stunning AI images online for free. Create unique artwork, illustrations, and photos from text descriptions using artificial intelligence. No sign-up needed.",
+  title: "AI Image Generator Online | ToolVoid",
+  description: "Create an image from a text prompt, choose a visual style, mood, and aspect ratio, then review and download the generated result from your browser.",
   keywords: ["free AI image generator online", "AI image generator", "text to image", "AI art generator", "generate images AI"],
   openGraph: {
     title: "Free AI Image Generator | ToolVoid",
@@ -11,7 +11,8 @@ export const metadata = {
     url: "https://toolvoid.com/imagegen",
   },
   ...createToolMetadata('imagegen'),
-  title: "Turn Your Ideas Into Stunning Art.",
+  title: "AI Image Generator Online | ToolVoid",
+  description: "Create an image from a text prompt, choose a visual style, mood, and aspect ratio, then review and download the generated result from your browser.",
 }
 
 export default function Page() {

@@ -2,8 +2,8 @@ import JsonClient from './JsonClient'
 import { createToolMetadata } from '../../lib/toolMetadata'
 
 export const metadata = {
-  title: "Shape messy JSON into clean, usable data.",
-  description: "Format, validate, and beautify JSON online with our free JSON formatter. Parse, minify, and fix JSON syntax errors instantly in your browser. No sign-up needed.",
+  title: "JSON Formatter & Validator Online | ToolVoid",
+  description: "Format, validate, minify, and inspect JSON in your browser, with syntax errors highlighted so you can review API payloads and configuration data before sharing.",
   keywords: ["JSON formatter validator online", "JSON formatter", "JSON validator", "JSON beautifier", "JSON parser online"],
   openGraph: {
     title: "JSON Formatter Validator | ToolVoid",
@@ -11,7 +11,8 @@ export const metadata = {
     url: "https://toolvoid.com/json",
   },
   ...createToolMetadata('json'),
-  title: "Shape messy JSON into clean, usable data.",
+  title: "JSON Formatter & Validator Online | ToolVoid",
+  description: "Format, validate, minify, and inspect JSON in your browser, with syntax errors highlighted so you can review API payloads and configuration data before sharing.",
 }
 
 export default function Page() {
