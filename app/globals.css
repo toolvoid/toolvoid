@@ -119,6 +119,9 @@ body {
 
 .site-footer-brand { font-size: 1.05rem; }
 
+ins.adsbygoogle { min-height: 280px; }
+.sw-tries { min-height: 48px; }
+
 @media (max-width: 480px) {
   .site-footer { align-items: flex-start; flex-direction: column; }
   .site-footer-links { flex-wrap: wrap; gap: 0.8rem 1rem; }

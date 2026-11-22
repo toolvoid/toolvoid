@@ -416,34 +416,30 @@ export default function PDFToolsSuite() {
       results: [], error: null,
     };
 
-    // ─── Load libraries ──────────────────────────
-    const loadScript = (src, globalName) => new Promise(res => {
-      if (globalName && window[globalName]) { res(window[globalName]); return; }
-      const existing = document.querySelector(`script[data-ps="${src}"]`);
-      if (existing) {
-        const w = () => { if (!globalName || window[globalName]) res(window[globalName]); else setTimeout(w, 60); };
-        w(); return;
-      }
-      const s = document.createElement('script');
-      s.src = src; s.setAttribute('data-ps', src);
-      s.onload = () => res(globalName ? window[globalName] : true);
-      s.onerror = () => res(null);
-      document.head.appendChild(s);
-    });
-
+    // ─── Load heavy document libraries after a file is selected ─────────────
     let libsReady = false;
-    Promise.all([
-      loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js', 'pdfjsLib'),
-      loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js', 'JSZip'),
-      loadScript('https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js', 'PDFLib'),
-    ]).then(() => {
-      if (window.pdfjsLib) {
-        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
-          'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    let libsPromise = null;
+    async function ensureLibraries() {
+      if (libsReady) return true;
+      if (!libsPromise) {
+        libsPromise = Promise.all([
+          import('pdfjs-dist/legacy/build/pdf.mjs'),
+          import('@cantoo/pdf-lib'),
+          import('jszip'),
+        ]).then(([pdfjs, pdfLib, jszip]) => {
+          window.pdfjsLib = pdfjs;
+          window.PDFLib = pdfLib;
+          window.JSZip = jszip.default || jszip;
+          pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/legacy/build/pdf.worker.mjs', import.meta.url).toString();
+          libsReady = true;
+          return true;
+        }).catch((error) => {
+          libsPromise = null;
+          throw error;
+        });
       }
-      libsReady = true;
-      renderOptions();
-    });
+      return libsPromise;
+    }
 
     // ─── Helpers ─────────────────────────────────
     const fmt = b => b < 1024 ? b + ' B' : b < 1048576 ? (b / 1024).toFixed(1) + ' KB' : (b / 1048576).toFixed(2) + ' MB';
@@ -513,18 +509,21 @@ export default function PDFToolsSuite() {
 
       if (isMerge) {
         if (!pdfs.length) { showError('Please upload PDF files.'); return; }
+        try { await ensureLibraries(); } catch { showError('Could not load the PDF tools. Please try again.'); return; }
         S.mergeFiles = [...S.mergeFiles, ...pdfs];
         clearError(); renderFileMeta(); renderOptions();
         return;
       }
       if (isImgPdf) {
         if (!imgs.length) { showError('Please upload image files (JPG, PNG, WEBP).'); return; }
+        try { await ensureLibraries(); } catch { showError('Could not load the PDF tools. Please try again.'); return; }
         S.mergeFiles = imgs;
         S.file = imgs[0];
         clearError(); renderFileMeta(); renderOptions();
         return;
       }
       if (!pdfs.length) { showError('Please upload a PDF file.'); return; }
+      try { await ensureLibraries(); } catch { showError('Could not load the PDF tools. Please try again.'); return; }
       clearError();
       S.file = pdfs[0];
       S.pageCanvases = []; S.pagesLoaded = false;

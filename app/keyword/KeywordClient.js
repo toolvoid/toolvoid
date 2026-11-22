@@ -132,7 +132,7 @@ const CSS = `
 .kw-select:focus { border-color: var(--accent); }
 .kw-select option { background: #0e1812; }
 .kw-selects-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-.kw-tries { text-align: center; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500; padding: 0.6rem 0.9rem; border-radius: var(--radius-xs); background: var(--bg2); border: 1px solid var(--border); }
+.kw-tries { min-height: 44px; text-align: center; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500; padding: 0.6rem 0.9rem; border-radius: var(--radius-xs); background: var(--bg2); border: 1px solid var(--border); }
 .kw-tries.green { color: #34D399; border-color: rgba(52,211,153,0.2); background: rgba(52,211,153,0.05); }
 .kw-tries.yellow { color: #fbbf24; border-color: rgba(251,191,36,0.2); background: rgba(251,191,36,0.05); }
 .kw-tries.red { color: var(--error); border-color: rgba(255,107,122,0.2); background: rgba(255,107,122,0.05); }

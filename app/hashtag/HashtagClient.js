@@ -174,6 +174,7 @@ const CSS = `
 .ht-count-btn:hover { border-color: var(--accent); color: var(--accent); }
 .ht-count-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
 .ht-tries {
+  min-height: 44px;
   text-align: center; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500; padding: 0.6rem 0.9rem;
   border-radius: var(--radius-xs); background: var(--bg2); border: 1px solid var(--border);
 }

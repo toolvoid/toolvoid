@@ -133,7 +133,7 @@ const CSS = `
 .ig-neg-input::placeholder { color: var(--text-muted); }
 
 /* Tries display */
-.ig-tries { text-align: center; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500; padding: 0.6rem 0.9rem; border-radius: var(--radius-xs); background: var(--bg2); border: 1px solid var(--border); }
+.ig-tries { min-height: 44px; text-align: center; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500; padding: 0.6rem 0.9rem; border-radius: var(--radius-xs); background: var(--bg2); border: 1px solid var(--border); }
 .ig-tries.green { color: #34d399; border-color: rgba(52,211,153,0.2); background: rgba(52,211,153,0.05); }
 .ig-tries.yellow { color: #fbbf24; border-color: rgba(251,191,36,0.2); background: rgba(251,191,36,0.05); }
 .ig-tries.red { color: var(--error); border-color: rgba(255,107,122,0.2); background: rgba(255,107,122,0.05); }

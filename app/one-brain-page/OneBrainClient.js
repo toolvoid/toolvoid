@@ -13,7 +13,7 @@ const githubRepo = 'https://github.com/toolvoid/one-brain';
 const releasesUrl = 'https://github.com/toolvoid/one-brain/releases';
 
 const gallery = [
-  { src: '/one-brain/main-view.png.png', alt: 'One Brain desktop app main view', caption: 'Your memory workspace', tab: 'Graph' },
+  { src: '/one-brain/main-view.png', alt: 'One Brain desktop app main view', caption: 'Your memory workspace', tab: 'Graph' },
   { src: '/one-brain/chat.png.png', alt: 'Chat view in the One Brain desktop app', caption: 'Ask your brain', tab: 'Chat' },
   { src: '/one-brain/insights.png.png', alt: 'Insights dashboard in the One Brain desktop app', caption: 'Activity, evaluation, and status', tab: 'Insights' },
 ];
@@ -460,7 +460,7 @@ export default function OneBrainClient() {
             <figure ref={shotTiltRef} onPointerMove={onShotMove} onPointerLeave={onShotLeave} className="ob-shot ob-reveal" id="ob-screenshot-panel" role="tabpanel">
               <div className="ob-window-bar" aria-hidden="true"><i /><i /><i /><span>One Brain</span></div>
               <button className="ob-shot-open" type="button" onClick={() => setLightboxIndex(activeShot)} aria-label={`Open ${gallery[activeShot].tab} screenshot`}>
-                <Image key={gallery[activeShot].src} src={gallery[activeShot].src} alt={gallery[activeShot].alt} width={1200} height={675} loading="lazy" />
+                <Image key={gallery[activeShot].src} src={gallery[activeShot].src} alt={gallery[activeShot].alt} width={1200} height={675} sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 980px) 90vw, 920px" loading="lazy" />
                 <figcaption className="ob-shot-caption">{gallery[activeShot].caption}</figcaption>
               </button>
             </figure>

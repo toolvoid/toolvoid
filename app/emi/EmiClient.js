@@ -953,6 +953,9 @@ export default function EMIPage() {
   const [targetEMI, setTargetEMI] = useState(12000);
   const [scheduleMode, setScheduleMode] = useState('month');
   const [scheduleSearch, setScheduleSearch] = useState('');
+  const [scheduleOpen, setScheduleOpen] = useState(false);
+  const [showAllScheduleRows, setShowAllScheduleRows] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
   const [monthlyIncome, setMonthlyIncome] = useState(80000);
   const [copied, setCopied] = useState('');
   const [selectedFav, setSelectedFav] = useState('');
@@ -1453,13 +1456,19 @@ export default function EMIPage() {
                   <p>Search entries, toggle monthly or yearly breakdown, and export the amortization sheet in CSV or JSON.</p>
                 </div>
                 <div className="emi-mini-actions">
-                  <button className={`emi-mini-btn${scheduleMode === 'month' ? ' active' : ''}`} onClick={() => setScheduleMode('month')}>Monthly</button>
-                  <button className={`emi-mini-btn${scheduleMode === 'year' ? ' active' : ''}`} onClick={() => setScheduleMode('year')}>Yearly</button>
-                  <button className="emi-mini-btn" onClick={exportCSV}>CSV</button>
-                  <button className="emi-mini-btn" onClick={exportJSON}>JSON</button>
+                  <button className="emi-mini-btn" onClick={() => { setScheduleOpen((open) => !open); setShowAllScheduleRows(false); }} aria-expanded={scheduleOpen}>
+                    {scheduleOpen ? 'Close table' : 'Open table'}
+                  </button>
+                  {scheduleOpen ? <>
+                    <button className={`emi-mini-btn${scheduleMode === 'month' ? ' active' : ''}`} onClick={() => setScheduleMode('month')}>Monthly</button>
+                    <button className={`emi-mini-btn${scheduleMode === 'year' ? ' active' : ''}`} onClick={() => setScheduleMode('year')}>Yearly</button>
+                    <button className="emi-mini-btn" onClick={exportCSV}>CSV</button>
+                    <button className="emi-mini-btn" onClick={exportJSON}>JSON</button>
+                  </> : null}
                 </div>
               </div>
 
+              {scheduleOpen ? <>
               <div className="emi-grid-2" style={{ marginBottom: 14 }}>
                 <div className="emi-field">
                   <label htmlFor="schedule-search">Search month / year</label>
@@ -1486,7 +1495,7 @@ export default function EMIPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {scheduleRows.slice(0, 180).map((row) => (
+                      {scheduleRows.slice(0, showAllScheduleRows ? 180 : 12).map((row) => (
                         <tr key={`${row.label}-${row.month}`}>
                           <td>{row.label}</td>
                           <td>{formatCurrency(row.payment)}</td>
@@ -1510,6 +1519,10 @@ export default function EMIPage() {
                   </table>
                 </div>
               </div>
+              {scheduleRows.length > 12 ? <button className="emi-mini-btn" style={{ marginTop: 12 }} onClick={() => setShowAllScheduleRows((showAll) => !showAll)}>
+                {showAllScheduleRows ? 'Show first 12 rows' : 'Show all rows'}
+              </button> : null}
+              </> : null}
             </div>
 
             <div className="emi-card emi-glass">
@@ -1518,8 +1531,11 @@ export default function EMIPage() {
                   <h3>EMI calendar view</h3>
                   <p>The first 12 installments are mapped like a payment calendar so high-interest months stand out instantly.</p>
                 </div>
+                <button className="emi-mini-btn" onClick={() => setCalendarOpen((open) => !open)} aria-expanded={calendarOpen}>
+                  {calendarOpen ? 'Close calendar' : 'Open calendar'}
+                </button>
               </div>
-              <div className="emi-calendar">
+              {calendarOpen ? <div className="emi-calendar">
                 {calendarRows.map((row) => (
                   <div key={row.month} className={`emi-calendar-card${row.interestRatio >= heavyThreshold ? ' hot' : ''}`}>
                     <strong>{row.label}</strong>
@@ -1528,7 +1544,7 @@ export default function EMIPage() {
                     <span>Principal: {formatCurrency(row.principal)}</span>
                   </div>
                 ))}
-              </div>
+              </div> : null}
             </div>
 
             <div className="emi-card emi-glass">
