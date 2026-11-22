@@ -48,6 +48,7 @@ export default function RootLayout({ children }) {
           {children}
           <SiteFooter />
         </AuthSessionProvider>
+        {/* AdSense Auto ads exclusions: /story, /hashtag, /keyword, /imagegen, /site-maker/create, /one-brain. Configure these URLs in AdSense to avoid sign-in walls, empty outputs, daily-limit states, the builder, and One Brain. */}
         <Script
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5587383552747687"
           crossOrigin="anonymous"
