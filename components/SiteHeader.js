@@ -8,6 +8,7 @@ export default function SiteHeader() {
         <div className="site-header-links">
           <Link href="/#tools">Tools</Link>
           <Link href="/about">About</Link>
+          <Link href="/guides">Guides</Link>
         </div>
       </nav>
     </header>

@@ -1789,6 +1789,7 @@ export default function EMIPage() {
         <div className="emi-foot">
           EMI estimates with loan comparisons and repayment planning tools.
         </div>
+        <a href="/guides/emi-calculation" style={{ display: 'inline-block', marginTop: 14, color: 'var(--brand)', textDecoration: 'underline', textUnderlineOffset: 3 }}>How EMI is calculated (worked example)</a>
       </div>
     </div>
   );
