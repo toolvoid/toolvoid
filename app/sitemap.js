@@ -27,7 +27,6 @@ export default function sitemap() {
     { path: '/qr', lastModified: '2026-09-26' },
     { path: '/resume', lastModified: '2026-09-26' },
     { path: '/site-maker', lastModified: '2026-09-26' },
-    { path: '/site-maker/create', lastModified: '2026-07-22' },
     { path: '/terms', lastModified: '2026-11-22' },
     { path: '/tools/hashtag-generator', lastModified: '2026-05-01' },
     { path: '/tools/image-generator', lastModified: '2026-10-12' },
