@@ -598,7 +598,7 @@ export default function PassportPhoto() {
               <div className="mobile-upload-badge">{image ? 'Ready' : 'Upload'}</div>
             </div>
             <div className="mobile-upload-copy">
-              {imgInfo ? `${imgInfo.name} selected hai. Neeche crop, color aur print settings mil jayengi.` : 'Mobile pe sabse pehle upload, phir direct crop and export flow milega.'}
+              {imgInfo ? `${imgInfo.name} selected. Crop, color, and print settings are below.` : 'On mobile, upload first, then crop and export directly.'}
             </div>
             {imgInfo && (
               <div className="mobile-upload-preview">

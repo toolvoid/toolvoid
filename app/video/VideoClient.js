@@ -480,7 +480,7 @@ export default function VideoConverter() {
               </div>
               <div className="mub-badge">{video?'Ready':'Upload'}</div>
             </div>
-            <div className="mub-copy">{vidInfo?`${vidInfo.name} loaded. Neeche format, quality aur export options milenge.`:'MP4, MOV, AVI, MKV — sab formats support hain.'}</div>
+            <div className="mub-copy">{vidInfo?`${vidInfo.name} loaded. Format, quality, and export options are below.`:'Supports MP4, MOV, AVI, and MKV formats.'}</div>
             {vidInfo&&(
               <div className="mub-preview">
                 <div className="mub-thumb">🎬</div>
