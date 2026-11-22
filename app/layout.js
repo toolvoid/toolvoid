@@ -40,6 +40,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className="h-full">
       <head>
         <link rel="manifest" href="/site.webmanifest" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5587383552747687" crossOrigin="anonymous"></script>
       </head>
       <body className="app-body min-h-full flex flex-col">
         <AuthSessionProvider>
@@ -49,11 +50,6 @@ export default function RootLayout({ children }) {
           <SiteFooter />
         </AuthSessionProvider>
         {/* AdSense Auto ads exclusions: /story, /hashtag, /keyword, /imagegen, /site-maker/create, /one-brain. Configure these URLs in AdSense to avoid sign-in walls, empty outputs, daily-limit states, the builder, and One Brain. */}
-        <Script
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5587383552747687"
-          crossOrigin="anonymous"
-          strategy="lazyOnload"
-        />
         <Script src="https://checkout.razorpay.com/v1/checkout.js" />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-9LZ4JMZ26L"
