@@ -327,7 +327,7 @@ export default function MobileHome() {
 
           {/* ── Stats Bar ── */}
           <div className="m-stats-bar" ref={statsRef}>
-            {[[toolCount, 'Tools'],['₹0','Forever'],['3s','To Start'],['24/7','Access']].map(([n,l])=>(
+            {[[toolCount, 'Tools'],['Daily limits','AI features'],['3s','To Start'],['24/7','Access']].map(([n,l])=>(
               <div key={l} className="m-stat">
                 <div className="m-stat-n">{n}</div>
                 <div className="m-stat-l">{l}</div>
@@ -546,7 +546,7 @@ export default function MobileHome() {
             </div>
             <div className="m-footer-end">
               <span>© 2026 ToolVoid · All rights reserved</span>
-              <span style={{color:'#1a1a2e'}}>Made with ⚡ Free Forever</span>
+              <span style={{color:'#1a1a2e'}}>Free tools. AI features have daily limits; optional paid packs for more.</span>
             </div>
           </footer>
 

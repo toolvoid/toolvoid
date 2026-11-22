@@ -811,8 +811,8 @@ export default function Home() {
                       <span>Live Utilities</span>
                     </div>
                     <div className="mini">
-                      <strong>₹0</strong>
-                      <span>Free Forever</span>
+                      <strong>Free tools</strong>
+                      <span>Free tools. AI features have daily limits; optional paid packs for more.</span>
                     </div>
                     <div className="mini">
                       <strong>Local</strong>

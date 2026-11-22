@@ -884,7 +884,7 @@ export default function WordCounterAnalyzer() {
         <div className="wc-hero-dots" aria-hidden="true" />
         <div className="wc-hero-orb" aria-hidden="true" />
         <div className="wc-hero-content">
-          <div className="wc-hero-badge">Live Analysis · Pure JS · No API · Free Forever</div>
+          <div className="wc-hero-badge">Live Analysis · Pure JS · No API · Free tools. AI features have daily limits; optional paid packs for more.</div>
           <h1>
             <span className="h1-light">Count words.</span><br />
             <span className="h1-blue">Analyze deeply.</span><br />

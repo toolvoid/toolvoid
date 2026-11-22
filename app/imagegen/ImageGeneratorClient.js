@@ -1139,7 +1139,7 @@ export default function ImageGenPage() {
           <div className="ig-faq-list">
             {[
               { q:'How many free images do I get?',              a:`Pollinations gives ${POOLINATION_FREE_LIMIT} free images per day. After that, Premium packs are 10 images for Rs ${EXTRA_PACKAGES[10]} or 40 images for Rs ${EXTRA_PACKAGES[40]}.` },
-              { q:'What generates the images?',                  a:'We use a powerful image generation engine that creates high-quality, detailed images with strong prompt adherence.' },
+              { q:'What generates the images?',                  a:'Pollinations generates images from your prompt.' },
               { q:'Can I use generated images commercially?',    a:'Images generated are yours to use. However, verify compliance with the service terms for commercial usage in your specific case.' },
               { q:'What\'s the difference between styles?',      a:'Each style changes the visual rendering: Realistic gives photographic results, Digital Art gives illustrated looks, Cinematic adds film-like lighting and composition, etc.' },
               { q:'What does the Prompt Enhancer do?',           a:'It takes your basic description and uses AI to add artistic details, lighting descriptions, composition notes, and quality modifiers — resulting in significantly better images.' },
