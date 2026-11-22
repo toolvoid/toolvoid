@@ -1050,7 +1050,7 @@ export default function JsonWorkbenchPage() {
         </section>
 
         <div className="json-foot">
-          Single-page JSON workbench with formatting, validation, inspection, flattening, TypeScript generation, local draft persistence, and QR-inspired visual styling.
+          Single-page JSON workbench with formatting, validation, inspection, flattening, TypeScript generation, and local draft persistence.
         </div>
       </div>
     </div>

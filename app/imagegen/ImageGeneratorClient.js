@@ -739,7 +739,7 @@ export default function ImageGenPage() {
       if (actRow) actRow.classList.add('show');
       if(genTimeEl) genTimeEl.textContent=`${elapsed}s`;
       if(overlayInfo) {
-        overlayInfo.innerHTML=`<span>AI Poolination</span><span>Style: ${state.style}</span><span>${elapsed}s</span><span title="${escHtml(state.prompt)}">${state.prompt.slice(0,40)}${state.prompt.length>40?'…':''}</span>`;
+        overlayInfo.innerHTML=`<span>Pollinations</span><span>Style: ${state.style}</span><span>${elapsed}s</span><span title="${escHtml(state.prompt)}">${state.prompt.slice(0,40)}${state.prompt.length>40?'…':''}</span>`;
         
       }
     }
@@ -759,15 +759,15 @@ export default function ImageGenPage() {
         genBtn.disabled = true;
       } else if (rem <= 0) {
         triesBadge.className += ' red';
-        triesBadge.textContent = `🔴 AI Poolination limit reached · resets in ${reset}`;
+        triesBadge.textContent = `🔴 Pollinations limit reached · resets in ${reset}`;
         genBtn.disabled = false;
       } else if (rem === 1) {
         triesBadge.className += ' yellow';
-        triesBadge.textContent = `⚠️ AI Poolination: ${rem}/${limit} remaining today`;
+        triesBadge.textContent = `⚠️ Pollinations: ${rem}/${limit} remaining today`;
         genBtn.disabled = false;
       } else {
         triesBadge.className += ' green';
-        triesBadge.textContent = `✅ AI Poolination: ${rem}/${limit} remaining today`;
+        triesBadge.textContent = `✅ Pollinations: ${rem}/${limit} remaining today`;
         genBtn.disabled = false;
       }
       if (usageGrid) {
@@ -1138,7 +1138,7 @@ export default function ImageGenPage() {
           </div>
           <div className="ig-faq-list">
             {[
-              { q:'How many free images do I get?',              a:`AI Poolination gives ${POOLINATION_FREE_LIMIT} free images per day. After that, Premium packs are 10 images for Rs ${EXTRA_PACKAGES[10]} or 40 images for Rs ${EXTRA_PACKAGES[40]}.` },
+              { q:'How many free images do I get?',              a:`Pollinations gives ${POOLINATION_FREE_LIMIT} free images per day. After that, Premium packs are 10 images for Rs ${EXTRA_PACKAGES[10]} or 40 images for Rs ${EXTRA_PACKAGES[40]}.` },
               { q:'What generates the images?',                  a:'We use a powerful image generation engine that creates high-quality, detailed images with strong prompt adherence.' },
               { q:'Can I use generated images commercially?',    a:'Images generated are yours to use. However, verify compliance with the service terms for commercial usage in your specific case.' },
               { q:'What\'s the difference between styles?',      a:'Each style changes the visual rendering: Realistic gives photographic results, Digital Art gives illustrated looks, Cinematic adds film-like lighting and composition, etc.' },

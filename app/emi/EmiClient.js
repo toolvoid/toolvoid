@@ -1158,7 +1158,7 @@ export default function EMIPage() {
           : 'Increase EMI above interest accrual to unlock a valid closure date.',
       },
       {
-        title: 'Rich-People Repayment Tip',
+        title: 'Repayment tip',
         body: best === 'extra'
           ? 'Recurring extra EMI wins here because it keeps cutting principal every month instead of waiting for a one-time move.'
           : 'A chunky prepayment wins here because the principal shock early on wipes out a large slice of future interest.',
@@ -1283,7 +1283,7 @@ export default function EMIPage() {
           <div className="emi-logo">
             <div className="emi-logo-mark" />
             <div className="emi-logo-copy">
-              <small>QR-inspired finance tool</small>
+              <small>Loan planning tools</small>
               <strong>EMI Matrix</strong>
             </div>
           </div>
@@ -1298,7 +1298,7 @@ export default function EMIPage() {
 
         <section className="emi-hero">
           <div>
-            <div className="emi-badge">Production-ready advanced EMI planner</div>
+            <div className="emi-badge">Advanced EMI planner</div>
             <h1 className="emi-title">Home Loan EMI Calculator India</h1>
             <p className="emi-sub">
               This calculator goes beyond monthly EMI. You can switch modes, simulate extra payments, compare loan offers, inspect amortization, export schedules, and use rule-based payoff insights without leaving the page.
@@ -1771,7 +1771,7 @@ export default function EMIPage() {
         </section>
 
         <div className="emi-foot">
-          Built as a single client page with inline math, local persistence, responsive glass UI, and QR-inspired grid energy using the `#FB923C` theme.
+          EMI estimates with loan comparisons and repayment planning tools.
         </div>
       </div>
     </div>

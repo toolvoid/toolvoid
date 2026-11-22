@@ -2,7 +2,7 @@
 
 ## 📦 What You're Getting
 
-A **production-ready, world-class Resume Builder** component built with React and Tailwind CSS.
+A Resume Builder component built with React and Tailwind CSS.
 
 ### Files Included
 

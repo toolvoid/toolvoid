@@ -1,6 +1,6 @@
 # Resume Builder UI - Professional React Component
 
-A world-class, production-ready Resume Builder featuring a split-screen design, live A4 preview, dark/light mode, and PDF export capabilities.
+A Resume Builder featuring a split-screen design, live A4 preview, dark/light mode, and PDF export capabilities.
 
 ## Features
 
