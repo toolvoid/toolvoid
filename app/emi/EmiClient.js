@@ -942,11 +942,6 @@ export default function EMIPage() {
   const [lumpSum, setLumpSum] = useState(0);
   const [inflation, setInflation] = useState(6);
 
-  const emi = resolvedEmi;
-  const totalInterest = resolvedTotalInterest;
-  const totalPayment = resolvedTotalPayment;
-
-  const schedule = resolvedSchedule;
   const [viewMode, setViewMode] = useState('standard');
   const [chartType, setChartType] = useState('pie');
 
@@ -1077,6 +1072,10 @@ export default function EMIPage() {
   const resolvedTotalInterest = derivedSummary.totalInterest;
   const resolvedTotalPayment = derivedSummary.totalPayment;
   const resolvedSchedule = derivedSummary.schedule;
+  const emi = resolvedEmi;
+  const totalInterest = resolvedTotalInterest;
+  const totalPayment = resolvedTotalPayment;
+  const schedule = resolvedSchedule;
 
   const invalidState = useMemo(() => {
     if (derived.amount <= 0 && viewMode !== 'budget') return 'Loan amount should be greater than zero.';
