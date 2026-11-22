@@ -17,9 +17,9 @@ export default function AppHomeButton() {
   if (pathname === '/' || pathname?.startsWith('/resume') || aiToolPaths.includes(pathname)) return null;
 
   return (
-    <Link href="/" className="app-home-button" aria-label="Back to TooL Void home">
+    <Link href="/" className="app-home-button" aria-label="Back to ToolVoid home">
       <span className="app-home-button-icon" aria-hidden="true">←</span>
-      <span className="app-home-button-label">TooL Void</span>
+      <span className="app-home-button-label">ToolVoid</span>
     </Link>
   );
 }

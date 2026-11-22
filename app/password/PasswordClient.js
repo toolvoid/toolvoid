@@ -1006,7 +1006,7 @@ export default function PasswordGenerator() {
         <div className="pg-nav-logo">
           <div className="logo-icon">🔐</div>
           Password Generator
-          <span className="logo-sub">by TooL Void</span>
+          <span className="logo-sub">ToolVoid</span>
         </div>
         <div className="pg-nav-right">
           <span className="pg-nav-pill">Crypto Secure</span>

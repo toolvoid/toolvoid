@@ -261,7 +261,7 @@ export default function PassportPhoto() {
       ctx.fillStyle='rgba(0,0,0,.18)';
       ctx.font=`${Math.round(5*MM_PX)}px sans-serif`;
       ctx.textAlign='center';
-      ctx.fillText(`${photoMM.label} | ${sheetCols}×${sheetRows} photos | ${page.label} | 300 DPI | toolvoid.com`,pageW/2,pageH-Math.round(2.5*MM_PX));
+      ctx.fillText(`${photoMM.label} | ${sheetCols}×${sheetRows} photos | ${page.label} | 300 DPI | ToolVoid.com`,pageW/2,pageH-Math.round(2.5*MM_PX));
 
       const a=document.createElement('a');
       a.href=c.toDataURL('image/jpeg',.96);
@@ -565,7 +565,7 @@ export default function PassportPhoto() {
         <div className="bg"><div className="g1"/><div className="g2"/><div className="aurora"/><div className="light-beam"/><div className="gbg"/><div className="particles"/><div className="noise"/></div>
 
         <nav>
-          <Link href="/" className="logo"><em>Tool</em>Site</Link>
+          <Link href="/" className="logo">ToolVoid</Link>
           <span className="npill">Passport Photo</span>
           <Link href="/" className="bk">← All Tools</Link>
         </nav>

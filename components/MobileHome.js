@@ -57,7 +57,7 @@ const comparisons = [
 ];
 
 const faqs = [
-  { q: 'Is TooL Void really free?',    a: 'Yes. Core utilities are free, and AI tools include daily free credits.' },
+  { q: 'Are ToolVoid tools free?',    a: 'Core utilities are free, and AI tools include daily free credits.' },
   { q: 'Does it work on mobile?',     a: 'Built mobile-first. Optimized for one-hand browsing.' },
   { q: 'Do I need to install anything?', a: 'No. Open in any browser and start immediately.' },
   { q: 'Are my files uploaded?',      a: 'Most tools run locally in your browser. Your files stay private.' },
@@ -454,8 +454,8 @@ export default function MobileHome() {
 
           {/* ── Compare ── */}
           <section className="m-section" id="compare">
-            <h2 className="m-sh">TooL Void vs Others</h2>
-            <p className="m-sp">Why creators choose TooL Void over paid alternatives.</p>
+            <h2 className="m-sh">ToolVoid tools</h2>
+            <p className="m-sp">Explore tools for common online tasks.</p>
             <div className="m-compare">
               {comparisons.map((row, i) => (
                 <div key={row.label} className="m-cmp-row" style={{ animationDelay:`${0.04+i*0.04}s` }}>
@@ -545,7 +545,7 @@ export default function MobileHome() {
               </div>
             </div>
             <div className="m-footer-end">
-              <span>© 2026 TooL Void · All rights reserved</span>
+              <span>© 2026 ToolVoid · All rights reserved</span>
               <span style={{color:'#1a1a2e'}}>Made with ⚡ Free Forever</span>
             </div>
           </footer>

@@ -1,6 +1,6 @@
 <svg width="100%" viewBox="0 0 1410 810" role="img" xmlns="http://www.w3.org/2000/svg" style="">
-  <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">TooL Void — Free Online Tools</title>
-  <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">OG image for TooL Void showing all 21 free tools</desc>
+  <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">ToolVoid — Free Online Tools</title>
+  <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">OG image for ToolVoid showing online tools</desc>
   <defs>
     <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
       <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
@@ -27,7 +27,7 @@
   <ellipse cx="1000" cy="500" rx="400" ry="280" fill="url(#g3)" style="stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
 
   <!-- Main title -->
-  <text x="600" y="165" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="86" fill="#e8e8f0" letter-spacing="-3" style="fill:rgb(232, 232, 240);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:86px;font-weight:800;text-anchor:middle;dominant-baseline:auto">TooL Void</text>
+  <text x="600" y="165" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="86" fill="#e8e8f0" letter-spacing="-3" style="fill:rgb(232, 232, 240);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:86px;font-weight:800;text-anchor:middle;dominant-baseline:auto">ToolVoid</text>
 
   <!-- Gradient accent line under title -->
   <rect x="460" y="178" width="280" height="3" rx="2" fill="url(#linegrad)" style="stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
@@ -133,5 +133,5 @@
   <text x="960" y="508" text-anchor="middle" font-family="system-ui,sans-serif" font-size="15" fill="#6b6b85" style="fill:rgb(107, 107, 133);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:system-ui, sans-serif;font-size:15px;font-weight:400;text-anchor:middle;dominant-baseline:auto">Forever</text>
 
   <!-- Domain -->
-  <text x="600" y="578" text-anchor="middle" font-family="monospace" font-size="18" fill="rgba(255,255,255,0.18)" letter-spacing="3" style="fill:rgba(255, 255, 255, 0.18);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:monospace;font-size:18px;font-weight:400;text-anchor:middle;dominant-baseline:auto">toolvoid.com</text>
+  <text x="600" y="578" text-anchor="middle" font-family="monospace" font-size="18" fill="rgba(255,255,255,0.18)" letter-spacing="3" style="fill:rgba(255, 255, 255, 0.18);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:monospace;font-size:18px;font-weight:400;text-anchor:middle;dominant-baseline:auto">ToolVoid.com</text>
 </svg>

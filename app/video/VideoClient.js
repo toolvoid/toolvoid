@@ -454,7 +454,7 @@ export default function VideoConverter() {
         </div>
 
         <nav>
-          <Link href="/" className="logo"><em>Tool</em>Site</Link>
+          <Link href="/" className="logo">ToolVoid</Link>
           <span className="nav-pill">Video Converter</span>
           <Link href="/" className="back">← All Tools</Link>
         </nav>

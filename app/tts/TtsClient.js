@@ -299,7 +299,7 @@ export default function TextToSpeech() {
         audioUrlRef.current = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = audioUrlRef.current;
-        link.download = `TooL Void-tts-${Date.now()}.webm`;
+        link.download = `ToolVoid-tts-${Date.now()}.webm`;
         link.click();
         setDownloadMsg('Audio downloaded. If the file is silent, re-run and make sure tab audio sharing is enabled.');
         setDownloading(false);
@@ -423,7 +423,7 @@ export default function TextToSpeech() {
           <div className="bg-grid"/><div className="noise"/>
         </div>
         <nav>
-          <Link href="/" className="logo"><em>Tool</em>Site</Link>
+          <Link href="/" className="logo">ToolVoid</Link>
           <span className="npill">🔊 Text to Speech</span>
           <Link href="/" className="bk">← All Tools</Link>
         </nav>

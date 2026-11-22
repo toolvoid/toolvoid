@@ -787,12 +787,12 @@ export default function Home() {
                   <div className="eyebrow">Daily AI Credits. Browser First.</div>
                   <h1 className="hero-title">Free Tools For <span className="green">Creators</span> And Builders</h1>
                   <p className="hero-desc">
-                    TooL Void brings together fast, privacy-friendly utilities for content, PDFs, finance, media, and developer workflows.
+                    ToolVoid brings together utilities for content, PDFs, finance, media, and developer workflows.
                     Open a tool, drop your input, and get results without friction.
                   </p>
                   <div className="hero-actions">
                     <a href="#tools" className="cta primary">Explore Tools</a>
-                    <a href="#compare" className="cta secondary">Why TooL Void</a>
+                    <a href="#compare" className="cta secondary">Why ToolVoid</a>
                   </div>
                 </div>
 
@@ -861,7 +861,7 @@ export default function Home() {
               <section className="section" id="features">
                 <div className="section-head">
                   <div className="section-copy reveal">
-                    <h2 className="sh">Why TooL Void</h2>
+                    <h2 className="sh">Why ToolVoid</h2>
                     <div className="sp">Fast loading, low friction, modern design and practical tools that feel useful on day one.</div>
                   </div>
                 </div>

@@ -1186,7 +1186,7 @@ export default function ImageToolkitPage() {
         <div className="it-nav-logo">
           <span className="logo-icon">🖼</span>
           <span>Image Toolkit</span>
-          <span className="logo-sub">by TooL Void</span>
+          <span className="logo-sub">ToolVoid</span>
         </div>
         <div className="it-nav-right">
           <ul className="it-nav-links">
