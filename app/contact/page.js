@@ -3,6 +3,7 @@ import Link from 'next/link';
 export const metadata = {
   title: 'Contact ToolVoid',
   description: 'Get in touch with ToolVoid about support, questions, or feedback.',
+  alternates: { canonical: 'https://toolvoid.com/contact' },
 };
 
 export default function ContactPage() {

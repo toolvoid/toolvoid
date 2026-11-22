@@ -12,9 +12,6 @@ export const metadata = {
   verification: {
     google: "rbqEJHRr7nYPOzcpX-joYrhKKHOXN43MzVU-L-LjaL8",
   },
-  alternates: {
-    canonical: 'https://toolvoid.com/',
-  },
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '48x48' },

@@ -1,5 +1,7 @@
 export const metadata = {
-  title: 'ToolVoid - Privacy Policy',
+  title: 'ToolVoid Privacy Policy',
+  description: 'Read how ToolVoid handles information, AI inputs, analytics, cookies, and advertising when you use the site.',
+  alternates: { canonical: 'https://toolvoid.com/privacy' },
 };
 
 export default function PrivacyPolicy() {

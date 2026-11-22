@@ -1,5 +1,7 @@
 export const metadata = {
-  title: 'ToolVoid - Terms of Service',
+  title: 'ToolVoid Terms of Service',
+  description: 'Review the terms for using ToolVoid tools, AI features, daily limits, and third-party services.',
+  alternates: { canonical: 'https://toolvoid.com/terms' },
 };
 
 export default function TermsOfService() {
