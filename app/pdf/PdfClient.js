@@ -2214,19 +2214,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
       </section>
 
       {/* FOOTER */}
-      <footer className="p-foot">
-        <div style={{maxWidth:'1240px',margin:'0 auto'}}>
-          <div className="p-foot-logo"><div className="fli">📄</div>PDF Tools Suite</div>
-          <p className="p-foot-sub">Everything PDF — all free, all private, all in your browser.</p>
-          <ul className="p-foot-links">
-            {['Tools::#p-app','All Tools::#p-all-tools','Features::#p-features','FAQ::#p-faq'].map(l=>{
-              const [label,href]=l.split('::');
-              return <li key={label}><a href={href}>{label}</a></li>;
-            })}
-          </ul>
-          <p className="p-foot-copy">PDF.js · pdf-lib · JSZip · Manual DOCX/XLSX/PPTX · 100% client-side · No tracking</p>
-        </div>
-      </footer>
+      
 
       {/* Toast */}
       <div className="p-toast" id="p-toast" role="status">

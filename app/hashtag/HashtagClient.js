@@ -1191,21 +1191,7 @@ export default function HashtagPage({ maintenanceMode = false }) {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="ht-footer">
-        <div className="ht-footer-inner">
-          <div className="ht-footer-logo">
-            <span className="logo-tag">#</span> Hashtag Generator
-          </div>
-          <p className="ht-footer-sub">Platform-optimized hashtags. Powered by AI. Free forever.</p>
-          <ul className="ht-footer-links">
-            <li><a href="#ht-generator">Generator</a></li>
-            <li><a href="#ht-features">Features</a></li>
-            <li><a href="#ht-cases">Use Cases</a></li>
-            <li><a href="#ht-faq">FAQ</a></li>
-          </ul>
-          <p className="ht-footer-copy">Daily free credits · No tracking · Results never stored</p>
-        </div>
-      </footer>
+      
 
       {/* ── MODAL ── */}
       <div id="ht-modal" className="ht-modal-backdrop" style={{ display: 'none' }}>

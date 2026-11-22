@@ -1157,22 +1157,7 @@ export default function ImageGenPage() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="ig-footer">
-        <div className="ig-footer-inner">
-          <div className="ig-footer-logo">
-            <div className="ig-footer-logo-icon">🎨</div>
-            AI Image Generator
-          </div>
-          <p className="ig-footer-sub">Turn your ideas into art. Powered by our image engine.</p>
-          <ul className="ig-footer-links">
-            <li><a href="#ig-generator">Generator</a></li>
-            <li><a href="#ig-features">Features</a></li>
-            <li><a href="#ig-cases">Use Cases</a></li>
-            <li><a href="#ig-faq">FAQ</a></li>
-          </ul>
-          <p className="ig-footer-copy">Daily free credits · No tracking · Images never stored</p>
-        </div>
-      </footer>
+      
 
       {/* ── MODAL ── */}
       <div id="ig-modal" className="ig-modal-bg" style={{display:'none'}}>

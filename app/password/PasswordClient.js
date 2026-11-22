@@ -1229,12 +1229,7 @@ export default function PasswordGenerator() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="pg-footer">
-        <div className="pg-footer-inner">
-          <div className="pg-footer-logo"><span>Tool</span>Site · Password Generator</div>
-          <p className="pg-footer-sub">100% client-side · crypto.getRandomValues() · No server · No tracking</p>
-        </div>
-      </footer>
+      
 
       {/* ── TOAST ── */}
       <div className="pg-toast" id="pg-toast" role="status">

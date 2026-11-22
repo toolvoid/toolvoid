@@ -57,6 +57,73 @@ body {
   padding: 0;
 }
 
+.site-header {
+  position: relative;
+  z-index: 1200;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(6, 6, 9, 0.92);
+  color: #f5f7fa;
+}
+
+.site-header-inner {
+  display: flex;
+  width: min(1180px, calc(100% - 2rem));
+  min-height: 60px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.site-brand,
+.site-footer-brand {
+  color: inherit;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+}
+
+.site-brand { font-size: 1.25rem; }
+
+.site-header-links,
+.site-footer-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.site-header-links a,
+.site-footer-links a {
+  color: inherit;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.site-header-links a:hover,
+.site-footer-links a:hover { color: #00ffb2; }
+
+.site-footer {
+  display: flex;
+  width: 100%;
+  min-height: 76px;
+  margin-top: auto;
+  padding: 1rem max(1rem, calc((100% - 1180px) / 2));
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: #060609;
+  color: #c9d1d9;
+}
+
+.site-footer-brand { font-size: 1.05rem; }
+
+@media (max-width: 480px) {
+  .site-footer { align-items: flex-start; flex-direction: column; }
+  .site-footer-links { flex-wrap: wrap; gap: 0.8rem 1rem; }
+}
+
 .app-home-button {
   position: fixed;
   top: 18px;

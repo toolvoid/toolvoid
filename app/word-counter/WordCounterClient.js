@@ -1207,21 +1207,7 @@ export default function WordCounterAnalyzer() {
       </section>
 
       {/* FOOTER */}
-      <footer className="wc-footer">
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div className="wc-footer-logo">
-            <div className="flogo-icon">📝</div>
-            Word Counter &amp; Analyzer
-          </div>
-          <p className="wc-footer-sub">Count words. Analyze deeply. Write better.</p>
-          <ul className="wc-footer-links">
-            <li><a href="#wc-app">Analyzer</a></li>
-            <li><a href="#wc-features">Features</a></li>
-            <li><a href="#wc-faq">FAQ</a></li>
-          </ul>
-          <p className="wc-footer-copy">100% client-side · No API calls · No tracking · No data stored</p>
-        </div>
-      </footer>
+      
 
       {/* Toast */}
       <div className="wc-toast" id="wc-toast" role="status">

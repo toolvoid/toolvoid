@@ -1010,21 +1010,7 @@ export default function RQCodeGenerator() {
       </section>
 
       {/* FOOTER */}
-      <footer className="qr-footer">
-        <div className="qr-footer-inner">
-          <div className="qr-footer-logo">
-            <span className="logo-qr">QR</span> Code Generator
-          </div>
-          <p className="qr-footer-sub">Generate any code. Instantly. Beautifully.</p>
-          <ul className="qr-footer-links">
-            <li><a href="#qr-generator">Generator</a></li>
-            <li><a href="#qr-features">Features</a></li>
-            <li><a href="#qr-use-cases">Use Cases</a></li>
-            <li><a href="#qr-faq">FAQ</a></li>
-          </ul>
-          <p className="qr-footer-copy">Built with zero backend · 100% client-side · No tracking</p>
-        </div>
-      </footer>
+      
 
       {/* Toast */}
       <div className="qr-toast" id="qr-toast" role="status" aria-live="polite">

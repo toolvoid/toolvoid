@@ -865,20 +865,7 @@ export default function Base64Encoder() {
         </section>
 
         {/* FOOTER */}
-        <footer className="b64-footer">
-          <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-            <div className="b64-footer-logo">
-              <span className="b64-logo-mark">B64</span>Encoder
-            </div>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '0.5rem' }}>Encode. Decode. Hash. All in one place.</p>
-            <ul className="b64-footer-links">
-              {['Encoder','Features','Use Cases','FAQ'].map(l => (
-                <li key={l}><a href={`#b64-${l.toLowerCase().replace(' ','-')}`}>{l}</a></li>
-              ))}
-            </ul>
-            <p className="b64-footer-copy">Zero API · 100% Browser · No tracking · All free forever</p>
-          </div>
-        </footer>
+        
 
         {/* TOAST */}
         <div className={`b64-toast${toast ? ' show' : ''}`}>

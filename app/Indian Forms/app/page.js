@@ -94,7 +94,7 @@ export default function HomePage() {
           <p>Our photo and signature presets cover {supportedForms}. Upload rules can vary by application cycle, so please verify the latest official notification before submitting your form.</p>
         </section>
       </div>
-      <footer className="site-footer"><div className="shell">FormReady India · Requirements vary by notification; official portals remain the source of truth.</div></footer>
+      
     </main>
   );
 }

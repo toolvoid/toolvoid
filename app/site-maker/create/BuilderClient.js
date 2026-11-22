@@ -1029,9 +1029,6 @@ function Site({
             <span>← Choose a card from the left panel</span>
           </div>
         )}
-        {!sections.some((section) => section.type === "footer") && (
-          <footer>Built with ToolVoid Site Maker</footer>
-        )}
       </div>
     </div>
   );

@@ -452,16 +452,7 @@ function LandingPage({ onStart }) {
         </div>
       </section>
 
-      <footer className="rf-footer">
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <div className="rf-footer-logo"><span>RF</span> ResumeForge</div>
-          <p style={{ color: '#6b6b85', fontSize: '.85rem', margin: '.5rem 0 1.5rem' }}>Build resumes that get you hired. Free forever.</p>
-          <ul className="rf-footer-links">
-          {[['Features','rf-features'],['How It Works','rf-how'],['Templates','rf-templates'],['ATS Checker','rf-ats'],['FAQ','rf-faq']].map(lbl => <li key={lbl[0]}><a href={`#${lbl[1]}`} onClick={e=>{e.preventDefault();document.getElementById(lbl[1])?.scrollIntoView({behavior:'smooth'})}}>{lbl[0]}</a></li>)}
-        </ul>
-          <p className="rf-footer-copy">100% client-side · No server · No tracking · No ads · Made with ❤️</p>
-        </div>
-      </footer>
+      
     </div>
   )
 }

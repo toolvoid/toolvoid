@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import MobileHome from '../components/MobileHome';
 import useTilt from '../components/useTilt';
 import ToolIcon3D, {
   AudienceIcon3D,
@@ -783,13 +782,6 @@ export default function Home() {
             </div>
             <div className="spotlight" />
             <div className="wrap">
-              <nav id="nv" className="nav">
-                <Link href="/" className="logo"><em>Tool</em> Void</Link>
-                <div className="nav-right">
-                  <div className="nav-pill">{toolCount} Free Tools</div>
-                </div>
-              </nav>
-
               <section className="hero">
                 <div className="hero-copy">
                   <div className="eyebrow">Daily AI Credits. Browser First.</div>
@@ -908,29 +900,7 @@ export default function Home() {
                 </div>
               </section>
 
-              <footer className="footer reveal">
-                <div className="footer-top">
-                  <div className="footer-brand"><em>Tool</em>Void</div>
-                </div>
-                <div className="footer-copy">A growing set of free browser tools for creators, developers, students and freelancers.</div>
-                <div className="footer-links">
-                  <Link href="/story">Script Generator</Link>
-                  <Link href="/imagegen">Image Gen</Link>
-                  <Link href="/pdf">PDF</Link>
-                  <Link href="/qr">QR</Link>
-                  <Link href="/json">JSON</Link>
-                  <Link href="/resume">Resume</Link>
-                </div>
-                <div className="footer-legal">
-                  <div className="footer-legal-links">
-                    <Link href="/about">About</Link>
-                    <Link href="/privacy">Privacy Policy</Link>
-                    <Link href="/terms">Terms of Service</Link>
-                    <Link href="/contact">Contact</Link>
-                  </div>
-                  <div className="footer-legal-copy">© 2026 ToolVoid. All rights reserved.</div>
-                </div>
-              </footer>
+              
             </div>
           </div>
         </SharedRendererProvider>

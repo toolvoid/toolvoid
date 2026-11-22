@@ -1,7 +1,8 @@
 import './globals.css';
-import AppHomeButton from '../components/AppHomeButton';
 import AppThemeShell from '../components/AppThemeShell';
 import AuthSessionProvider from '../components/AuthSessionProvider';
+import SiteHeader from '../components/SiteHeader';
+import SiteFooter from '../components/SiteFooter';
 import Script from 'next/script';
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
@@ -47,9 +48,10 @@ export default function RootLayout({ children }) {
       </head>
       <body className="app-body min-h-full flex flex-col">
         <AuthSessionProvider>
-          <AppHomeButton />
+          <SiteHeader />
           <AppThemeShell />
           {children}
+          <SiteFooter />
         </AuthSessionProvider>
         <Script src="https://checkout.razorpay.com/v1/checkout.js" />
         <Script

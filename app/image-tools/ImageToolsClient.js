@@ -1741,19 +1741,7 @@ export default function ImageToolkitPage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="it-footer">
-        <div className="it-footer-inner">
-          <div className="it-footer-logo"><span className="logo-icon">🖼</span> Image Toolkit</div>
-          <p className="it-footer-sub">Resize. Compress. Edit. Free. All in your browser.</p>
-          <ul className="it-footer-links">
-            <li><a href="#it-tool">Editor</a></li>
-            <li><a href="#it-features">Features</a></li>
-            <li><a href="#it-use-cases">Use Cases</a></li>
-            <li><a href="#it-faq">FAQ</a></li>
-          </ul>
-          <p className="it-footer-copy">Built with zero backend · 100% client-side · No tracking · Part of TooL Void</p>
-        </div>
-      </footer>
+      
 
       {/* STICKY DOWNLOAD BAR - always visible when image loaded */}
       <div className="it-dl-bar" id="it-dl-bar">

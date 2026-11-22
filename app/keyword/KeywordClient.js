@@ -1086,22 +1086,7 @@ export default function KeywordPage() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="kw-footer">
-        <div className="kw-footer-inner">
-          <div className="kw-footer-logo">
-            <div className="kw-footer-logo-icon">🔑</div>
-            Keyword Generator
-          </div>
-          <p className="kw-footer-sub">AI-powered SEO keyword research. Fast, free, and actionable.</p>
-          <ul className="kw-footer-links">
-            <li><a href="#kw-generator">Generator</a></li>
-            <li><a href="#kw-features">Features</a></li>
-            <li><a href="#kw-cases">Use Cases</a></li>
-            <li><a href="#kw-faq">FAQ</a></li>
-          </ul>
-          <p className="kw-footer-copy">Daily free credits · No tracking · Data never stored</p>
-        </div>
-      </footer>
+      
 
       {/* ── MODAL ── */}
       <div id="kw-modal" className="kw-modal-bg" style={{display:'none'}}>

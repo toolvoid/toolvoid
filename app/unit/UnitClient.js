@@ -853,20 +853,7 @@ export default function UnitConverter() {
         </section>
 
         {/* FOOTER */}
-        <footer className="uc-footer">
-          <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-            <div className="uc-footer-logo">
-              <span className="uc-logo-mark">📏</span>UnitConverter
-            </div>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '1.5rem' }}>Convert anything. Instantly. Precisely.</p>
-            <ul className="uc-footer-links">
-              {['Converter','Features','Use Cases','FAQ'].map(l => (
-                <li key={l}><a href={`#uc-${l.toLowerCase().replace(' ','-')}`}>{l}</a></li>
-              ))}
-            </ul>
-            <p className="uc-footer-copy">Zero API · Pure JavaScript · No tracking · Fully offline</p>
-          </div>
-        </footer>
+        
 
         {/* TOAST */}
         <div className={`uc-toast${toast ? ' show' : ''}`}>
