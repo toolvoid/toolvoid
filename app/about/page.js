@@ -33,7 +33,7 @@ export default function AboutPage() {
             <strong>Script Generator</strong>
             <div style={{ color: 'rgba(255,255,255,.62)', marginTop: '.35rem' }}>Turn a topic into structured AI video ideas and scripts.</div>
           </Link>
-          <Link href="/hashtag-generator" style={{ display: 'block', padding: '1rem 1.15rem', border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, color: 'inherit', textDecoration: 'none', background: '#0c0c1a' }}>
+          <Link href="/hashtag" style={{ display: 'block', padding: '1rem 1.15rem', border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, color: 'inherit', textDecoration: 'none', background: '#0c0c1a' }}>
             <strong>Hashtag Generator</strong>
             <div style={{ color: 'rgba(255,255,255,.62)', marginTop: '.35rem' }}>Draft social content ideas in seconds.</div>
           </Link>
