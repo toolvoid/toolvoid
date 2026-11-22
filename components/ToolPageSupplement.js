@@ -254,11 +254,21 @@ export default function ToolPageSupplement({ tool }) {
   if (!details) return null;
 
   return (
-    <section className={tool === 'one-brain' ? 'ob-supplement' : undefined} aria-labelledby={`${tool}-guide-title`}>
+    <section className={`tool-page-supplement${tool === 'one-brain' ? ' ob-supplement' : ''}`} aria-labelledby={`${tool}-guide-title`}>
+      <style>{`
+        .tool-page-supplement:not(.ob-supplement) { width: min(680px, calc(100% - 32px)); margin: 3rem auto 4rem; color: var(--app-text); font-family: inherit; font-size: 16px; line-height: 1.7; }
+        .tool-page-supplement:not(.ob-supplement) h2 { margin: 24px 0 12px; color: var(--app-text); font-size: 1.4rem; line-height: 1.3; }
+        .tool-page-supplement:not(.ob-supplement) h3 { margin: 24px 0 12px; color: var(--app-text); font-size: 1.2rem; line-height: 1.35; }
+        .tool-page-supplement:not(.ob-supplement) > p { margin: 0 0 16px; color: var(--app-text); font-size: 16px; line-height: 1.7; }
+        .tool-page-supplement-example { margin: 20px 0 24px !important; padding: 14px 16px; border: 1px solid var(--app-surface-strong); border-left: 3px solid #00ffb2; border-radius: 12px; background: var(--app-surface); }
+        .tool-page-supplement-steps { display: grid; gap: 10px; margin: 0; padding-left: 26px; color: var(--app-text); font-size: 16px; line-height: 1.7; }
+        .tool-page-supplement-steps li { padding-left: 4px; }
+        @media (max-width: 600px) { .tool-page-supplement:not(.ob-supplement) { width: calc(100% - 32px); margin: 2.5rem auto 3rem; } }
+      `}</style>
       {details.heading && <h2 id={`${tool}-guide-title`}>{details.heading}</h2>}
       {details.copy && <p>{details.copy}</p>}
-      {details.example && <p><strong>Example:</strong> {details.example}</p>}
-      {details.steps && <><h3>How to use it</h3><ol>{details.steps.map((step) => <li key={step}>{step}</li>)}</ol></>}
+      {details.example && <p className="tool-page-supplement-example"><strong>Example:</strong> {details.example}</p>}
+      {details.steps && <><h2 id={details.heading ? undefined : `${tool}-guide-title`}>How to use it</h2><ol className="tool-page-supplement-steps">{details.steps.map((step) => <li key={step}>{step}</li>)}</ol></>}
       {details.faqs && <section aria-labelledby={`${tool}-faq-title`}>
         <h3 id={`${tool}-faq-title`}>Frequently asked questions</h3>
         {details.faqs.map(([question, answer]) => <details key={question}><summary>{question}</summary><p>{answer}</p></details>)}
