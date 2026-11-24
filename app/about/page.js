@@ -22,7 +22,7 @@ export default function AboutPage() {
 
         <h2 style={{ fontSize: '1.5rem', marginTop: '2rem', marginBottom: '.75rem' }}>Why I started ToolVoid</h2>
         <p style={{ color: 'rgba(255,255,255,.7)', lineHeight: 1.8, fontSize: '1.05rem', marginBottom: '1.5rem' }}>
-          I started ToolVoid in 2026. Many content creators need small online tools every day, but they cannot pay for expensive subscriptions. I built ToolVoid for them, so the tools are easy to use and free to start with.
+          I started ToolVoid in 2026. Many content creators need small online tools every day, but they cannot pay for expensive subscriptions. I built ToolVoid for them, so the tools are easy to use and free to use.
         </p>
 
         <h2 style={{ fontSize: '1.5rem', marginTop: '2rem', marginBottom: '.75rem' }}>What you can find here</h2>
@@ -32,7 +32,7 @@ export default function AboutPage() {
 
         <h2 style={{ fontSize: '1.5rem', marginTop: '2rem', marginBottom: '.75rem' }}>How ToolVoid earns money</h2>
         <p style={{ color: 'rgba(255,255,255,.7)', lineHeight: 1.8, fontSize: '1.05rem', marginBottom: '1.5rem' }}>
-          ToolVoid is free to use. The site shows Google ads. Some AI features have daily limits, and you can buy optional packs if you want more. The Privacy Policy explains how cookies and ads work.
+          ToolVoid is free to use. The site shows Google ads. Some AI features have daily limits. The Privacy Policy explains how cookies and ads work.
         </p>
 
         <h2 style={{ fontSize: '1.5rem', marginTop: '2rem', marginBottom: '.75rem' }}>Who runs it</h2>
