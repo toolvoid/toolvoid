@@ -680,7 +680,7 @@ export default function UnitConverter() {
 
                 <div className="uc-row">
                   <input className="uc-num-input" type="number" placeholder="Enter value…"
-                    value={fromValue} onChange={e => setFromValue(e.target.value)} />
+                    value={fromValue} onChange={e => handleFromChange(e.target.value)} />
                   <select className="uc-unit-sel" value={fromUnit} onChange={e => setFromUnit(e.target.value)}>
                     {currentUnits.map(u => <option key={u.value} value={u.value}>{u.label}</option>)}
                   </select>
