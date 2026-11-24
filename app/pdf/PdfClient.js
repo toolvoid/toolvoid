@@ -155,6 +155,7 @@ const CSS = `
 .p-page-thumb .p-pg-num { position:absolute; bottom:0; left:0; right:0; text-align:center; padding:.2rem; background:rgba(0,0,0,.65); font-family:var(--mono); font-size:.62rem; color:#fff; }
 .p-page-thumb .p-pg-check { position:absolute; top:4px; right:4px; width:18px; height:18px; background:var(--accent); border-radius:50%; display:none; align-items:center; justify-content:center; font-size:.6rem; color:var(--bg); font-weight:900; }
 .p-page-thumb.selected .p-pg-check { display:flex; }
+.p-thumb-placeholder { min-height:100px; display:grid; place-items:center; padding:.5rem; background:var(--bg3); color:var(--text-muted); font-family:var(--mono); font-size:.62rem; text-align:center; }
 .p-pages-loading { padding:2rem; text-align:center; font-family:var(--mono); font-size:.78rem; color:var(--text-muted); }
 .p-pages-loading .spinner { width:24px; height:24px; border:2px solid var(--border-hi); border-top-color:var(--accent); border-radius:50%; animation:pSpin .6s linear infinite; margin:0 auto .75rem; }
 
@@ -394,6 +395,7 @@ export default function PDFToolsSuite() {
       mergeFiles: [],    // for merge tool
       pdfDoc: null,      // loaded pdfjsLib doc
       pageCanvases: [],  // rendered page canvases (thumbnails)
+      pagePreviewErrors: new Set(),
       pagesLoaded: false,
       selectedPages: new Set(),
       markedForRemoval: new Set(),
@@ -527,6 +529,7 @@ export default function PDFToolsSuite() {
       clearError();
       S.file = pdfs[0];
       S.pageCanvases = []; S.pagesLoaded = false;
+      S.pagePreviewErrors = new Set();
       S.selectedPages = new Set(); S.markedForRemoval = new Set();
       S.reorderPages = [];
       S.results = []; S.error = null;
@@ -600,15 +603,21 @@ export default function PDFToolsSuite() {
         S.reorderPages = Array.from({ length: pdf.numPages }, (_, i) => i + 1);
         renderFileMeta();
 
-        // Render all pages as thumbnails
-        S.pageCanvases = [];
+        // Create the page cards first, then render each small preview in sequence.
+        S.pageCanvases = Array.from({ length: pdf.numPages }, () => null);
+        S.pagePreviewErrors.clear();
+        renderPageGrid();
         for (let i = 1; i <= pdf.numPages; i++) {
-          const canvas = await renderPageThumb(pdf, i, 0.35);
-          S.pageCanvases.push(canvas);
+          try {
+            const canvas = await renderPageThumb(pdf, i, 200);
+            S.pageCanvases[i - 1] = canvas;
+            updatePageThumb(i);
+          } catch {
+            S.pagePreviewErrors.add(i);
+            updatePageThumb(i);
+          }
         }
         S.pagesLoaded = true;
-        setPreviewLoading(false);
-        renderPageGrid();
         renderOptions();
       } catch (e) {
         setPreviewLoading(false);
@@ -617,14 +626,41 @@ export default function PDFToolsSuite() {
       }
     }
 
-    async function renderPageThumb(pdf, pageNum, scale) {
+    async function renderPageThumb(pdf, pageNum, maxWidth) {
       const page = await pdf.getPage(pageNum);
+      const baseViewport = page.getViewport({ scale: 1 });
+      const scale = Math.min(1, maxWidth / baseViewport.width);
       const vp = page.getViewport({ scale });
       const canvas = document.createElement('canvas');
       canvas.width = vp.width; canvas.height = vp.height;
       const ctx = canvas.getContext('2d');
       await page.render({ canvasContext: ctx, viewport: vp }).promise;
       return canvas;
+    }
+
+    function appendThumbnailCanvas(source, slot, height = 'auto') {
+      const canvas = document.createElement('canvas');
+      canvas.width = source.width;
+      canvas.height = source.height;
+      canvas.style.width = '100%';
+      canvas.style.height = height;
+      canvas.style.display = 'block';
+      canvas.style.objectFit = 'cover';
+      canvas.getContext('2d').drawImage(source, 0, 0);
+      slot.className = '';
+      slot.replaceChildren(canvas);
+    }
+
+    function updatePageThumb(pageNum) {
+      const slot = G(`pthumb-${pageNum}`);
+      if (!slot) return;
+      const canvas = S.pageCanvases[pageNum - 1];
+      if (canvas) {
+        appendThumbnailCanvas(canvas, slot);
+      } else {
+        slot.className = 'p-thumb-placeholder';
+        slot.textContent = S.pagePreviewErrors.has(pageNum) ? 'Preview unavailable' : 'Rendering preview…';
+      }
     }
 
     async function renderPageFull(pdf, pageNum, dpi) {
@@ -665,7 +701,7 @@ export default function PDFToolsSuite() {
         const cls = isMarked ? 'marked-remove' : isSelected ? 'selected' : '';
         return `
           <div class="p-page-thumb ${cls}" data-pg="${pg}">
-            <div id="pthumb-${pg}"></div>
+            <div id="pthumb-${pg}" class="p-thumb-placeholder">Rendering preview…</div>
             <div class="p-pg-num">Page ${pg}</div>
             ${isSelectable ? `<div class="p-pg-check">✓</div>` : ''}
           </div>
@@ -673,14 +709,8 @@ export default function PDFToolsSuite() {
       }).join('');
 
       // Inject canvases
-      S.pageCanvases.forEach((canvas, i) => {
-        const pg = i + 1;
-        const slot = G(`pthumb-${pg}`);
-        if (slot) {
-          const c = canvas.cloneNode(true);
-          c.style.width = '100%'; c.style.height = 'auto'; c.style.display = 'block';
-          slot.appendChild(c);
-        }
+      S.pageCanvases.forEach((_, i) => {
+        updatePageThumb(i + 1);
       });
 
       // Click handlers
@@ -1133,9 +1163,9 @@ export default function PDFToolsSuite() {
           const slot = G(`prithumb-${idx}`);
           const canvas = S.pageCanvases[pg-1];
           if (slot && canvas) {
-            const c = canvas.cloneNode(true);
-            c.style.width='100%'; c.style.height='100%'; c.style.objectFit='cover';
-            slot.appendChild(c);
+            appendThumbnailCanvas(canvas, slot, '100%');
+          } else if (slot) {
+            slot.textContent = S.pagePreviewErrors.has(pg) ? 'Preview unavailable' : 'Rendering preview…';
           }
         });
         let dragIdx = null;
