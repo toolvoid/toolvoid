@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 const tools = [
   { name: 'Site Maker',           href: '/site-maker',   desc: 'Build a responsive website visually — no code needed',   color: '#22D3EE', tag: 'NEW' },
@@ -102,8 +102,6 @@ function MobileToolIcon({ href, color }) {
 export default function MobileHome({ embedded = false }) {
   const [activeTag, setActiveTag] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
-  const pageRef = useRef(null);
-  const statsRef = useRef(null);
 
   const filteredTools = tools.filter(t => {
     const matchTag = activeTag === 'All' || t.tag === activeTag;
@@ -111,22 +109,6 @@ export default function MobileHome({ embedded = false }) {
                         t.desc.toLowerCase().includes(searchQuery.toLowerCase());
     return matchTag && matchSearch;
   });
-
-  useEffect(() => {
-    const node = pageRef.current;
-    if (!node) return;
-    let frame = 0;
-    const updateScene = () => {
-      frame = 0;
-      const scrollY = window.scrollY || 0;
-      node.style.setProperty('--bg-shift', `${scrollY * 0.18}px`);
-      node.style.setProperty('--bg-shift-soft', `${scrollY * 0.1}px`);
-    };
-    const onScroll = () => { if (frame) return; frame = window.requestAnimationFrame(updateScene); };
-    updateScene();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => { if (frame) window.cancelAnimationFrame(frame); window.removeEventListener('scroll', onScroll); };
-  }, []);
 
   return (
     <>
@@ -288,9 +270,16 @@ export default function MobileHome({ embedded = false }) {
 
         /* ── Divider ── */
         .m-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:4px 0}
+
+        @media(max-width:768px), (prefers-reduced-motion:reduce){
+          .m-page,.m-page *,.m-page *::before,.m-page *::after{animation:none!important;transition:none!important;filter:none!important;backdrop-filter:none!important;box-shadow:none!important;will-change:auto!important}
+          .m-page .m-orb{display:none}
+          .m-page .m-grid{transform:perspective(820px) rotateX(72deg)!important}
+          .m-page .m-hero,.m-page .m-nav,.m-page .m-stats-bar,.m-page .m-panel{opacity:1!important;transform:none!important}
+        }
       `}</style>
 
-      <div className="m-page" ref={pageRef}>
+      <div className="m-page">
         <div className="m-bg">
           <div className="m-grid" />
           <div className="m-orb a" />
@@ -325,7 +314,7 @@ export default function MobileHome({ embedded = false }) {
           </section>
 
           {/* ── Stats Bar ── */}
-          <div className="m-stats-bar" ref={statsRef}>
+          <div className="m-stats-bar">
             {[[toolCount, 'Tools'],['Daily limits','AI features'],['3s','To Start'],['24/7','Access']].map(([n,l])=>(
               <div key={l} className="m-stat">
                 <div className="m-stat-n">{n}</div>

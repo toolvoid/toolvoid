@@ -194,6 +194,7 @@ function OneBrainFeaturedCard() {
 export default function Home() {
   const [toolSearch, setToolSearch] = useState('');
   const [activeToolTag, setActiveToolTag] = useState('All');
+  const [desktopEffectsEnabled, setDesktopEffectsEnabled] = useState(false);
   const toolTags = ['All', 'NEW', 'AI', 'Image', 'Dev', 'Finance', 'Utility', 'Content', 'Business'];
   const visibleToolCategories = toolCategories
     .map((category) => ({
@@ -208,6 +209,20 @@ export default function Home() {
     .filter((category) => category.tools.length > 0);
 
   useEffect(() => {
+    const mobile = window.matchMedia('(max-width: 768px)');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setDesktopEffectsEnabled(!mobile.matches && !reducedMotion.matches);
+    update();
+    mobile.addEventListener('change', update);
+    reducedMotion.addEventListener('change', update);
+    return () => {
+      mobile.removeEventListener('change', update);
+      reducedMotion.removeEventListener('change', update);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!desktopEffectsEnabled) return undefined;
     const elements = Array.from(document.querySelectorAll('.reveal'));
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -221,6 +236,8 @@ export default function Home() {
       entries.forEach((entry) => entry.target.classList.toggle('motion-near', entry.isIntersecting));
     }, { rootMargin: '80px' }) : null;
     if (banner) bannerMotionObserver?.observe(banner);
+    const hoverTargets = Array.from(document.querySelectorAll('a,button,.fq'));
+    const rippleTargets = Array.from(document.querySelectorAll('.bp,.bg2,.nc'));
 
     const onMouseMove = (event) => {
       document.documentElement.style.setProperty('--mx', `${event.clientX}px`);
@@ -228,14 +245,24 @@ export default function Home() {
     };
 
     window.addEventListener('mousemove', onMouseMove);
+    let startRingAnimation = null;
+    let resumeBackgroundAnimation = null;
     const onVisChange = () => {
       document.body.classList.toggle('motion-suspended', document.visibilityState !== 'visible');
-      if (document.visibilityState !== 'visible') return;
+      if (document.visibilityState !== 'visible') {
+        if (ringRaf) cancelAnimationFrame(ringRaf);
+        ringRaf = null;
+        if (animRafId) cancelAnimationFrame(animRafId);
+        animRafId = null;
+        return;
+      }
 
       const canvas = document.getElementById('bgc');
       if (canvas && parseFloat(canvas.style.opacity || '0') < 0.5 && !bgRenderer) {
         initBG();
       }
+      startRingAnimation?.();
+      resumeBackgroundAnimation?.();
     };
     document.addEventListener('visibilitychange', onVisChange);
 
@@ -262,30 +289,31 @@ export default function Home() {
     let ringRaf = null;
     if (ring) {
       const tick = () => {
+        if (document.visibilityState !== 'visible') { ringRaf = null; return; }
         rx += (cx - rx) * 0.1;
         ry += (cy - ry) * 0.1;
         ring.style.left = `${rx}px`;
         ring.style.top = `${ry}px`;
         ringRaf = requestAnimationFrame(tick);
       };
-      tick();
+      startRingAnimation = () => { if (!ringRaf && document.visibilityState === 'visible') tick(); };
+      startRingAnimation();
     }
 
     const enter = () => document.body.classList.add('hov');
     const leave = () => document.body.classList.remove('hov');
-    document.querySelectorAll('a,button,.fq').forEach((el) => {
+    hoverTargets.forEach((el) => {
       el.addEventListener('mouseenter', enter);
       el.addEventListener('mouseleave', leave);
     });
-    document.querySelectorAll('.bp,.bg2,.nc').forEach((btn) => {
-      btn.addEventListener('click', function (event) {
+    const onRipple = function (event) {
         const ripple = document.createElement('span');
         const rect = this.getBoundingClientRect();
         ripple.style.cssText = `position:absolute;border-radius:50%;background:rgba(255,255,255,.22);transform:scale(0);animation:ripple .5s linear;left:${event.clientX - rect.left - 10}px;top:${event.clientY - rect.top - 10}px;width:20px;height:20px;pointer-events:none`;
         this.appendChild(ripple);
         window.setTimeout(() => ripple.remove(), 500);
-      });
-    });
+    };
+    rippleTargets.forEach((btn) => btn.addEventListener('click', onRipple));
 
     const onScroll = () => {
       if (prog) {
@@ -488,6 +516,10 @@ export default function Home() {
           animRafId = null;
           return;
         }
+        if (document.visibilityState !== 'visible') {
+          animRafId = null;
+          return;
+        }
         animRafId = requestAnimationFrame(animate);
         time += 0.002;
         scrollY += (targetScrollY - scrollY) * 0.04;
@@ -540,6 +572,7 @@ export default function Home() {
           animRafId = null;
         }
       };
+      resumeBackgroundAnimation = () => { if (!animRafId && bgRenderer) animate(); };
       animate();
 
       const onResize = () => {
@@ -568,6 +601,11 @@ export default function Home() {
     return () => {
       observer.disconnect();
       bannerMotionObserver?.disconnect();
+      hoverTargets.forEach((el) => {
+        el.removeEventListener('mouseenter', enter);
+        el.removeEventListener('mouseleave', leave);
+      });
+      rippleTargets.forEach((btn) => btn.removeEventListener('click', onRipple));
       window.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('visibilitychange', onVisChange);
       document.removeEventListener('mousemove', onMouse);
@@ -583,7 +621,7 @@ export default function Home() {
       }
       if (bgCleanup) bgCleanup();
     };
-  }, []);
+  }, [desktopEffectsEnabled]);
 
   const css = `
     @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
@@ -781,6 +819,13 @@ export default function Home() {
       .nav-pill{display:none}
       .footer-legal{flex-direction:column;align-items:flex-start;gap:8px}
       .aud-grid,.feature-grid,.support-grid,.compare,.hp-grid{grid-template-columns:minmax(0,1fr)}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .desk *,.desk *::before,.desk *::after{animation:none!important;transition:none!important;filter:none!important;backdrop-filter:none!important;will-change:auto!important}
+      .desk .reveal,.desk .reveal.vis,.desk .reveal.vis.tc,.desk .reveal.vis.ob-home-tilt{opacity:1!important;transform:none!important}
+    }
+    @media (max-width:768px){
+      .desk .reveal,.desk .reveal.vis,.desk .reveal.vis.tc,.desk .reveal.vis.ob-home-tilt{opacity:1!important;transform:none!important}
     }
   `;
 

@@ -29,6 +29,8 @@ export default function useTilt(maxAngle = 8) {
       ? 'touch pointer'
       : document.visibilityState !== 'visible'
         ? 'document is hidden'
+        : window.matchMedia('(max-width: 768px)').matches
+          ? 'mobile viewport'
         : window.matchMedia('(prefers-reduced-motion: reduce)').matches
           ? 'prefers-reduced-motion'
           : window.matchMedia('(pointer: coarse)').matches

@@ -92,7 +92,7 @@ function GraphVisual() {
   const graphRef = useRef(null);
   const graphFrame = useRef(0);
   const onGraphMove = (event) => {
-    if (!graphRef.current || event.pointerType === 'touch' || window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches || document.visibilityState !== 'visible') return;
+    if (!graphRef.current || event.pointerType === 'touch' || window.matchMedia('(max-width: 768px), (pointer: coarse), (prefers-reduced-motion: reduce)').matches || document.visibilityState !== 'visible') return;
     const rect = graphRef.current.getBoundingClientRect();
     const mx = ((event.clientX - rect.left) / rect.width) * 100;
     const my = ((event.clientY - rect.top) / rect.height) * 100;
@@ -266,7 +266,7 @@ export default function OneBrainClient() {
     let pointerX = 0;
     let pointerY = 0;
     const move = (event) => {
-      if (event.pointerType === 'touch' || window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches) return;
+      if (event.pointerType === 'touch' || window.matchMedia('(max-width: 768px), (pointer: coarse), (prefers-reduced-motion: reduce)').matches) return;
       pointerX = event.clientX;
       pointerY = event.clientY;
       if (!frame) frame = window.requestAnimationFrame(() => {
@@ -428,6 +428,12 @@ export default function OneBrainClient() {
         @media(max-width:620px){.ob-wrap,.ob-details,.ob-supplement{width:min(100% - 24px,1120px)}.ob-section{padding:42px 0}.ob-head{display:block}.ob-copy{margin-top:10px}.ob-features,.ob-download{grid-template-columns:1fr}.ob-download-card:last-child{grid-column:auto}.ob-download-card{min-height:220px}.ob-actions .ob-btn{width:100%}.ob-nav-inner{justify-content:flex-start}.ob-install-panel{padding:16px}.ob-code-row{align-items:stretch;flex-direction:column}.ob-code-row .ob-copy-btn{align-self:flex-end}.ob-supplement{padding:20px 16px}}
         .ob-extension-mock{max-width:620px;margin-top:22px;border:1px solid rgba(255,255,255,.1);border-radius:15px;padding:10px;background:rgba(5,8,13,.56)}.ob-mock-top{display:flex;justify-content:space-between;padding:7px 9px;color:#9ba8ba;font:11px ui-monospace,monospace}.ob-extension-mock .ob-extension-list{margin:0}.ob-extension-mock .ob-extension-list li{background:rgba(255,255,255,.045)}
         @media(prefers-reduced-motion:reduce){.ob-graph-orbit,.ob-graph-center-halo,.ob-coming::before{animation:none!important}.ob-btn{transition:none}.ob-motion-ready .ob-reveal:not([data-visible="true"]){opacity:1!important;translate:0 0!important}}
+        @media(max-width:768px), (prefers-reduced-motion:reduce){
+          .ob-page,.ob-page *,.ob-page *::before,.ob-page *::after{animation:none!important;transition:none!important;filter:none!important;backdrop-filter:none!important;will-change:auto!important;scroll-behavior:auto!important}
+          .ob-page .ob-reveal,.ob-page .ob-reveal:not([data-visible="true"]){opacity:1!important;transform:none!important;translate:0 0!important}
+          .ob-page .ob-feature,.ob-page .ob-download-card,.ob-page .ob-shot{transform:none!important;box-shadow:none!important}
+          .ob-page .ob-coming::before{animation:none!important}
+        }
       `}</style>
 
       <section className="ob-hero ob-reveal">

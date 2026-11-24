@@ -243,6 +243,8 @@ export default function ToolIcon3D({ href, hovered, mouseX, mouseY }) {
     let t = 0;
     let raf = null;
     let inView = false;
+    let observer = null;
+    const mobile = window.matchMedia('(max-width: 768px)');
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const paint = () => {
       t += 0.022;
@@ -255,23 +257,34 @@ export default function ToolIcon3D({ href, hovered, mouseX, mouseY }) {
       paint();
       raf = requestAnimationFrame(loop);
     };
-    const start = () => { if (inView && !raf && document.visibilityState === 'visible' && !motion.matches) raf = requestAnimationFrame(loop); };
     const stop = () => { if (raf) cancelAnimationFrame(raf); raf = null; };
-    paint();
-    const observer = new IntersectionObserver(([entry]) => {
-      inView = entry.isIntersecting;
-      if (inView) start(); else stop();
-    }, { rootMargin: '40px' });
-    observer.observe(canvas);
+    const start = () => { if (inView && !raf && document.visibilityState === 'visible' && !mobile.matches && !motion.matches) raf = requestAnimationFrame(loop); };
+    const setup = () => {
+      stop();
+      observer?.disconnect();
+      observer = null;
+      inView = false;
+      if (mobile.matches) return;
+      paint();
+      if (motion.matches) return;
+      observer = new IntersectionObserver(([entry]) => {
+        inView = entry.isIntersecting;
+        if (inView) start(); else stop();
+      }, { rootMargin: '40px' });
+      observer.observe(canvas);
+    };
+    setup();
     const onVisibility = () => { if (document.visibilityState === 'visible') start(); else stop(); };
-    const onMotion = () => { if (motion.matches) { stop(); paint(); } else start(); };
+    const onMediaChange = () => setup();
     document.addEventListener('visibilitychange', onVisibility);
-    motion.addEventListener('change', onMotion);
+    mobile.addEventListener('change', onMediaChange);
+    motion.addEventListener('change', onMediaChange);
     return () => {
       stop();
-      observer.disconnect();
+      observer?.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
-      motion.removeEventListener('change', onMotion);
+      mobile.removeEventListener('change', onMediaChange);
+      motion.removeEventListener('change', onMediaChange);
     };
   }, [href]);
 
@@ -301,6 +314,8 @@ function Icon2D({ draw, size, hovered, color }) {
     canvas.style.width = `${size}px`; canvas.style.height = `${size}px`;
     ctx.scale(dpr, dpr);
     let inView = false;
+    let observer = null;
+    const mobile = window.matchMedia('(max-width: 768px)');
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const paint = () => {
       currentState.t += 0.022;
@@ -313,20 +328,31 @@ function Icon2D({ draw, size, hovered, color }) {
       paint();
       currentState.raf = requestAnimationFrame(loop);
     };
-    const start = () => { if (inView && !currentState.raf && document.visibilityState === 'visible' && !motion.matches) currentState.raf = requestAnimationFrame(loop); };
     const stop = () => { if (currentState.raf) cancelAnimationFrame(currentState.raf); currentState.raf = null; };
-    paint();
-    const observer = new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; if (inView) start(); else stop(); }, { rootMargin: '40px' });
-    observer.observe(canvas);
+    const start = () => { if (inView && !currentState.raf && document.visibilityState === 'visible' && !mobile.matches && !motion.matches) currentState.raf = requestAnimationFrame(loop); };
+    const setup = () => {
+      stop();
+      observer?.disconnect();
+      observer = null;
+      inView = false;
+      if (mobile.matches) return;
+      paint();
+      if (motion.matches) return;
+      observer = new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; if (inView) start(); else stop(); }, { rootMargin: '40px' });
+      observer.observe(canvas);
+    };
+    setup();
     const onVisibility = () => { if (document.visibilityState === 'visible') start(); else stop(); };
-    const onMotion = () => { if (motion.matches) { stop(); paint(); } else start(); };
+    const onMediaChange = () => setup();
     document.addEventListener('visibilitychange', onVisibility);
-    motion.addEventListener('change', onMotion);
+    mobile.addEventListener('change', onMediaChange);
+    motion.addEventListener('change', onMediaChange);
     return () => {
       stop();
-      observer.disconnect();
+      observer?.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
-      motion.removeEventListener('change', onMotion);
+      mobile.removeEventListener('change', onMediaChange);
+      motion.removeEventListener('change', onMediaChange);
     };
   }, [color, draw, size]);
   useEffect(() => { state.current.hovered = hovered; }, [hovered]);
