@@ -884,8 +884,8 @@ export default function WordCounterAnalyzer() {
         <div className="wc-hero-dots" aria-hidden="true" />
         <div className="wc-hero-orb" aria-hidden="true" />
         <div className="wc-hero-content">
-          <div className="wc-hero-badge">Live Analysis · Pure JS · No API · Free tools. AI features have daily limits.</div>
-          <h1>Word Counter Online - Words &amp; Characters | ToolVoid</h1>
+          <div className="wc-hero-badge">Live analysis · Browser-based · Free tools. AI features have daily limits.</div>
+          <h1>Word Counter Online - Words &amp; Characters</h1>
           <p className="wc-hero-sub">
             Real-time word count, readability scores, keyword extraction, sentiment analysis, AI detection, and 20 text tools — all in your browser.
           </p>
@@ -912,7 +912,7 @@ export default function WordCounterAnalyzer() {
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <div className="wc-section-label">⚡ Live Analyzer</div>
             <h2 className="wc-section-title">Start Typing or Paste Text</h2>
-            <p className="wc-section-sub" style={{ margin: '0 auto' }}>Every metric updates as you type — zero delay, zero uploads.</p>
+            <p className="wc-section-sub" style={{ margin: '0 auto' }}>Every metric updates as you type.</p>
           </div>
 
           <div className="wc-app-layout">

@@ -905,7 +905,7 @@ export default function ImageGenPage() {
         <div className="ig-hero-glow2" aria-hidden="true" />
         <div className="ig-hero-content">
           <div className="ig-badge">Image Engine Active</div>
-          <h1>AI Image Generator Online | ToolVoid</h1>
+          <h1>AI Image Generator Online</h1>
           <p className="ig-hero-sub">Describe an image, choose its style and aspect ratio, and review the generated result.</p>
           <div className="ig-hero-actions">
             <a href="#ig-generator" className="ig-btn-primary"><span>🎨 Start Creating</span></a>
@@ -1059,7 +1059,7 @@ export default function ImageGenPage() {
         <div className="ig-section-inner">
           <div className="ig-label">✦ Why Choose Us</div>
           <h2 className="ig-title">Built for Creators</h2>
-          <p className="ig-sub">Everything you need to generate stunning visuals — fast, free, and private.</p>
+          <p className="ig-sub">Everything you need to generate images from a text description.</p>
           <div className="ig-features-grid">
             {[
               { icon:'🤖', title:'Pollinations Powered', desc:'Images are generated using Pollinations AI — a free, open image engine that creates high-quality visuals from your text descriptions.' },
@@ -1067,7 +1067,7 @@ export default function ImageGenPage() {
               { icon:'💡', title:'Prompt Enhancer',      desc:'Type a basic idea and let AI expand it into a detailed, optimized prompt for dramatically better results.' },
               { icon:'📐', title:'4 Aspect Ratios',      desc:'Square, landscape, portrait, and standard — optimized for Instagram, YouTube, TikTok, and desktop wallpapers.' },
               { icon:'⬇', title:'Download', desc:'Use the download control to save the generated image as a PNG.' },
-              { icon:'🔒', title:'Prompt Request', desc:'The image description is sent to the ToolVoid image route for processing.' },
+              { icon:'🔒', title:'Prompt Request', desc:'Your image description and style choices are sent to Pollinations to create the image.' },
             ].map((f,i)=>(
               <article className="ig-feat-card" key={i}>
                 <div className="ig-feat-icon">{f.icon}</div>
@@ -1089,7 +1089,7 @@ export default function ImageGenPage() {
             {[
               { n:'01', icon:'✍️', title:'Write Your Idea',    desc:'Describe the image you want — be as specific or as simple as you like.' },
               { n:'02', icon:'🎨', title:'Set the Image Controls', desc:'Choose a style, mood, aspect ratio, and optional negative prompt.' },
-              { n:'03', icon:'🤖', title:'Generate Image', desc:'Select Generate Image to send the prompt to the ToolVoid image route, which calls Pollinations for image generation.' },
+              { n:'03', icon:'🤖', title:'Generate Image', desc:'Select Generate Image to send your description and style choices to Pollinations.' },
               { n:'04', icon:'⬇', title:'Review and Download', desc:'Inspect the preview, then use the PNG download control.' },
             ].map((s,i)=>(
               <div className="ig-step" key={i}>
@@ -1138,10 +1138,10 @@ export default function ImageGenPage() {
           </div>
           <div className="ig-faq-list">
             {[
-              { q:'How long can the image description be?', a:'The Image Description field has a 500-character maximum.' },
+              { q:'How long can the image description be?', a:'Your description can be up to 500 characters long.' },
               { q:'Which aspect ratios are available?', a:'The controls list 1:1, 16:9, 9:16, and 4:3.' },
-              { q:'Which provider generates an image?', a:'The /api/generate-image route calls Pollinations for image generation.' },
-              { q:'What daily image limit is defined in the code?', a:`POLLINATIONS_FREE_LIMIT and the image-generator entry in lib/quotaStore.js both set the limit to ${POLLINATIONS_FREE_LIMIT} per day.` },
+              { q:'Where does my description go?', a:'Your description and style choices are sent to Pollinations to create the image. See the Privacy Policy for details.' },
+              { q:'How many images can I generate each day?', a:'You can generate 6 images a day. The limit resets at 5:30 AM IST (midnight UTC).' },
             ].map((f,i)=>(
               <div className="ig-faq-item" key={i}>
                 <div className="ig-faq-q" role="button" tabIndex={0} aria-expanded="false">

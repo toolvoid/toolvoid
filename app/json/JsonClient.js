@@ -811,7 +811,7 @@ export default function JsonWorkbenchPage() {
         <section className="json-hero">
           <div>
             <div className="json-badge">Validator + formatter + inspector</div>
-            <h1 className="json-title">JSON Formatter &amp; Validator Online | ToolVoid</h1>
+            <h1 className="json-title">JSON Formatter &amp; Validator Online</h1>
             <p className="json-sub">
               Validate payloads, pretty-print responses, flatten nested keys, inspect deep paths, and generate TypeScript shapes from a single live workspace.
             </p>
@@ -846,7 +846,7 @@ export default function JsonWorkbenchPage() {
               <div className="json-card-head">
                 <div>
                   <h2>Editor and transforms</h2>
-                  <p>Paste raw API responses, local config blobs, or exported data files. Format, minify, sort keys, and copy cleaned output without leaving the page.</p>
+                  <p>Paste raw responses, local settings, or exported data files. Format, minify, sort keys, and copy cleaned output without leaving the page.</p>
                 </div>
                 <div className={`json-status ${statusClass}`}>{statusLabel}</div>
               </div>
@@ -1039,11 +1039,11 @@ export default function JsonWorkbenchPage() {
               <div className="json-card-head">
                 <div>
                   <h3>Quick usage ideas</h3>
-                  <p>Useful when you are bouncing between APIs, config files, and frontend typing work.</p>
+                  <p>Useful when you are working with web services, settings files, and frontend typing.</p>
                 </div>
               </div>
               <div className="json-note">
-                Clean API responses before logging them into docs. Flatten payloads to map fields into forms. Generate quick TS types while wiring components. Use path lookup to test whether a nested field exists before writing frontend code around it.
+                Clean service responses before logging them into docs. Flatten data to map fields into forms. Generate quick TypeScript types while wiring components. Use path lookup to test whether a nested field exists before writing frontend code around it.
               </div>
             </div>
           </aside>

@@ -25,8 +25,8 @@ export default function Page() {
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "Where is the PDF processed?",
-            "acceptedAnswer": { "@type": "Answer", "text": "The page uses PDF.js to render pages in the browser and loads pdf-lib and JSZip for document operations." }
+            "name": "Where is my PDF processed?",
+            "acceptedAnswer": { "@type": "Answer", "text": "In your browser. Your PDF is read on your device and is not uploaded to ToolVoid." }
           },
           {
             "@type": "Question",

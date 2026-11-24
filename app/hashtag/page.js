@@ -35,15 +35,15 @@ export default function Page() {
                 name: 'How long can the topic be?',
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: 'The API route rejects a topic longer than 200 characters.',
+                  text: 'Your topic can be up to 200 characters long.',
                 },
               },
               {
                 '@type': 'Question',
-                name: 'Which provider receives the request?',
+                name: 'Where does my topic go?',
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: 'The server route sends the topic, platform, category, and count to Google Gemini.',
+                  text: 'Your topic, platform, category and number of hashtags are sent to Google Gemini to create the hashtags. See the Privacy Policy for details.',
                 },
               },
               {
@@ -51,7 +51,7 @@ export default function Page() {
                 name: 'Which result counts can I choose?',
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: 'The count buttons offer 15, 20, and 30 hashtags.',
+                  text: 'You can choose 15, 20 or 30 hashtags.',
                 },
               },
             ],

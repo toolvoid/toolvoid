@@ -1301,7 +1301,7 @@ export default function EMIPage() {
         <section className="emi-hero">
           <div>
             <div className="emi-badge">Advanced EMI planner</div>
-            <h1 className="emi-title">EMI Calculator India - Monthly Loan Instalment | ToolVoid</h1>
+            <h1 className="emi-title">EMI Calculator India - Monthly Loan Instalment</h1>
             <p className="emi-sub">
               This calculator goes beyond monthly EMI. You can switch modes, simulate extra payments, compare loan offers, inspect amortization, export schedules, and use rule-based payoff insights without leaving the page.
             </p>

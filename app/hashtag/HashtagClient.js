@@ -849,7 +849,7 @@ export default function HashtagPage({ maintenanceMode = false }) {
         <div className="ht-hero-glow2" aria-hidden="true" />
         <div className="ht-hero-content">
           <div className="ht-badge">AI-Powered Hashtag Engine Active</div>
-          <h1>AI Hashtag Generator for Social Media | ToolVoid</h1>
+          <h1>AI Hashtag Generator for Social Media</h1>
           <p className="ht-hero-sub">
             Platform-optimized hashtags for Instagram, TikTok, LinkedIn & more —
             sorted by volume, ready to copy in one click.
@@ -1077,10 +1077,10 @@ export default function HashtagPage({ maintenanceMode = false }) {
           </div>
           <div className="ht-faq-list">
             {[
-              { q: 'How many characters can I enter?', a: 'The API route rejects a topic longer than 200 characters.' },
-              { q: 'Which result counts can I choose?', a: 'The count buttons offer 15, 20, and 30 hashtags.' },
-              { q: 'Which provider receives the request?', a: 'The server route sends the topic, platform, category, and count to Google Gemini.' },
-              { q: 'What daily quota does the route use?', a: 'The hashtag-generator limit in lib/quotaStore.js is 10 requests per day.' },
+              { q: 'How many characters can I enter?', a: 'Your topic can be up to 200 characters long.' },
+              { q: 'Which result counts can I choose?', a: 'You can choose 15, 20 or 30 hashtags.' },
+              { q: 'Where does my topic go?', a: 'Your topic, platform, category and number of hashtags are sent to Google Gemini to create the hashtags. See the Privacy Policy for details.' },
+              { q: 'How many times can I generate hashtags each day?', a: 'You can generate hashtags 10 times a day. The limit resets at midnight UTC (5:30 AM IST).' },
             ].map((f, i) => (
               <div className="ht-faq-item" key={i}>
                 <div className="ht-faq-q" role="button" tabIndex={0} aria-expanded="false">
@@ -1102,7 +1102,7 @@ export default function HashtagPage({ maintenanceMode = false }) {
           <p className="ht-sub">Everything you need to maximize reach — no fluff, no filler.</p>
           <div className="ht-features-grid">
             {[
-              { icon: '🤖', title: 'Gemini AI Powered', desc: 'Uses Google Gemini to understand context, trends, and platform-specific best practices for each generation.' },
+              { icon: '🤖', title: 'Gemini AI Powered', desc: 'Uses Google Gemini to understand context and platform-specific best practices for each generation.' },
               { icon: '📊', title: '3-Tier Volume Mix', desc: 'Get 10 high-volume, 10 medium, and 10 niche hashtags — the perfect blend for maximum algorithmic reach.' },
               { icon: '📱', title: '5 Platform Modes', desc: 'Hashtags are tuned for Instagram, TikTok, Twitter/X, LinkedIn, and YouTube — each has a different optimal strategy.' },
               { icon: '⚡', title: 'Copy Hashtags', desc: 'Select an individual hashtag to copy it, or use Copy All for the generated set.' },

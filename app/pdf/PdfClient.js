@@ -1192,7 +1192,7 @@ export default function PDFToolsSuite() {
 
     // ─── Utility functions ────────────────────────
     async function loadPDFLib(file) {
-      if (!window.PDFLib) throw new Error('pdf-lib not loaded. Please wait a moment and retry.');
+      if (!window.PDFLib) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
       const bytes = await file.arrayBuffer();
       return PDFLib.PDFDocument.load(bytes, { ignoreEncryption: true });
     }
@@ -1472,7 +1472,7 @@ ${contentTypesExtra}
     // DOCX — manual XML construction via JSZip
     async function processToDocx() {
       const pdf = S.pdfDoc; if (!pdf) throw new Error('No PDF loaded.');
-      if (!window.JSZip) throw new Error('JSZip not loaded.');
+      if (!window.JSZip) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
       let zip;
 
       if (S.docxMode === 'editable') {
@@ -1582,7 +1582,7 @@ ${contentTypesExtra}
       const base = S.file.name.replace(/\.pdf$/i,'');
       if (S.outputFormat==='xlsx') {
         // Create minimal XLSX via JSZip
-        const JSZip = window.JSZip; if (!JSZip) throw new Error('JSZip not loaded.');
+        const JSZip = window.JSZip; if (!JSZip) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
         setProgress(90,'Building XLSX…');
         const sheetXml = buildXLSXSheet(rows);
         const workbookXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="PDF Data" sheetId="1" r:id="rId1"/></sheets></workbook>`;
@@ -1620,7 +1620,7 @@ ${contentTypesExtra}
     // PPTX — manual XML
     async function processToPPTX() {
       const pdf = S.pdfDoc; if (!pdf) throw new Error('No PDF loaded.');
-      const JSZip = window.JSZip; if (!JSZip) throw new Error('JSZip not loaded.');
+      const JSZip = window.JSZip; if (!JSZip) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
       const slides = [];
       for (let i=1;i<=pdf.numPages;i++) {
         setProgress(Math.round((i/pdf.numPages)*80),`Extracting page ${i}…`);
@@ -1702,7 +1702,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
     }
 
     async function processMerge() {
-      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('pdf-lib not loaded.');
+      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
       if (S.mergeFiles.length < 2) throw new Error('Upload at least 2 PDFs to merge.');
       const merged = await PDFLib.PDFDocument.create();
       for (let fi=0;fi<S.mergeFiles.length;fi++) {
@@ -1722,7 +1722,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
     }
 
     async function processSplit() {
-      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('pdf-lib not loaded.');
+      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
       const src = await loadPDFLib(S.file);
       const n = src.getPageCount();
       const base = S.file.name.replace(/\.pdf$/i,'');
@@ -1752,7 +1752,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
 
     async function processRemovePages() {
       if (!S.markedForRemoval.size) throw new Error('No pages marked for removal. Click pages in the preview to mark them.');
-      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('pdf-lib not loaded.');
+      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
       const src = await loadPDFLib(S.file);
       const n = src.getPageCount();
       const keep = Array.from({length:n},(_,i)=>i+1).filter(p=>!S.markedForRemoval.has(p)).map(p=>p-1);
@@ -1771,7 +1771,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
 
     async function processExtractPages() {
       if (!S.selectedPages.size) throw new Error('No pages selected. Click pages in the preview to select them.');
-      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('pdf-lib not loaded.');
+      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
       const src = await loadPDFLib(S.file);
       const indices = [...S.selectedPages].sort((a,b)=>a-b).map(p=>p-1);
       setProgress(60,'Extracting pages…');
@@ -1786,7 +1786,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
     }
 
     async function processReorder() {
-      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('pdf-lib not loaded.');
+      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
       const src = await loadPDFLib(S.file);
       setProgress(50,'Reordering…');
       const doc = await PDFLib.PDFDocument.create();
@@ -1801,7 +1801,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
     }
 
     async function processCompress() {
-      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('pdf-lib not loaded.');
+      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
       const origSize = S.file.size;
       setProgress(30,'Loading…');
       const pdfDoc = await loadPDFLib(S.file);
@@ -1818,7 +1818,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
     }
 
     async function processRotate() {
-      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('pdf-lib not loaded.');
+      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
       const pdfDoc = await loadPDFLib(S.file);
       const pages = pdfDoc.getPages();
       pages.forEach((page,idx)=>{
@@ -1833,7 +1833,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
     }
 
     async function processWatermark() {
-      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('pdf-lib not loaded.');
+      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
       const pdfDoc = await loadPDFLib(S.file);
       const font = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
       const hex = S.wmColor.replace('#','');
@@ -1853,7 +1853,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
     }
 
     async function processPageNumbers() {
-      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('pdf-lib not loaded.');
+      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
       const pdfDoc = await loadPDFLib(S.file);
       const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
       pdfDoc.getPages().forEach((page,idx)=>{
@@ -1874,7 +1874,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
     }
 
     async function processMetadata() {
-      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('pdf-lib not loaded.');
+      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
       const pdfDoc = await loadPDFLib(S.file);
       if (S.metaTitle) pdfDoc.setTitle(S.metaTitle);
       if (S.metaAuthor) pdfDoc.setAuthor(S.metaAuthor);
@@ -1886,7 +1886,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
     }
 
     async function processUnlock() {
-      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('pdf-lib not loaded.');
+      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
       try {
         const bytes = await S.file.arrayBuffer();
         const pdfDoc = await PDFLib.PDFDocument.load(bytes, {ignoreEncryption:true});
@@ -1898,7 +1898,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
     }
 
     async function processImgToPDF() {
-      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('pdf-lib not loaded.');
+      const PDFLib = window.PDFLib; if (!PDFLib) throw new Error('PDF tools are still loading. Please wait a moment and retry.');
       if (!S.mergeFiles.length) throw new Error('Upload image files first.');
       const pdfDoc = await PDFLib.PDFDocument.create();
       const sizes = {a4:[595.28,841.89], letter:[612,792]};
@@ -2063,7 +2063,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
         <div className="p-hero-orb2" aria-hidden="true" />
         <div className="p-hero-c">
           <div className="p-badge"><span className="p-badge-dot" />19 Tools · Browser-Only · Zero Upload · Free tools. AI features have daily limits.</div>
-          <h1>PDF to Image Converter Online | ToolVoid</h1>
+          <h1>PDF to Image Converter Online</h1>
           <p className="p-hero-sub">Convert to Word, Excel, PowerPoint, images. Merge, split, remove pages, watermark — all processed locally in your browser. Files never leave your device.</p>
           <div className="p-hero-acts">
             <a href="#p-app" className="p-btn-pri"><span>Open PDF Suite</span><span>→</span></a>
@@ -2174,7 +2174,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
               {icon:'👁️',title:'Live Page Preview',desc:'When you upload a PDF, the page renders its pages as visual thumbnails.'},
               {icon:'📄',title:'PDF → Word / Excel / PPT',desc:'Convert PDFs to DOCX, XLSX, CSV, and PPTX — all built manually with ZIP+XML, no external APIs needed.'},
               {icon:'🗑️',title:'Visual Page Removal',desc:'Click on actual page thumbnails to mark pages for removal or extraction. See exactly what you\'re deleting.'},
-              {icon:'🔒',title:'Browser Processing',desc:'PDF.js, pdf-lib, and JSZip are loaded by the page for PDF operations in the browser.'},
+              {icon:'🔒',title:'Browser Processing',desc:'PDF operations run in your browser.'},
               {icon:'⚡',title:'Processing Options',desc:'Choose from the PDF operations and settings shown in the editor.'},
               {icon:'🆓',title:'PDF Tools',desc:'The page lists PDF conversion, organization, editing, and additional tools.'},
             ].map((f,i)=>(
@@ -2197,10 +2197,10 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
           </div>
           <div className="p-faq-list">
             {[
-              {q:'Where is the PDF processed?',a:'PDF.js renders pages in the browser. The page also loads pdf-lib and JSZip for document operations.'},
+              {q:'Where is my PDF processed?',a:'In your browser. Your PDF is read on your device and is not uploaded to ToolVoid.'},
               {q:'Which output formats can I choose?',a:'The Convert to Images controls list JPG, PNG, and WebP.'},
               {q:'Can I select particular pages?',a:'The page-range controls include All Pages, Custom Range, and Current Page.'},
-              {q:'What does Remove Pages do?',a:'Select page thumbnails for removal, then use Remove Pages to create a PDF without those pages using pdf-lib.'},
+              {q:'What does Remove Pages do?',a:'Select page thumbnails for removal, then use Remove Pages to create a PDF without those pages.'},
             ].map((f,i)=>(
               <div key={i} className="p-faq-item">
                 <div className="p-faq-q" role="button" tabIndex={0}>{f.q}<span className="p-faq-arrow">⌄</span></div>
