@@ -7,7 +7,7 @@ const TOOL_COLORS = {
   '/image-tools':'#FFD93D','/pdf':'#FF9A3C','/passport':'#60A5FA','/indian-forms':'#2563EB','/qr':'#00FFB2',
   '/password':'#F472B6','/domain':'#00C9FF','/unit':'#6BCB77','/base64':'#C77DFF',
   '/emi':'#FB923C','/loan':'#E879F9','/invoice':'#38BDF8','/word-counter':'#4D96FF',
-  '/json':'#86EFAC','/tts':'#4D96FF','/video':'#FF4ECD','/resume':'#FF6B6B',
+  '/json':'#86EFAC','/tts':'#4D96FF','/resume':'#FF6B6B',
   '/capsule-manager':'#a78bfa',
   '/site-maker':'#22D3EE',
   '/resize':'#FFD93D','/compress':'#6BCB77','/convert':'#C77DFF',
@@ -98,10 +98,6 @@ function drawToolIcon2D(ctx, href, cx, cy, s, t, hov, color) {
     ctx.fillStyle=color;
     ctx.beginPath(); ctx.arc(-9,0,3,0,Math.PI*2); ctx.fill();
     ctx.beginPath(); ctx.arc(9,0,3,0,Math.PI*2); ctx.fill();
-
-  } else if (href === '/video') {
-    ctx.beginPath(); ctx.arc(0,0,18,0,Math.PI*2); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(-4,-9); ctx.lineTo(11,0); ctx.lineTo(-4,9); ctx.closePath(); ctx.fill();
 
   } else if (href === '/story') {
     ctx.lineWidth=2.5;

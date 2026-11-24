@@ -50,8 +50,6 @@
 ./app/page.js
 ./app/unit
 ./app/unit/page.js
-./app/video
-./app/video/page.js
 ./app/image-tools
 ./app/image-tools/page.js
 ./app/word-counter

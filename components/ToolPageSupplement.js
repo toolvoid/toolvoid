@@ -221,19 +221,6 @@ const SUPPLEMENTS = {
       ['Does speech output replace accessibility testing?', 'No. Review the full experience with appropriate assistive technology.'],
     ],
   },
-  video: {
-    heading: 'Prepare a clip for a playback or upload requirement',
-    copy: 'The converter prepares video for a target playback environment by changing supported formats or dimensions and, where offered, adjusting file size or trimming. It can help when a presentation, learning platform, or sharing service has a practical limit. Start from a copy, choose settings that meet the destination requirements, and compare picture and audio after conversion. Re-encoding can alter clarity, color, or synchronization; the smallest file is not automatically the best result. Browser resources and source codecs affect which files can be processed, so retain the original until the export is confirmed.',
-    example: 'A team can resize a meeting excerpt for a presentation while retaining the source recording for its archive.',
-    steps: ['Select a source and desired operation.', 'Choose a supported format and dimensions.', 'Adjust available compression or trim controls.', 'Preview playback and keep the source until verified.'],
-    faqs: [
-      ['Which formats can I convert?', 'Use formats displayed by the converter; codec support can also matter.'],
-      ['Can I reduce the file size?', 'Use compression controls and compare the result with the original.'],
-      ['Can I adjust the audio?', 'Audio operations depend on the controls offered on the page.'],
-      ['Why might processing fail?', 'Unsupported codecs, large inputs, or browser memory limits can be factors.'],
-      ['Should I delete the original?', 'Keep it until the converted file has been played and checked.'],
-    ],
-  },
   resume: {
     heading: 'Arrange career evidence for a particular application',
     copy: 'The resume builder organizes work history, education, skills, and supporting sections into an application document. It can help create a first structured draft or maintain tailored versions for different roles. Strong entries describe contribution and outcome instead of listing duties alone; use accurate figures and avoid claims you cannot support. Choose a layout that keeps important information easy to scan, then compare section order with the vacancy. Export a PDF and inspect page breaks and links. A readable format helps presentation but cannot guarantee how an employer or screening system evaluates an application.',
