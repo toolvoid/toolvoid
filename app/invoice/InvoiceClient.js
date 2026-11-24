@@ -661,7 +661,7 @@ function initApp() {
     G('cur-sel')?.addEventListener('change', e => {
       const c = CURRENCIES.find(x=>x.code===e.target.value)
       if (c) { state.currency=c.code; state.currencySymbol=c.symbol; previewOnly(); save() }
-    })
+    });
 
     // Toggles
     [['t-tax','showTax'],['t-disc','showDiscount'],['t-ship','showShipping'],['t-round','roundOff'],['t-bank','showBankDetails'],['t-notes','showNotes'],['t-terms','showTerms']].forEach(([id,f]) => {
