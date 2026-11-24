@@ -17,13 +17,13 @@ export const metadata = {
 export default function Page() {
   return (
     <>
+      <PassportClient />
       <div style={{maxWidth: 1100, margin: '0 auto', padding: '2rem 1.5rem 0'}}>
         <h1 style={{fontSize: '2rem', fontWeight: 800, marginBottom: '0.75rem'}}>Free Passport Photo Maker Online</h1>
-        <p style={{color: '#6b6b85', lineHeight: 1.7, fontSize: '1rem'}}>
+        <p style={{color: '#d1d5db', lineHeight: 1.7, fontSize: '1rem'}}>
           Create professional passport, visa, and ID card photos online for free with our passport photo maker. Gone are the days of expensive photo booth sessions or studio visits for passport photos. Our tool lets you take or upload a photo from your phone or computer and automatically crop, resize, and adjust it to meet the exact specifications of passport and visa applications for countries around the world, including the United States, India, United Kingdom, Canada, Australia, Schengen countries, and many more. Simply upload your photo, select the document type and country, and our intelligent cropping guide helps you position your face correctly within the frame. Adjust the background to solid white or light blue as required by official guidelines, fine-tune brightness and contrast, and ensure your photo meets all requirements including size, resolution, and head position. Download your final photo as a high-resolution print-ready JPG or PNG. Completely free, no sign-up, and your photos never leave your device — ensuring your privacy is protected.
         </p>
       </div>
-      <PassportClient />
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 1.5rem 1.25rem', color: '#6b6b85' }}>
         Related tools: <a href="/keyword" style={{ color: '#7dd3fc' }}>Keyword generator</a> · <a href="/tts" style={{ color: '#7dd3fc' }}>Text to speech</a> · <a href="/guides/passport-photo-size-india" style={{ color: '#7dd3fc' }}>Indian passport photo size and rules</a>
       </div>
