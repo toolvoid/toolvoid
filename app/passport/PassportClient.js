@@ -73,7 +73,7 @@ export default function PassportPhoto() {
   const loadImage = (file) => {
     if (!file || !file.type.startsWith('image/')) return;
     const url = URL.createObjectURL(file);
-    const img = new Image();
+    const img = new window.Image();
     img.onload = () => {
       setImage(url); setOutput(null); setBgRemoved(false); setBgRemovedImg(null);
       setImgInfo({ name: file.name, size: file.size, w: img.width, h: img.height, img });
@@ -159,7 +159,7 @@ export default function PassportPhoto() {
       try { result = await tryRemove({ publicPath:'/bgremoval/' }); }
       catch { result = await tryRemove({}); } // fallback — no publicPath
       const url = URL.createObjectURL(result);
-      const img = new Image();
+      const img = new window.Image();
       img.onload = () => { setBgRemovedImg(img); setBgRemoved(true); };
       img.src = url;
     } catch(e) {
@@ -234,7 +234,7 @@ export default function PassportPhoto() {
     const ctx=c.getContext('2d');
     ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,pageW,pageH);
 
-    const img=new Image();
+    const img=new window.Image();
     img.onload=()=>{
       // Center grid on page
       const gridW=sheetCols*photoW+(sheetCols-1)*gap;
