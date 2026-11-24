@@ -2,8 +2,8 @@ import Link from 'next/link'
 import BackButton from './BackButton'
 
 export const metadata = {
-  title: 'About ToolVoid - Free Online Tools for Creators & Builders',
-  description: 'ToolVoid is a small collection of free browser tools built for creators, marketers, students, and everyday users who want practical help without a signup maze.',
+  title: 'About ToolVoid | ToolVoid',
+  description: 'ToolVoid is a set of free online tools built by Sparsh Pathak for creators and everyday users in India.',
   alternates: {
     canonical: 'https://toolvoid.com/about',
   },
@@ -17,31 +17,33 @@ export default function AboutPage() {
         <h1 style={{ fontSize: 'clamp(2rem, 6vw, 4rem)', marginBottom: '1rem' }}>About ToolVoid</h1>
 
         <p style={{ color: 'rgba(255,255,255,.7)', lineHeight: 1.8, fontSize: '1.05rem', marginBottom: '1.5rem' }}>
-          ToolVoid is a small set of free online tools built for people who want quick answers without dealing with bloated apps, signups, or confusing workflows. The site started as a simple idea: make useful utilities available in the browser, fast and without friction.
+          Hi, I&apos;m Sparsh Pathak, the person behind ToolVoid. I am originally from Himachal Pradesh, and I live in Punjab.
         </p>
 
+        <h2 style={{ fontSize: '1.5rem', marginTop: '2rem', marginBottom: '.75rem' }}>Why I started ToolVoid</h2>
+        <p style={{ color: 'rgba(255,255,255,.7)', lineHeight: 1.8, fontSize: '1.05rem', marginBottom: '1.5rem' }}>
+          I started ToolVoid in 2026. Many content creators need small online tools every day, but they cannot pay for expensive subscriptions. I built ToolVoid for them, so the tools are easy to use and free to start with.
+        </p>
+
+        <h2 style={{ fontSize: '1.5rem', marginTop: '2rem', marginBottom: '.75rem' }}>What you can find here</h2>
+        <p style={{ color: 'rgba(255,255,255,.7)', lineHeight: 1.8, fontSize: '1.05rem', marginBottom: '1.5rem' }}>
+          ToolVoid has tools for everyday tasks. These include an EMI calculator, a JSON formatter, PDF tools, image tools, and a photo and signature resizer for Indian exam forms. There are also AI tools for hashtags, keywords, scripts and images. The Guides section has step-by-step guides with worked examples.
+        </p>
+
+        <h2 style={{ fontSize: '1.5rem', marginTop: '2rem', marginBottom: '.75rem' }}>How ToolVoid earns money</h2>
+        <p style={{ color: 'rgba(255,255,255,.7)', lineHeight: 1.8, fontSize: '1.05rem', marginBottom: '1.5rem' }}>
+          ToolVoid is free to use. The site shows Google ads. Some AI features have daily limits, and you can buy optional packs if you want more. The Privacy Policy explains how cookies and ads work.
+        </p>
+
+        <h2 style={{ fontSize: '1.5rem', marginTop: '2rem', marginBottom: '.75rem' }}>Who runs it</h2>
+        <p style={{ color: 'rgba(255,255,255,.7)', lineHeight: 1.8, fontSize: '1.05rem', marginBottom: '1.5rem' }}>
+          I build and run ToolVoid myself. You can find me here: <a href="https://www.linkedin.com/in/sparsh-pathak-330118330/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>Sparsh Pathak on LinkedIn</a>.
+        </p>
+
+        <h2 style={{ fontSize: '1.5rem', marginTop: '2rem', marginBottom: '.75rem' }}>Contact</h2>
         <p style={{ color: 'rgba(255,255,255,.7)', lineHeight: 1.8, fontSize: '1.05rem', marginBottom: '2rem' }}>
-          It was built by a solo developer who likes practical tools for writing, image work, SEO, productivity, and everyday digital tasks. The goal was to keep the experience honest and useful: no heavy dashboard, no fake “premium” funnel, just tools that actual people can open and use without much setup.
+          Write to <a href="mailto:hello@toolvoid.com" style={{ color: 'inherit' }}>hello@toolvoid.com</a>, or use the <Link href="/contact" style={{ color: 'inherit' }}>Contact page</Link>.
         </p>
-
-        <p style={{ color: 'rgba(255,255,255,.7)', lineHeight: 1.8, fontSize: '1.05rem', marginBottom: '2rem' }}>
-          ToolVoid covers the small jobs that show up repeatedly — generating scripts, hashtags, keywords, checking domains, converting files, creating invoices, and making life a little easier while working online. If a tool saves time or removes a tedious step, it belongs here.
-        </p>
-
-        <div style={{ display: 'grid', gap: '1rem', marginTop: '2rem' }}>
-          <Link href="/story" style={{ display: 'block', padding: '1rem 1.15rem', border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, color: 'inherit', textDecoration: 'none', background: '#0c0c1a' }}>
-            <strong>Script Generator</strong>
-            <div style={{ color: 'rgba(255,255,255,.62)', marginTop: '.35rem' }}>Turn a topic into structured AI video ideas and scripts.</div>
-          </Link>
-          <Link href="/hashtag" style={{ display: 'block', padding: '1rem 1.15rem', border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, color: 'inherit', textDecoration: 'none', background: '#0c0c1a' }}>
-            <strong>Hashtag Generator</strong>
-            <div style={{ color: 'rgba(255,255,255,.62)', marginTop: '.35rem' }}>Draft social content ideas in seconds.</div>
-          </Link>
-          <Link href="/keyword" style={{ display: 'block', padding: '1rem 1.15rem', border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, color: 'inherit', textDecoration: 'none', background: '#0c0c1a' }}>
-            <strong>Keyword Generator</strong>
-            <div style={{ color: 'rgba(255,255,255,.62)', marginTop: '.35rem' }}>Generate SEO-friendly keyword ideas for content work.</div>
-          </Link>
-        </div>
       </div>
     </main>
   )
