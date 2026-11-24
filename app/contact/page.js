@@ -27,7 +27,7 @@ export default function ContactPage() {
           </a>
         </div>
 
-        <form action="mailto:0voidtool0@gmail.com" method="post" encType="text/plain" style={{ display: 'grid', gap: '1rem' }}>
+        <form action="mailto:hello@toolvoid.com" method="post" encType="text/plain" style={{ display: 'grid', gap: '1rem' }}>
           <div>
             <label htmlFor="name" style={{ display: 'block', marginBottom: '0.45rem', color: 'rgba(255,255,255,.8)' }}>Name</label>
             <input id="name" name="name" type="text" style={{ width: '100%', background: '#0d0f1a', border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, padding: '0.9rem 1rem', color: '#f0f0fa' }} />
@@ -46,6 +46,7 @@ export default function ContactPage() {
           <button type="submit" style={{ justifySelf: 'start', background: '#00FFB2', color: '#07110d', border: 'none', borderRadius: 999, padding: '0.85rem 1.4rem', fontWeight: 700, cursor: 'pointer' }}>
             Send Message
           </button>
+          <p>This opens your email app with your message ready to send.</p>
         </form>
       </div>
     </main>
