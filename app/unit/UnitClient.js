@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 
 /* ─── CSS ─────────────────────────────────────────────────────────────── */
 const CSS = `
@@ -444,11 +444,15 @@ export default function UnitConverter() {
     if (typeof window === 'undefined') return [];
     try {
       const h = localStorage.getItem('uc_history');
-      return h ? JSON.parse(h) : [];
+      const parsed = h ? JSON.parse(h) : [];
+      return Array.isArray(parsed) ? parsed.slice(0, 5) : [];
     } catch {
       return [];
     }
   });
+  const historyRef = useRef(history);
+  const inputDirty = useRef(false);
+  const historyBlurTimer = useRef(null);
   const [copiedKey,  setCopiedKey] = useState('');
   const [toast,      setToast]     = useState('');
   const [openFaq,    setOpenFaq]   = useState(null);
@@ -473,6 +477,7 @@ export default function UnitConverter() {
 
   /* Reverse: typing in "to" box */
   const handleFromChange = (val) => {
+    inputDirty.current = true;
     setFromValue(val);
     if (!val) {
       setToValue('');
@@ -483,6 +488,7 @@ export default function UnitConverter() {
   };
 
   const handleToChange = (val) => {
+    inputDirty.current = true;
     setToValue(val);
     if (!val) {
       setFromValue('');
@@ -523,20 +529,101 @@ export default function UnitConverter() {
     return `1 ${u[fromUnit]?.symbol} = ${ratioStr} ${u[toUnit]?.symbol}`;
   }, [category, fromUnit, toUnit]);
 
-  /* Save history */
-  const saveHistory = useCallback((entry) => {
-    const newH = [entry, ...history].slice(0, 15);
-    setHistory(newH);
-    try { localStorage.setItem('uc_history', JSON.stringify(newH)); } catch {}
-  }, [history]);
+  /* Save history only after an explicit user action. */
+  const createHistoryEntry = (value, inputUnit, outputUnit, unitCategory, result) => {
+    const input = String(value ?? '').trim();
+    if (!input || !Number.isFinite(Number(input))) return null;
+    const units = UNITS[unitCategory]?.units;
+    if (!units?.[inputUnit] || !units?.[outputUnit]) return null;
+    const output = String(result ?? '').trim();
+    if (!output || Number.isNaN(Number(output.replaceAll(',', '')))) return null;
+    const label = `${input} ${units[inputUnit].symbol} = ${output} ${units[outputUnit].symbol}`;
+    return { value: input, result: output, fromUnit: inputUnit, toUnit: outputUnit, category: unitCategory, label };
+  };
 
-  useEffect(() => {
-    if (fromValue && toValue && fromUnit && toUnit) {
-      const entry = `${fromValue} ${UNITS[category]?.units[fromUnit]?.symbol || fromUnit} = ${toValue} ${UNITS[category]?.units[toUnit]?.symbol || toUnit}`;
-      const t = setTimeout(() => saveHistory(entry), 1500);
-      return () => clearTimeout(t);
+  const saveHistory = useCallback((entry) => {
+    if (!entry) return;
+    const current = historyRef.current;
+    const latest = current[0];
+    const duplicate = typeof latest === 'string'
+      ? latest === entry.label
+      : latest?.value === entry.value
+        && latest?.fromUnit === entry.fromUnit
+        && latest?.toUnit === entry.toUnit
+        && latest?.category === entry.category;
+    if (duplicate) return;
+    const newHistory = [entry, ...current].slice(0, 5);
+    historyRef.current = newHistory;
+    setHistory(newHistory);
+    try { localStorage.setItem('uc_history', JSON.stringify(newHistory)); } catch {}
+  }, []);
+
+  const clearHistoryBlurTimer = () => {
+    if (historyBlurTimer.current !== null) {
+      clearTimeout(historyBlurTimer.current);
+      historyBlurTimer.current = null;
     }
-  }, [category, fromUnit, fromValue, saveHistory, toUnit, toValue]);
+  };
+
+  const commitCurrentHistory = () => {
+    clearHistoryBlurTimer();
+    inputDirty.current = false;
+    saveHistory(createHistoryEntry(fromValue, fromUnit, toUnit, category, toValue));
+  };
+
+  const handleInputBlur = (event) => {
+    if (!inputDirty.current) return;
+    if (event.relatedTarget?.closest?.('.uc-unit-sel, .uc-cat-btn, .uc-hist-item')) return;
+    clearHistoryBlurTimer();
+    historyBlurTimer.current = window.setTimeout(() => {
+      historyBlurTimer.current = null;
+      if (!inputDirty.current) return;
+      inputDirty.current = false;
+      saveHistory(createHistoryEntry(fromValue, fromUnit, toUnit, category, toValue));
+    }, 0);
+  };
+
+  const handleHistoryKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      commitCurrentHistory();
+    }
+  };
+
+  const handleFromUnitChange = (unit) => {
+    setFromUnit(unit);
+    const result = convert(fromValue, unit, toUnit, category);
+    const formattedResult = result === '' ? '' : formatNum(result, precision, scientific);
+    setToValue(formattedResult);
+    clearHistoryBlurTimer();
+    inputDirty.current = false;
+    saveHistory(createHistoryEntry(fromValue, unit, toUnit, category, formattedResult));
+  };
+
+  const handleToUnitChange = (unit) => {
+    setToUnit(unit);
+    const result = convert(fromValue, fromUnit, unit, category);
+    const formattedResult = result === '' ? '' : formatNum(result, precision, scientific);
+    setToValue(formattedResult);
+    clearHistoryBlurTimer();
+    inputDirty.current = false;
+    saveHistory(createHistoryEntry(fromValue, fromUnit, unit, category, formattedResult));
+  };
+
+  const restoreHistory = (entry, key) => {
+    clearHistoryBlurTimer();
+    inputDirty.current = false;
+    if (typeof entry === 'string') {
+      copyVal(entry, key);
+      return;
+    }
+    if (!entry || !UNITS[entry.category]?.units?.[entry.fromUnit] || !UNITS[entry.category]?.units?.[entry.toUnit]) return;
+    setCategory(entry.category);
+    setFromUnit(entry.fromUnit);
+    setToUnit(entry.toUnit);
+    setFromValue(entry.value);
+    setToValue(entry.result);
+  };
 
   /* Copy */
   const copyVal = async (text, key) => {
@@ -680,8 +767,8 @@ export default function UnitConverter() {
 
                 <div className="uc-row">
                   <input className="uc-num-input" type="number" placeholder="Enter value…"
-                    value={fromValue} onChange={e => handleFromChange(e.target.value)} />
-                  <select className="uc-unit-sel" value={fromUnit} onChange={e => setFromUnit(e.target.value)}>
+                    value={fromValue} onChange={e => handleFromChange(e.target.value)} onBlur={handleInputBlur} onKeyDown={handleHistoryKeyDown} />
+                  <select className="uc-unit-sel" value={fromUnit} onChange={e => handleFromUnitChange(e.target.value)}>
                     {currentUnits.map(u => <option key={u.value} value={u.value}>{u.label}</option>)}
                   </select>
                 </div>
@@ -692,8 +779,8 @@ export default function UnitConverter() {
 
                 <div className="uc-row">
                   <input className="uc-num-input" type="number" placeholder="Result…"
-                    value={toValue} onChange={e => handleToChange(e.target.value)} />
-                  <select className="uc-unit-sel" value={toUnit} onChange={e => setToUnit(e.target.value)}>
+                    value={toValue} onChange={e => handleToChange(e.target.value)} onBlur={handleInputBlur} onKeyDown={handleHistoryKeyDown} />
+                  <select className="uc-unit-sel" value={toUnit} onChange={e => handleToUnitChange(e.target.value)}>
                     {currentUnits.map(u => <option key={u.value} value={u.value}>{u.label}</option>)}
                   </select>
                 </div>
@@ -723,11 +810,15 @@ export default function UnitConverter() {
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
                       <div style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', letterSpacing: '0.06em' }}>RECENT</div>
                       <button style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}
-                        onClick={() => { setHistory([]); localStorage.removeItem('uc_history'); }}>clear</button>
+                        onClick={() => {
+                          historyRef.current = [];
+                          setHistory([]);
+                          try { localStorage.removeItem('uc_history'); } catch {}
+                        }}>clear</button>
                     </div>
                     {history.slice(0, 5).map((h, i) => (
-                      <div key={i} className="uc-hist-item" onClick={() => copyVal(h, `hist-${i}`)}>
-                        <span>{h}</span>
+                      <div key={i} className="uc-hist-item" onClick={() => restoreHistory(h, `hist-${i}`)}>
+                        <span>{typeof h === 'string' ? h : h.label}</span>
                         <span style={{ color: copiedKey === `hist-${i}` ? 'var(--green)' : 'var(--text-muted)', fontSize: '0.7rem' }}>
                           {copiedKey === `hist-${i}` ? '✓' : '⧉'}
                         </span>
