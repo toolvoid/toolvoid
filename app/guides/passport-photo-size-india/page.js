@@ -41,7 +41,7 @@ export default function IndianPassportPhotoSizeGuidePage() {
           <li>The photo should be printed on good quality photo paper. A photograph in computer print will not be accepted.</li>
           <li>Do not sign the photograph.</li>
           <li>Dark backgrounds, uniforms, and eyes hidden by coloured or dark glasses are not accepted.</li>
-          <li>A photograph is not required for applications submitted at a Passport Seva Kendra (PSK). The photo rules apply to other collection centres, such as DPC, SPC and CSC.</li>
+          <li>A photograph is not required for applications submitted at a Passport Seva Kendra (PSK) or a Post Office Passport Seva Kendra (POPSK). The photo rules apply to applications submitted at other collection centres: a District Passport Cell (DPC), an Authorized Speed Post Centre (SPC) or a Citizen Service Centre (CSC).</li>
         </ul>
         <p style={styles.paragraph}>The booklet does not give a pixel size, a file size in KB, or a file format. It also does not say whether you need to upload a photo for an online application. Check the Passport Seva website for the latest rules.</p>
 
