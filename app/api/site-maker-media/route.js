@@ -4,6 +4,8 @@ import { createClient } from '@supabase/supabase-js';
 export const runtime = 'nodejs';
 
 export async function POST(request) {
+  return NextResponse.json({ error: 'This endpoint is disabled' }, { status: 410 });
+
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return NextResponse.json({ error: 'Supabase storage is not configured yet.' }, { status: 503 });
