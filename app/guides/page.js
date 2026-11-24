@@ -44,6 +44,27 @@ export default function GuidesPage() {
             <span className="guides-index-action">Read the guide →</span>
           </Link>
         </li>
+        <li>
+          <Link className="guides-index-card" href="/guides/extra-emi-payment">
+            <span className="guides-index-title">Does Paying Extra Every Month Save Money on a Loan?</span>
+            <span className="guides-index-description">A worked example showing how an extra Rs 1,000 or Rs 2,000 a month changes the loan term and total interest on a Rs 5,00,000 loan.</span>
+            <span className="guides-index-action">Read the guide →</span>
+          </Link>
+        </li>
+        <li>
+          <Link className="guides-index-card" href="/guides/interest-rate-emi-change">
+            <span className="guides-index-title">How Much Does 1% Change Your EMI? A Worked Example</span>
+            <span className="guides-index-description">See how interest rates of 7.5%, 8.5%, 9.5% and 10.5% change the EMI and total interest on a Rs 5,00,000 loan over 5 years.</span>
+            <span className="guides-index-action">Read the guide →</span>
+          </Link>
+        </li>
+        <li>
+          <Link className="guides-index-card" href="/guides/home-loan-tenure-15-20-25-years">
+            <span className="guides-index-title">Home Loan of Rs 30 Lakh: 15, 20 or 25 Years?</span>
+            <span className="guides-index-description">Compare the EMI and total interest of a Rs 30 lakh loan at 8.5% over 15, 20 and 25 years.</span>
+            <span className="guides-index-action">Read the guide →</span>
+          </Link>
+        </li>
       </ul>
     </main>
   );

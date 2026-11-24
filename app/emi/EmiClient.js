@@ -1788,7 +1788,15 @@ export default function EMIPage() {
         <div className="emi-foot">
           EMI estimates with loan comparisons and repayment planning tools.
         </div>
-        <a href="/guides/emi-calculation" style={{ display: 'inline-block', marginTop: 14, color: 'var(--brand)', textDecoration: 'underline', textUnderlineOffset: 3 }}>How EMI is calculated (worked example)</a>
+        <section aria-label="EMI guides" style={{ margin: '16px 0 32px', color: 'var(--text)' }}>
+          <h2 style={{ fontSize: '1.2rem', margin: '0 0 8px' }}>EMI guides</h2>
+          <ul style={{ margin: 0, paddingLeft: 22, lineHeight: 1.8 }}>
+            <li><a href="/guides/extra-emi-payment" style={{ color: 'var(--brand)', textDecoration: 'underline', textUnderlineOffset: 3 }}>Does Paying Extra Every Month Save Money on a Loan?</a></li>
+            <li><a href="/guides/interest-rate-emi-change" style={{ color: 'var(--brand)', textDecoration: 'underline', textUnderlineOffset: 3 }}>How Much Does 1% Change Your EMI? A Worked Example</a></li>
+            <li><a href="/guides/home-loan-tenure-15-20-25-years" style={{ color: 'var(--brand)', textDecoration: 'underline', textUnderlineOffset: 3 }}>Home Loan of Rs 30 Lakh: 15, 20 or 25 Years?</a></li>
+            <li><a href="/guides/emi-calculation" style={{ color: 'var(--brand)', textDecoration: 'underline', textUnderlineOffset: 3 }}>How EMI Is Calculated: A Worked Example for a Rs 5,00,000 Loan</a></li>
+          </ul>
+        </section>
       </div>
     </div>
   );
