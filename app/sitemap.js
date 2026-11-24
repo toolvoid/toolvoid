@@ -32,7 +32,6 @@ export default function sitemap() {
     { path: '/story', lastModified: '2026-09-26' },
     { path: '/tts', lastModified: '2026-09-26' },
     { path: '/unit', lastModified: '2026-09-26' },
-    { path: '/video', lastModified: '2026-09-26' },
     { path: '/word-counter', lastModified: '2026-11-22' },
   ];
 

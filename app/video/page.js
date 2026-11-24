@@ -10,6 +10,7 @@ export const metadata = {
     description: "Convert video files between MP4, WebM, AVI, MOV formats online for free. No uploads needed.",
     url: "https://toolvoid.com/video",
   },
+  robots: { index: false },
   ...createToolMetadata('video'),
 }
 

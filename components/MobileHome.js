@@ -24,13 +24,12 @@ const tools = [
   { name: 'Word Counter',        href: '/word-counter', desc: 'Count words, characters & estimate reading time',       color: '#4D96FF', tag: 'Content' },
   { name: 'JSON Formatter',      href: '/json',         desc: 'Format, validate and beautify JSON instantly',          color: '#86EFAC', tag: 'Dev' },
   { name: 'Text to Speech',      href: '/tts',          desc: 'Convert any text to natural voice instantly free',      color: '#4D96FF', tag: 'Voice' },
-  { name: 'Video Converter',     href: '/video',        desc: 'Convert MP4, MOV, AVI, MKV to any format free',        color: '#FF4ECD', tag: 'Media' },
   { name: 'Resume Builder',      href: '/resume',       desc: 'Multiple templates · PDF download · Quick workflow',    color: '#FF6B6B', tag: 'Career' },
   { name: 'Capsule Manager',     href: '/capsule-manager', desc: 'Save AI conversations as capsules. Never lose context again.', color: '#a78bfa', tag: 'NEW' },
 ];
-const toolCount = 23;
+const toolCount = 22;
 
-const ALL_TAGS = ['All', 'NEW', 'AI', 'Image', 'Dev', 'Finance', 'Utility', 'Content', 'Business', 'Media'];
+const ALL_TAGS = ['All', 'NEW', 'AI', 'Image', 'Dev', 'Finance', 'Utility', 'Content', 'Business'];
 
 const audiences = [
   { title: 'Creators',    desc: 'Stories, hashtags, AI images & more for your content.', color: '#00FFB2' },

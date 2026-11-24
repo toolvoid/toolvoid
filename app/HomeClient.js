@@ -31,14 +31,13 @@ const tools = [
   { name: 'Word Counter', desc: 'Count words, characters and estimate reading time instantly', href: '/word-counter', tag: 'Content', delay: '.8s', color: '#4D96FF' },
   { name: 'JSON Formatter', desc: 'Format, validate and beautify JSON instantly', href: '/json', tag: 'Dev', delay: '.85s', color: '#86EFAC' },
   { name: 'Text to Speech', desc: 'Convert text into natural voice instantly free', href: '/tts', tag: 'Voice', delay: '.9s', color: '#4D96FF' },
-  { name: 'Video Converter', desc: 'Convert MP4, MOV, AVI and MKV for free', href: '/video', tag: 'Media', delay: '.95s', color: '#FF4ECD' },
   { name: 'Resume Builder', desc: 'Multiple templates, PDF export, quick browser workflow', href: '/resume', tag: 'Career', delay: '1s', color: '#FF6B6B' },
   { name: 'Capsule Manager', desc: 'Save AI conversations as capsules. Never lose context again.', href: '/capsule-manager', tag: 'NEW', delay: '1.05s', color: '#a78bfa' },
 ];
 
 const toolsByHref = Object.fromEntries(tools.map((tool) => [tool.href, tool]));
 const pickTools = (hrefs) => hrefs.map((href) => toolsByHref[href]).filter(Boolean);
-const toolCount = 23;
+const toolCount = 22;
 
 const toolCategories = [
   {
@@ -49,7 +48,7 @@ const toolCategories = [
   {
     id: 'content-creator',
     label: '🎨 Content Creator Tools',
-    tools: pickTools(['/story', '/hashtag', '/imagegen', '/keyword', '/word-counter', '/tts', '/video']),
+    tools: pickTools(['/story', '/hashtag', '/imagegen', '/keyword', '/word-counter', '/tts']),
   },
   {
     id: 'developer',
