@@ -1724,7 +1724,7 @@ export default function ImageToolkitPage() {
           </div>
           <div className="it-faq-list">
             {[
-              {q:'Is Image Toolkit free to use?',a:'Free tools. AI features have daily limits; optional paid packs for more.'},
+              {q:'Is Image Toolkit free to use?',a:'Free tools. AI features have daily limits.'},
               {q:'Does my image get uploaded to any server?',a:"Never. All processing happens inside your browser using the Canvas API and, for background removal, an ONNX model running locally. Your files never leave your device — there's no backend at all."},
               {q:'What formats can I upload and export?',a:'You can upload JPEG, PNG, WebP, GIF, and SVG files up to 50MB. You can export your edited image as JPEG, PNG, or WebP. For background removal, the output is always a transparent PNG.'},
               {q:'How does the AI background remover work?',a:'It uses the @imgly/background-removal library, which runs an AI segmentation model (ONNX format) entirely in your browser. The first time you use it, it downloads ~40MB — after that, it runs instantly on any image.'},

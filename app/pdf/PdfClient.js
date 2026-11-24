@@ -2062,7 +2062,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
         <div className="p-hero-orb" aria-hidden="true" />
         <div className="p-hero-orb2" aria-hidden="true" />
         <div className="p-hero-c">
-          <div className="p-badge"><span className="p-badge-dot" />19 Tools · Browser-Only · Zero Upload · Free tools. AI features have daily limits; optional paid packs for more.</div>
+          <div className="p-badge"><span className="p-badge-dot" />19 Tools · Browser-Only · Zero Upload · Free tools. AI features have daily limits.</div>
           <h1>PDF to Image Converter Online | ToolVoid</h1>
           <p className="p-hero-sub">Convert to Word, Excel, PowerPoint, images. Merge, split, remove pages, watermark — all processed locally in your browser. Files never leave your device.</p>
           <div className="p-hero-acts">

@@ -546,7 +546,7 @@ export default function MobileHome() {
             </div>
             <div className="m-footer-end">
               <span>© 2026 ToolVoid · All rights reserved</span>
-              <span style={{color:'#1a1a2e'}}>Free tools. AI features have daily limits; optional paid packs for more.</span>
+              <span style={{color:'#1a1a2e'}}>Free tools. AI features have daily limits.</span>
             </div>
           </footer>
 

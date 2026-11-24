@@ -812,7 +812,7 @@ export default function Home() {
                     </div>
                     <div className="mini">
                       <strong>Free tools</strong>
-                      <span>Free tools. AI features have daily limits; optional paid packs for more.</span>
+                      <span>Free tools. AI features have daily limits.</span>
                     </div>
                     <div className="mini">
                       <strong>Local</strong>
