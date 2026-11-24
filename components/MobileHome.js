@@ -99,7 +99,7 @@ function MobileToolIcon({ href, color }) {
   return icons[href] || <svg {...base}><circle cx="22" cy="22" r="12" {...s}/><path d="M18 22H26M22 18V26" {...s}/></svg>;
 }
 
-export default function MobileHome() {
+export default function MobileHome({ embedded = false }) {
   const [activeTag, setActiveTag] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const pageRef = useRef(null);
@@ -132,11 +132,10 @@ export default function MobileHome() {
     <>
       <style precedence="default" href="toolvoid-mobile-v2">{`
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Bebas+Neue&family=JetBrains+Mono:wght@500;700&display=swap');
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        :root{--bg:#060609;--fg:#f8fbff;--muted:#8893a3;--green:#00FFB2;--line:rgba(255,255,255,.1)}
-        html,body{background:var(--bg);color:var(--fg);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden;scroll-behavior:smooth}
-        a{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-        button{-webkit-tap-highlight-color:transparent;touch-action:manipulation;cursor:pointer}
+        .m-page,.m-page *,.m-page *::before,.m-page *::after{box-sizing:border-box;margin:0;padding:0}
+        .m-page{--bg:#060609;--fg:#f8fbff;--muted:#8893a3;--green:#00FFB2;--line:rgba(255,255,255,.1);color:var(--fg);font-family:'Outfit',sans-serif;min-height:100vh;scroll-behavior:smooth}
+        .m-page a{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+        .m-page button{-webkit-tap-highlight-color:transparent;touch-action:manipulation;cursor:pointer}
         @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
         @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
@@ -301,10 +300,12 @@ export default function MobileHome() {
         <div className="m-wrap">
 
           {/* ── Nav ── */}
-          <div className="m-nav">
-            <Link href="/" className="m-logo"><em>Tool</em> Void</Link>
-            <div className="m-pill">{toolCount} Tools</div>
-          </div>
+          {!embedded && (
+            <div className="m-nav">
+              <Link href="/" className="m-logo"><em>Tool</em> Void</Link>
+              <div className="m-pill">{toolCount} Tools</div>
+            </div>
+          )}
 
           {/* ── Hero ── */}
           <section className="m-hero">
@@ -525,28 +526,30 @@ export default function MobileHome() {
           </section>
 
           {/* ── Footer ── */}
-          <footer className="m-footer">
-            <div className="m-footer-brand"><em>Tool</em>void</div>
-            <div className="m-footer-copy">{toolCount} tools for creators, builders and hustlers. Fast workflows, clear daily AI limits.</div>
-            <div className="m-footer-cols">
-              <div className="m-footer-col">
-                <h4>AI Tools</h4>
-                {tools.filter(t=>t.tag==='AI').map(t=><a key={t.href} href={t.href}>{t.name}</a>)}
-                <h4 style={{marginTop:'16px'}}>Finance</h4>
-                {tools.filter(t=>t.tag==='Finance').map(t=><a key={t.href} href={t.href}>{t.name}</a>)}
+          {!embedded && (
+            <footer className="m-footer">
+              <div className="m-footer-brand"><em>Tool</em>void</div>
+              <div className="m-footer-copy">{toolCount} tools for creators, builders and hustlers. Fast workflows, clear daily AI limits.</div>
+              <div className="m-footer-cols">
+                <div className="m-footer-col">
+                  <h4>AI Tools</h4>
+                  {tools.filter(t=>t.tag==='AI').map(t=><a key={t.href} href={t.href}>{t.name}</a>)}
+                  <h4 style={{marginTop:'16px'}}>Finance</h4>
+                  {tools.filter(t=>t.tag==='Finance').map(t=><a key={t.href} href={t.href}>{t.name}</a>)}
+                </div>
+                <div className="m-footer-col">
+                  <h4>Dev Tools</h4>
+                  {tools.filter(t=>t.tag==='Dev').map(t=><a key={t.href} href={t.href}>{t.name}</a>)}
+                  <h4 style={{marginTop:'16px'}}>Utilities</h4>
+                  {tools.filter(t=>t.tag==='Utility').map(t=><a key={t.href} href={t.href}>{t.name}</a>)}
+                </div>
               </div>
-              <div className="m-footer-col">
-                <h4>Dev Tools</h4>
-                {tools.filter(t=>t.tag==='Dev').map(t=><a key={t.href} href={t.href}>{t.name}</a>)}
-                <h4 style={{marginTop:'16px'}}>Utilities</h4>
-                {tools.filter(t=>t.tag==='Utility').map(t=><a key={t.href} href={t.href}>{t.name}</a>)}
+              <div className="m-footer-end">
+                <span>© 2026 ToolVoid · All rights reserved</span>
+                <span style={{color:'#1a1a2e'}}>Free tools. AI features have daily limits.</span>
               </div>
-            </div>
-            <div className="m-footer-end">
-              <span>© 2026 ToolVoid · All rights reserved</span>
-              <span style={{color:'#1a1a2e'}}>Free tools. AI features have daily limits.</span>
-            </div>
-          </footer>
+            </footer>
+          )}
 
         </div>
       </div>

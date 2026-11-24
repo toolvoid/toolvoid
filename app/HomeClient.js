@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import MobileHome from '../components/MobileHome';
 import useTilt from '../components/useTilt';
 import ToolIcon3D, {
   AudienceIcon3D,
@@ -191,6 +192,21 @@ function OneBrainFeaturedCard() {
 }
 
 export default function Home() {
+  const [toolSearch, setToolSearch] = useState('');
+  const [activeToolTag, setActiveToolTag] = useState('All');
+  const toolTags = ['All', 'NEW', 'AI', 'Image', 'Dev', 'Finance', 'Utility', 'Content', 'Business'];
+  const visibleToolCategories = toolCategories
+    .map((category) => ({
+      ...category,
+      tools: category.tools.filter((tool) => {
+        const matchesTag = activeToolTag === 'All' || tool.tag === activeToolTag;
+        const query = toolSearch.trim().toLowerCase();
+        const matchesSearch = !query || tool.name.toLowerCase().includes(query) || tool.desc.toLowerCase().includes(query);
+        return matchesTag && matchesSearch;
+      }),
+    }))
+    .filter((category) => category.tools.length > 0);
+
   useEffect(() => {
     const elements = Array.from(document.querySelectorAll('.reveal'));
     const observer = new IntersectionObserver((entries) => {
@@ -638,6 +654,13 @@ export default function Home() {
     .section{padding:40px 0;scroll-margin-top:80px}
     .section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:22px}
     .section-copy{max-width:560px}
+    .home-tool-controls{display:grid;gap:12px;margin:0 0 28px}
+    .home-tool-search{width:100%;min-height:46px;padding:12px 16px;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font:inherit}
+    .home-tool-search::placeholder{color:#8b94a2}
+    .home-tool-tags{display:flex;gap:8px;flex-wrap:wrap}
+    .home-tool-tag{min-height:44px;padding:9px 14px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.05);color:#cbd5e1;font:700 11px 'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+    .home-tool-tag.active{border-color:rgba(0,255,178,.45);background:rgba(0,255,178,.12);color:#00FFB2}
+    .home-tool-empty{padding:32px 16px;border:1px solid rgba(255,255,255,.1);border-radius:16px;color:#9aa4b2;text-align:center}
     .sh{font-family:'Bebas Neue',sans-serif;font-size:58px;line-height:.88;color:#fff;margin:0 0 8px;letter-spacing:1px}
     .sp{font-size:15px;line-height:1.8;color:#8b94a2}
     .tools-categories{display:grid;gap:38px}
@@ -764,6 +787,9 @@ export default function Home() {
   return (
     <>
       <style>{css}</style>
+      <div className="mob">
+        <MobileHome embedded />
+      </div>
       <div className="desk">
         <SharedRendererProvider>
           <div className="home">
@@ -832,9 +858,32 @@ export default function Home() {
                     <div className="sp">Launch the tools people keep coming back to, from AI workflows to PDF, image and developer utilities.</div>
                   </div>
                 </div>
+                <div className="home-tool-controls">
+                  <input
+                    className="home-tool-search"
+                    type="search"
+                    aria-label="Search tools"
+                    placeholder="Search tools..."
+                    value={toolSearch}
+                    onChange={(event) => setToolSearch(event.target.value)}
+                  />
+                  <div className="home-tool-tags" role="group" aria-label="Filter tools by category">
+                    {toolTags.map((tag) => (
+                      <button
+                        className={`home-tool-tag${activeToolTag === tag ? ' active' : ''}`}
+                        type="button"
+                        key={tag}
+                        aria-pressed={activeToolTag === tag}
+                        onClick={() => setActiveToolTag(tag)}
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <div className="tools-categories">
                   <OneBrainFeaturedCard />
-                  {toolCategories.map((category) => (
+                  {visibleToolCategories.map((category) => (
                     <div key={category.id} className="tool-category">
                       <h3 className="tool-category-head reveal">{category.label}</h3>
                       <div className="tool-row scrollbar-hide">
@@ -842,6 +891,7 @@ export default function Home() {
                       </div>
                     </div>
                   ))}
+                  {visibleToolCategories.length === 0 && <div className="home-tool-empty">No tools found. Try another search or category.</div>}
                 </div>
               </section>
 
