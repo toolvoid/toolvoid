@@ -417,7 +417,7 @@ export default function Base64Encoder() {
       const b64only = full.split(',')[1];
       setImagePreview(full);
       setImageB64(b64only);
-      const img = new Image();
+      const img = new window.Image();
       img.onload = () => setFileInfo({ name: file.name, type: file.type, size: fmtSize(file.size), w: img.width, h: img.height });
       img.src = full;
     };

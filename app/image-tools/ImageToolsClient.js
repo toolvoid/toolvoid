@@ -398,7 +398,7 @@ export default function ImageToolkitPage() {
     };
     const getMime = (f) => f==='png'?'image/png':f==='webp'?'image/webp':'image/jpeg';
     const getExt  = (f) => f==='jpeg'?'jpg':f;
-    const loadImg = (src) => new Promise(res => { const i = new Image(); i.onload=()=>res(i); i.src=src; });
+    const loadImg = (src) => new Promise(res => { const i = new window.Image(); i.onload=()=>res(i); i.src=src; });
 
     // ─── Toast ───────────────────────────────────────────
     const toast = G('it-toast');
@@ -440,7 +440,7 @@ export default function ImageToolkitPage() {
     function applyHistoryFrame(dataURL) {
       state.image = dataURL;
       setPreviewImg(dataURL);
-      const img = new Image();
+      const img = new window.Image();
       img.onload = () => { state.curW = img.width; state.curH = img.height; updateMeta(); };
       img.src = dataURL;
       const b64 = dataURL.split(',')[1] || '';
@@ -552,7 +552,7 @@ export default function ImageToolkitPage() {
       const reader = new FileReader();
       reader.onload = e => {
         const url = e.target.result;
-        const img = new Image();
+        const img = new window.Image();
         img.onload = () => {
           state.origW = img.width; state.origH = img.height;
           state.curW = img.width; state.curH = img.height;
@@ -958,7 +958,7 @@ export default function ImageToolkitPage() {
           ctx.drawImage(img2, 0, 0); finalize(c, 'png');
         } else {
           state.image = dataURL; state.fmt = 'png';
-          const img2 = new Image(); img2.onload = () => { state.curW = img2.width; state.curH = img2.height; updateMeta(); };
+          const img2 = new window.Image(); img2.onload = () => { state.curW = img2.width; state.curH = img2.height; updateMeta(); };
           img2.src = dataURL;
           const b64 = dataURL.split(',')[1] || '';
           state.curSize = Math.round(b64.length * 0.75);
@@ -1066,7 +1066,7 @@ export default function ImageToolkitPage() {
       const ext  = fmt === 'jpeg' ? 'jpg' : fmt;
       const a = document.createElement('a');
       // re-encode in chosen format
-      const img2 = new Image();
+      const img2 = new window.Image();
       img2.onload = () => {
         const c = document.createElement('canvas'); c.width = img2.width; c.height = img2.height;
         c.getContext('2d').drawImage(img2, 0, 0);
