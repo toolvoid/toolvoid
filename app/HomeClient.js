@@ -37,7 +37,7 @@ const tools = [
 
 const toolsByHref = Object.fromEntries(tools.map((tool) => [tool.href, tool]));
 const pickTools = (hrefs) => hrefs.map((href) => toolsByHref[href]).filter(Boolean);
-const toolCount = 22;
+const toolCount = tools.length;
 
 const toolCategories = [
   {

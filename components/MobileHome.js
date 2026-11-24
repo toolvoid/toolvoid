@@ -27,7 +27,7 @@ const tools = [
   { name: 'Resume Builder',      href: '/resume',       desc: 'Multiple templates · PDF download · Quick workflow',    color: '#FF6B6B', tag: 'Career' },
   { name: 'Capsule Manager',     href: '/capsule-manager', desc: 'Save AI conversations as capsules. Never lose context again.', color: '#a78bfa', tag: 'NEW' },
 ];
-const toolCount = 22;
+const toolCount = tools.length;
 
 const ALL_TAGS = ['All', 'NEW', 'AI', 'Image', 'Dev', 'Finance', 'Utility', 'Content', 'Business'];
 
