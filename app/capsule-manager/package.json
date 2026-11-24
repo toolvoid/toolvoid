@@ -4,7 +4,7 @@
   "description": "Capsule Manager desktop app",
   "author": {
     "name": "toolvoid",
-    "email": "0voidtool0@gmail.com"
+    "email": "hello@toolvoid.com"
   },
   "homepage": "https://github.com/toolvoid/toolvoid",
   "main": "main.js",
@@ -35,7 +35,7 @@
         "AppImage"
       ],
       "category": "Utility",
-      "maintainer": "toolvoid <0voidtool0@gmail.com>",
+      "maintainer": "toolvoid <hello@toolvoid.com>",
       "desktop": {
         "StartupNotify": "true"
       }

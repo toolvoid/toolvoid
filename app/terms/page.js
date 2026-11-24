@@ -26,7 +26,7 @@ export default function TermsOfService() {
       <p style={{ color: '#9aa4b2' }}>We may update these terms at any time. Continued use of ToolVoid after changes are posted means you accept the updated terms.</p>
 
       <h2 style={{ fontSize: '22px', fontWeight: '700', marginTop: '36px', marginBottom: '10px', color: '#00FFB2' }}>6. Contact</h2>
-      <p style={{ color: '#9aa4b2' }}>Questions or concerns? Email us at <a href="mailto:0voidtool0@gmail.com" style={{ color: '#00FFB2' }}>0voidtool0@gmail.com</a> or use the <a href="/contact" style={{ color: '#00FFB2' }}>Contact page</a>.</p>
+      <p style={{ color: '#9aa4b2' }}>Questions or concerns? Email us at <a href="mailto:hello@toolvoid.com" style={{ color: '#00FFB2' }}>hello@toolvoid.com</a> or use the <a href="/contact" style={{ color: '#00FFB2' }}>Contact page</a>.</p>
     </div>
   );
 }

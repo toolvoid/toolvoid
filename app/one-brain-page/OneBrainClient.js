@@ -562,9 +562,9 @@ export default function OneBrainClient() {
           <div>
             <h2 id="ob-feedback-title">Got feedback or a suggestion?</h2>
             <p>Tell me what you'd want a shared AI memory to do. Bugs, ideas and recommendations are all welcome.</p>
-            <p>0voidtool0@gmail.com</p>
+            <p>hello@toolvoid.com</p>
           </div>
-          <div className="ob-final-actions"><a className="ob-btn primary ob-magnetic" href="mailto:0voidtool0@gmail.com?subject=One%20Brain%20feedback">Email me</a></div>
+          <div className="ob-final-actions"><a className="ob-btn primary ob-magnetic" href="mailto:hello@toolvoid.com?subject=One%20Brain%20feedback">Email me</a></div>
         </div>
       </section>
       {lightboxIndex !== null && <Suspense fallback={null}><OneBrainLightbox images={gallery} index={lightboxIndex} onClose={closeLightbox} onChange={changeLightbox} /></Suspense>}

@@ -21,8 +21,8 @@ export default function ContactPage() {
 
         <div style={{ background: '#0d0f1a', border: '1px solid rgba(255,255,255,.08)', borderRadius: 18, padding: '1.5rem', marginBottom: '1.5rem' }}>
           <p style={{ margin: '0 0 0.6rem', color: '#8fe7c8', fontWeight: 700 }}>Email</p>
-          <a href="mailto:0voidtool0@gmail.com" style={{ color: '#f0f0fa', textDecoration: 'none', fontSize: '1.05rem' }}>
-            0voidtool0@gmail.com
+          <a href="mailto:hello@toolvoid.com" style={{ color: '#f0f0fa', textDecoration: 'none', fontSize: '1.05rem' }}>
+            hello@toolvoid.com
           </a>
         </div>
 
