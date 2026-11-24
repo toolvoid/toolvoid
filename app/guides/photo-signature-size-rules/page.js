@@ -53,6 +53,7 @@ export default function PhotoSignatureSizeRulesPage() {
   return (
     <main style={styles.main}>
       <article style={styles.article}>
+        <style>{`.content-link:hover{color:#8fe7c8!important;text-decoration-thickness:2px!important}.content-link:focus-visible{color:#8fe7c8!important;outline:2px solid #00FFB2;outline-offset:3px;border-radius:2px}`}</style>
         <h1 style={styles.h1}>Photo and Signature Size Rules for SBI PO, IBPS PO, SSC CGL, NEET and JEE Main</h1>
         <p style={styles.paragraph}>Online application forms can reject files that do not match the size and format rules. These rules come from each exam&apos;s official notice, and they are different for each exam. This guide lists the rules for five big exams, with links to the official notices.</p>
 
@@ -135,7 +136,7 @@ export default function PhotoSignatureSizeRulesPage() {
         </ul>
 
         <h2 style={styles.h2}>How to get your files to the right size</h2>
-        <p style={styles.paragraph}>If your photo or signature is too big or too small, you can resize and compress it with the <a href="/indian-forms" style={styles.sourceLink}>ToolVoid Indian Forms tool</a>. After resizing, check the file size and format before you upload.</p>
+        <p style={styles.paragraph}>If your photo or signature is too big or too small, you can resize and compress it with the <a className="content-link" href="/indian-forms" style={styles.sourceLink}>ToolVoid Indian Forms tool</a>. After resizing, check the file size and format before you upload.</p>
 
         <h2 style={styles.h2}>Before you upload</h2>
         <ol style={styles.list}>
@@ -150,7 +151,7 @@ export default function PhotoSignatureSizeRulesPage() {
         <p style={styles.paragraph}>Last verified: 22 November 2026. Always check the official notice for the exam you are applying to.</p>
         <ul style={styles.sourceList}>
           {sources.map(([label, url]) => (
-            <li key={url}><a href={url} target="_blank" rel="noopener noreferrer" style={styles.sourceLink}>{label}</a></li>
+            <li key={url}><a className="content-link" href={url} target="_blank" rel="noopener noreferrer" style={styles.sourceLink}>{label}</a></li>
           ))}
         </ul>
       </article>

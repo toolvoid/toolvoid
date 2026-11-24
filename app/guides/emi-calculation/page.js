@@ -80,9 +80,10 @@ export default function EmiCalculationGuidePage() {
   return (
     <main style={styles.main}>
       <article style={styles.article}>
+        <style>{`.content-link:hover{color:#8fe7c8!important;text-decoration-thickness:2px!important}.content-link:focus-visible{color:#8fe7c8!important;outline:2px solid #00FFB2;outline-offset:3px;border-radius:2px}`}</style>
         <h1 style={styles.h1}>How EMI Is Calculated: A Worked Example for a Rs 5,00,000 Loan</h1>
         <p style={styles.paragraph}>When a bank tells you your EMI, you rarely know how they got that number. Here is the full calculation, step by step. We use one loan: Rs 5,00,000 at 8.5% per year for 5 years.</p>
-        <a href="/emi" style={styles.link}>Try the EMI calculator</a>
+        <a className="content-link" href="/emi" style={styles.link}>Try the EMI calculator</a>
 
         <h2 style={styles.h2}>The question</h2>
         <p style={styles.paragraph}>You borrow Rs 5,00,000 at 8.5% for 5 years. How much do you pay each month? And how much of the total is interest?</p>
@@ -158,7 +159,7 @@ export default function EmiCalculationGuidePage() {
 
         <h2 style={styles.h2}>Try it yourself</h2>
         <p style={styles.paragraph}>Enter your own loan amount, interest rate and tenure in the ToolVoid EMI calculator. It shows your monthly payment and the full repayment schedule.</p>
-        <a href="/emi" style={styles.link}>Try the EMI calculator</a>
+        <a className="content-link" href="/emi" style={styles.link}>Try the EMI calculator</a>
       </article>
     </main>
   );

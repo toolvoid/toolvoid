@@ -7,6 +7,7 @@ export const metadata = {
 export default function TermsOfService() {
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '60px 24px', color: '#f8fafc', fontFamily: 'Inter, sans-serif', lineHeight: '1.8' }}>
+      <style>{`.content-link{color:#00FFB2;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}.content-link:hover{color:#8fe7c8;text-decoration-thickness:2px}.content-link:focus-visible{color:#8fe7c8;outline:2px solid #00FFB2;outline-offset:3px;border-radius:2px}`}</style>
       <h1 style={{ fontSize: '42px', fontWeight: '800', marginBottom: '8px' }}>Terms of Service</h1>
       <p style={{ color: '#8b94a2', marginBottom: '40px', fontSize: '14px' }}>Last updated: October 2026</p>
 
@@ -26,7 +27,7 @@ export default function TermsOfService() {
       <p style={{ color: '#9aa4b2' }}>We may update these terms at any time. Continued use of ToolVoid after changes are posted means you accept the updated terms.</p>
 
       <h2 style={{ fontSize: '22px', fontWeight: '700', marginTop: '36px', marginBottom: '10px', color: '#00FFB2' }}>6. Contact</h2>
-      <p style={{ color: '#9aa4b2' }}>Questions or concerns? Email us at <a href="mailto:hello@toolvoid.com" style={{ color: '#00FFB2' }}>hello@toolvoid.com</a> or use the <a href="/contact" style={{ color: '#00FFB2' }}>Contact page</a>.</p>
+      <p style={{ color: '#9aa4b2' }}>Questions or concerns? Email us at <a className="content-link" href="mailto:hello@toolvoid.com">hello@toolvoid.com</a> or use the <a className="content-link" href="/contact">Contact page</a>.</p>
     </div>
   );
 }

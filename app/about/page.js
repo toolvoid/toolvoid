@@ -12,6 +12,7 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <main style={{ minHeight: '100vh', background: '#07070f', color: '#f0f0fa', padding: '5rem 1.25rem', fontFamily: 'system-ui, sans-serif' }}>
+      <style>{`.content-link{color:#00FFB2;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}.content-link:hover{color:#8fe7c8;text-decoration-thickness:2px}.content-link:focus-visible{color:#8fe7c8;outline:2px solid #00FFB2;outline-offset:3px;border-radius:2px}`}</style>
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
         <BackButton />
         <h1 style={{ fontSize: 'clamp(2rem, 6vw, 4rem)', marginBottom: '1rem' }}>About ToolVoid</h1>
@@ -37,12 +38,12 @@ export default function AboutPage() {
 
         <h2 style={{ fontSize: '1.5rem', marginTop: '2rem', marginBottom: '.75rem' }}>Who runs it</h2>
         <p style={{ color: 'rgba(255,255,255,.7)', lineHeight: 1.8, fontSize: '1.05rem', marginBottom: '1.5rem' }}>
-          I build and run ToolVoid myself. You can find me here: <a href="https://www.linkedin.com/in/sparsh-pathak-330118330/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>Sparsh Pathak on LinkedIn</a>.
+          I build and run ToolVoid myself. You can find me here: <a className="content-link" href="https://www.linkedin.com/in/sparsh-pathak-330118330/" target="_blank" rel="noopener noreferrer">Sparsh Pathak on LinkedIn</a>.
         </p>
 
         <h2 style={{ fontSize: '1.5rem', marginTop: '2rem', marginBottom: '.75rem' }}>Contact</h2>
         <p style={{ color: 'rgba(255,255,255,.7)', lineHeight: 1.8, fontSize: '1.05rem', marginBottom: '2rem' }}>
-          Write to <a href="mailto:hello@toolvoid.com" style={{ color: 'inherit' }}>hello@toolvoid.com</a>, or use the <Link href="/contact" style={{ color: 'inherit' }}>Contact page</Link>.
+          Write to <a className="content-link" href="mailto:hello@toolvoid.com">hello@toolvoid.com</a>, or use the <Link className="content-link" href="/contact">Contact page</Link>.
         </p>
       </div>
     </main>

@@ -9,8 +9,9 @@ export const metadata = {
 export default function ContactPage() {
   return (
     <main style={{ minHeight: '100vh', background: '#07070f', color: '#f0f0fa', padding: '5rem 1.25rem', fontFamily: 'system-ui, sans-serif' }}>
+      <style>{`.content-link{color:#00FFB2;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}.content-link:hover{color:#8fe7c8;text-decoration-thickness:2px}.content-link:focus-visible{color:#8fe7c8;outline:2px solid #00FFB2;outline-offset:3px;border-radius:2px}`}</style>
       <div style={{ maxWidth: 720, margin: '0 auto' }}>
-        <Link href="/" style={{ color: '#8fe7c8', textDecoration: 'none', display: 'inline-block', marginBottom: '1.5rem' }}>
+        <Link className="content-link" href="/" style={{ display: 'inline-block', marginBottom: '1.5rem' }}>
           ← Back to ToolVoid
         </Link>
 
@@ -21,7 +22,7 @@ export default function ContactPage() {
 
         <div style={{ background: '#0d0f1a', border: '1px solid rgba(255,255,255,.08)', borderRadius: 18, padding: '1.5rem', marginBottom: '1.5rem' }}>
           <p style={{ margin: '0 0 0.6rem', color: '#8fe7c8', fontWeight: 700 }}>Email</p>
-          <a href="mailto:hello@toolvoid.com" style={{ color: '#f0f0fa', textDecoration: 'none', fontSize: '1.05rem' }}>
+          <a className="content-link" href="mailto:hello@toolvoid.com" style={{ fontSize: '1.05rem' }}>
             hello@toolvoid.com
           </a>
         </div>
