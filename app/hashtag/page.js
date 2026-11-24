@@ -32,26 +32,26 @@ export default function Page() {
             mainEntity: [
               {
                 '@type': 'Question',
-                name: 'What does the hashtag generator do?',
+                name: 'How long can the topic be?',
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: 'It turns a short topic or description into a fresh set of platform-specific hashtags that are easy to copy and use in captions, bios, and video descriptions.',
+                  text: 'The API route rejects a topic longer than 200 characters.',
                 },
               },
               {
                 '@type': 'Question',
-                name: 'Is the tool useful for Instagram and TikTok?',
+                name: 'Which provider receives the request?',
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: 'Yes. The generator produces tailored hashtag clusters for Instagram, TikTok, YouTube, LinkedIn, and X so you can match the way each platform surfaces content.',
+                  text: 'The server route sends the topic, platform, category, and count to Google Gemini.',
                 },
               },
               {
                 '@type': 'Question',
-                name: 'How many hashtags does it generate?',
+                name: 'Which result counts can I choose?',
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: 'Each run generates a balanced set of hashtags grouped by reach level, so you get a mix of broad, medium, and niche tags in one place.',
+                  text: 'The count buttons offer 15, 20, and 30 hashtags.',
                 },
               },
             ],

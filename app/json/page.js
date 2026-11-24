@@ -7,7 +7,7 @@ export const metadata = {
   keywords: ["JSON formatter validator online", "JSON formatter", "JSON validator", "JSON beautifier", "JSON parser online"],
   openGraph: {
     title: "JSON Formatter Validator | ToolVoid",
-    description: "Format, validate, and beautify JSON online for free. Parse and fix JSON syntax errors instantly.",
+    description: "Format, validate, and beautify JSON online. Parse and fix JSON syntax errors with line and column guidance.",
     url: "https://toolvoid.com/json",
   },
   ...createToolMetadata('json'),
@@ -25,18 +25,18 @@ export default function Page() {
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "Is this JSON formatter free?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, completely free with no limits on usage. Format and validate as much JSON as you need." }
+            "name": "Which indentation settings are available?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The Indent size control offers 2 spaces and 4 spaces." }
           },
           {
             "@type": "Question",
-            "name": "Does my JSON data leave my computer?",
-            "acceptedAnswer": { "@type": "Answer", "text": "No. Everything runs locally in your browser. Your JSON data is never sent to any server, keeping it private and secure." }
+            "name": "Which transform actions are available?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The quick actions include Format, Minify, and Sort Keys." }
           },
           {
             "@type": "Question",
-            "name": "Can I minify and beautify JSON?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, you can switch between formatted (beautified) and minified views instantly with a single click." }
+            "name": "Can I import a JSON file?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Import File accepts .json, application/json, and text/plain files." }
           }
         ]
       })}} />

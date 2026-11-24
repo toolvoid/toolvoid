@@ -25,18 +25,18 @@ export default function Page() {
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "Is this word counter free to use?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, completely free with no limits. Count words and characters in as much text as you need." }
+            "name": "Which live counters does the page show?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The page updates words, characters, sentences, paragraphs, lines, unique words, and average word length." }
           },
           {
             "@type": "Question",
-            "name": "What statistics does the word counter show?",
-            "acceptedAnswer": { "@type": "Answer", "text": "It shows word count, character count (with and without spaces), sentences, paragraphs, reading time, speaking time, and keyword density analysis." }
+            "name": "Which reading measures are listed?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The page lists average, slow, and fast reading estimates, plus speaking time." }
           },
           {
             "@type": "Question",
-            "name": "Can I track word count goals?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, you can set custom word count goals and track your progress with a visual indicator." }
+            "name": "Which text export formats are offered?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The page provides text downloads in .txt, .md, and .html formats, plus a Download Stats Report button." }
           }
         ]
       })}} />

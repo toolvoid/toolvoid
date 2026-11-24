@@ -950,7 +950,7 @@ export default function WordCounterAnalyzer() {
                   <textarea
                     id="wc-textarea"
                     className="wc-textarea"
-                    placeholder="Start typing or paste your text here…&#10;&#10;Word count, readability, sentiment, and more update instantly."
+                    placeholder="Start typing or paste your text here…&#10;&#10;Word count, readability, sentiment, and other text measures appear in the results."
                     spellCheck={true}
                   />
                 </div>
@@ -1152,7 +1152,7 @@ export default function WordCounterAnalyzer() {
         <div className="wc-section-inner">
           <div className="wc-section-label">✦ What&apos;s Inside</div>
           <h2 className="wc-section-title">Every Writing Metric</h2>
-          <p className="wc-section-sub">From basic word counts to AI detection — all pure JavaScript, all private.</p>
+          <p className="wc-section-sub">From word counts to readability and text analysis, the page uses JavaScript in your browser.</p>
           <div className="wc-features-grid">
             {[
               { icon: '📊', title: 'Real-Time Counting', desc: 'Words, characters, sentences, paragraphs, lines, unique words, and average word length — all live.' },
@@ -1184,11 +1184,10 @@ export default function WordCounterAnalyzer() {
           </div>
           <div className="wc-faq-list">
             {[
-              { q: 'Does it save my text anywhere?', a: 'No. All analysis happens in your browser using pure JavaScript. Your text never touches any server. Close the tab and it\'s gone. We strongly recommend not pasting confidential material into any online tool, but for this one, it\'s genuinely safe — there is no backend.' },
-              { q: 'How accurate is the AI detection?', a: 'It\'s heuristic-based — it looks for patterns common in AI writing (overuse of transition phrases, uniform sentence lengths, passive voice, hedge words). It gives a probability score, not a definitive answer. For accurate AI detection, use dedicated APIs like Winston AI or Originality.ai.' },
-              { q: 'Why are my readability scores different from other tools?', a: 'Syllable counting in JavaScript is an approximation — it uses rule-based patterns, not a full dictionary. Results may differ slightly from tools that use linguistic databases. The relative comparison between scores on the same text is accurate.' },
-              { q: 'Is this useful for SEO content?', a: 'Yes. Keyword density, readability grade level, sentence length, and word count are all key SEO metrics. Most SEO best practices recommend a Flesch Reading Ease score above 60 and keyword density between 1–3%.' },
-              { q: 'Can I use this for academic writing?', a: 'Definitely. The readability scores, word count targets, and AI detection are especially useful for academic contexts. The "Export Stats Report" generates a document you can include as a writing log.' },
+              { q: 'Which live counters does the page show?', a: 'The page updates words, characters, sentences, paragraphs, lines, unique words, and average word length.' },
+              { q: 'Which reading measures are listed?', a: 'The page lists average, slow, and fast reading estimates, plus speaking time.' },
+              { q: 'Which readability scores are included?', a: 'The feature list names Flesch Reading Ease, F-K Grade, Gunning Fog, Coleman-Liau, and ARI.' },
+              { q: 'Which exports are available?', a: 'The page has text downloads in .txt, .md, and .html formats, plus Download Stats Report.' },
             ].map((f, i) => (
               <div key={i} className="wc-faq-item">
                 <div className="wc-faq-q" role="button" tabIndex={0}>

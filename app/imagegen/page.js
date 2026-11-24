@@ -7,7 +7,7 @@ export const metadata = {
   keywords: ["free AI image generator online", "AI image generator", "text to image", "AI art generator", "generate images AI"],
   openGraph: {
     title: "Free AI Image Generator | ToolVoid",
-    description: "Generate stunning AI images from text descriptions for free. Create unique artwork instantly.",
+    description: "Generate AI images from text descriptions and create artwork from a written prompt.",
     url: "https://toolvoid.com/imagegen",
   },
   ...createToolMetadata('imagegen'),

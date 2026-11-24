@@ -885,7 +885,7 @@ export default function HashtagPage({ maintenanceMode = false }) {
           <div className="ht-gen-header">
             <div className="ht-label">✦ Live Generator</div>
             <h2 className="ht-title">Generate Your Hashtags</h2>
-            <p className="ht-sub">Enter your topic, pick your platform — get 30 targeted hashtags in seconds.</p>
+            <p className="ht-sub">Enter your topic, pick your platform, and choose how many hashtags to generate.</p>
           </div>
 
           <div className="ht-gen-layout">
@@ -972,7 +972,7 @@ export default function HashtagPage({ maintenanceMode = false }) {
                 <div id="ht-placeholder" className="ht-placeholder">
                   <div className="ht-placeholder-icon">🏷️</div>
                   <div className="ht-placeholder-title">Ready when you are</div>
-                  <div className="ht-placeholder-text">Describe your post, pick a platform, and generate a polished set of hashtags in seconds.</div>
+                  <div className="ht-placeholder-text">Describe your post and pick a platform to generate hashtag suggestions.</div>
                   <div className="ht-placeholder-tip">Tip: be specific for better matches</div>
                 </div>
 
@@ -1077,30 +1077,10 @@ export default function HashtagPage({ maintenanceMode = false }) {
           </div>
           <div className="ht-faq-list">
             {[
-              {
-                q: 'What does this tool actually do?',
-                a: 'It takes a short topic or content idea and creates a balanced hashtag set that is relevant to your post and easy to copy into captions, bios, and descriptions. Instead of researching tags manually, you get a ready-made mix that supports reach and organization.',
-              },
-              {
-                q: 'How many hashtags should I use on Instagram?',
-                a: 'Instagram posts usually work best when you choose a focused set rather than dumping a wall of tags. Our generator gives you a curated group of hashtags so you can keep your caption clean while still covering broad, medium, and niche interests.',
-              },
-              {
-                q: 'Are the hashtags current and relevant?',
-                a: 'The tool generates fresh suggestions based on the topic and platform you choose, which makes it useful for both evergreen content and timely campaigns. That means you can adapt your tag mix as your content changes without starting from scratch.',
-              },
-              {
-                q: 'Does it work for TikTok and YouTube too?',
-                a: 'Yes. Hashtags are not one-size-fits-all across social platforms, so the generator adjusts the suggestions to better fit the behavior of each network. That helps your content feel more intentional whether you are posting a Reel, short video, or long-form upload.',
-              },
-              {
-                q: 'What is the high, medium, and niche split?',
-                a: 'The groups are designed to balance visibility and precision. Broad tags improve discoverability, medium tags help you reach a more specific audience, and niche tags support stronger relevance for people who are already interested in your topic.',
-              },
-              {
-                q: 'Is my topic data stored?',
-                a: 'No. The generator processes your input to create hashtags and does not keep it for later reuse. That keeps the experience straightforward and private while still giving you useful suggestions right away.',
-              },
+              { q: 'How many characters can I enter?', a: 'The API route rejects a topic longer than 200 characters.' },
+              { q: 'Which result counts can I choose?', a: 'The count buttons offer 15, 20, and 30 hashtags.' },
+              { q: 'Which provider receives the request?', a: 'The server route sends the topic, platform, category, and count to Google Gemini.' },
+              { q: 'What daily quota does the route use?', a: 'The hashtag-generator limit in lib/quotaStore.js is 10 requests per day.' },
             ].map((f, i) => (
               <div className="ht-faq-item" key={i}>
                 <div className="ht-faq-q" role="button" tabIndex={0} aria-expanded="false">
@@ -1125,8 +1105,8 @@ export default function HashtagPage({ maintenanceMode = false }) {
               { icon: '🤖', title: 'Gemini AI Powered', desc: 'Uses Google Gemini to understand context, trends, and platform-specific best practices for each generation.' },
               { icon: '📊', title: '3-Tier Volume Mix', desc: 'Get 10 high-volume, 10 medium, and 10 niche hashtags — the perfect blend for maximum algorithmic reach.' },
               { icon: '📱', title: '5 Platform Modes', desc: 'Hashtags are tuned for Instagram, TikTok, Twitter/X, LinkedIn, and YouTube — each has a different optimal strategy.' },
-              { icon: '⚡', title: 'One-Click Copy', desc: 'Click any hashtag to copy it instantly, or grab all 30 at once with the Copy All button.' },
-              { icon: '🔒', title: 'Privacy First', desc: 'Your topic data is never stored or logged. Each API call is stateless and private.' },
+              { icon: '⚡', title: 'Copy Hashtags', desc: 'Select an individual hashtag to copy it, or use Copy All for the generated set.' },
+              { icon: '🔒', title: 'Provider Request', desc: 'The generation request sends the topic, platform, category, and count to Google Gemini.' },
               { icon: '🔢', title: 'Instagram Char Limit', desc: 'Real-time character count with warning when you exceed Instagram\'s 2200 character caption limit.' },
             ].map((f, i) => (
               <article className="ht-feat-card" key={i}>
@@ -1144,13 +1124,13 @@ export default function HashtagPage({ maintenanceMode = false }) {
         <div className="ht-section-inner">
           <div className="ht-label">◎ Process</div>
           <h2 className="ht-title">How It Works</h2>
-          <p className="ht-sub">From topic to publishable hashtags in under 10 seconds.</p>
+          <p className="ht-sub">Enter a topic, choose the platform and category, then review the suggestions.</p>
           <div className="ht-hiw-steps">
             {[
               { n: '01', icon: '✍️', title: 'Describe Your Post', desc: 'Enter your topic, product, or content description in up to 200 characters.' },
-              { n: '02', icon: '📱', title: 'Pick Your Platform', desc: 'Select Instagram, TikTok, LinkedIn, YouTube or Twitter/X and your content category.' },
-              { n: '03', icon: '🤖', title: 'AI Generates', desc: 'Gemini analyzes your topic and crafts 30 platform-specific, trend-aware hashtags.' },
-              { n: '04', icon: '📋', title: 'Copy & Publish', desc: 'Click individual hashtags or copy all at once — paste directly into your post.' },
+              { n: '02', icon: '📱', title: 'Choose Platform and Category', desc: 'Select a platform in Platform and a category in Category.' },
+              { n: '03', icon: '🤖', title: 'Choose a Result Count', desc: 'Select 15, 20, or 30, then press Generate Hashtags. The server sends the topic, platform, category, and count to Google Gemini.' },
+              { n: '04', icon: '📋', title: 'Review the Groups', desc: 'Check the high-volume, medium, and niche suggestions before copying.' },
             ].map((s, i) => (
               <div className="ht-step" key={i}>
                 <div className="ht-step-num">{s.n}</div>

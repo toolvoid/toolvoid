@@ -1528,7 +1528,7 @@ export default function EMIPage() {
               <div className="emi-card-head">
                 <div>
                   <h3>EMI calendar view</h3>
-                  <p>The first 12 installments are mapped like a payment calendar so high-interest months stand out instantly.</p>
+                  <p>The first 12 installments are mapped like a payment calendar so high-interest months can be reviewed.</p>
                 </div>
                 <button className="emi-mini-btn" onClick={() => setCalendarOpen((open) => !open)} aria-expanded={calendarOpen}>
                   {calendarOpen ? 'Close calendar' : 'Open calendar'}
@@ -1656,7 +1656,7 @@ export default function EMIPage() {
               <div className="emi-card-head">
                 <div>
                   <h3>History and favorites</h3>
-                  <p>Configurations persist in local storage so you can bookmark options, reload them later, and compare repayment plans faster.</p>
+                  <p>Configurations persist in local storage so you can bookmark options, reload them later, and compare repayment plans.</p>
                 </div>
               </div>
 

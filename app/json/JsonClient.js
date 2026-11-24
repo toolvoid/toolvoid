@@ -813,7 +813,7 @@ export default function JsonWorkbenchPage() {
             <div className="json-badge">Validator + formatter + inspector</div>
             <h1 className="json-title">JSON Formatter &amp; Validator Online | ToolVoid</h1>
             <p className="json-sub">
-              Validate payloads, pretty-print responses, flatten nested keys, inspect deep paths, and generate instant TypeScript shapes from a single live workspace.
+              Validate payloads, pretty-print responses, flatten nested keys, inspect deep paths, and generate TypeScript shapes from a single live workspace.
             </p>
           </div>
           <div className="json-hero-grid">
@@ -1011,7 +1011,7 @@ export default function JsonWorkbenchPage() {
                 <div className="json-mini-item">
                   <div>
                     <strong>Live syntax validation</strong>
-                    <span>Errors show instantly with line and column guidance.</span>
+                    <span>Errors include line and column guidance.</span>
                   </div>
                 </div>
                 <div className="json-mini-item">

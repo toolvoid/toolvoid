@@ -7,7 +7,7 @@ export const metadata = {
   keywords: ["PDF to image converter free", "PDF to JPG", "PDF to PNG", "extract images from PDF", "PDF converter online"],
   openGraph: {
     title: "PDF to Image Converter Free | ToolVoid",
-    description: "Convert PDF pages to high-quality JPG, PNG, and WebP images online for free. 100% private.",
+    description: "Convert PDF pages to JPG, PNG, and WebP images in your browser.",
     url: "https://toolvoid.com/pdf",
   },
   ...createToolMetadata('pdf'),
@@ -25,18 +25,18 @@ export default function Page() {
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "Is this PDF to image converter free?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, completely free with no limits on file size or number of pages. No sign-up required." }
+            "name": "Where is the PDF processed?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The page uses PDF.js to render pages in the browser and loads pdf-lib and JSZip for document operations." }
           },
           {
             "@type": "Question",
-            "name": "Are my PDF files uploaded to a server?",
-            "acceptedAnswer": { "@type": "Answer", "text": "No. Everything runs entirely in your browser. Your PDF files never leave your device, ensuring complete privacy." }
+            "name": "Which image formats can I export?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The Convert to Images controls include JPG, PNG, and WebP output formats." }
           },
           {
             "@type": "Question",
-            "name": "What image formats can I export to?",
-            "acceptedAnswer": { "@type": "Answer", "text": "You can export PDF pages as JPG, PNG, or WebP images with adjustable quality and resolution settings." }
+            "name": "Can I select a page range?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The page-range controls include All Pages, Custom Range, and Current Page." }
           }
         ]
       })}} />

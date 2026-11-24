@@ -1,3 +1,5 @@
+import ToolPageSupplement from '../../components/ToolPageSupplement';
+
 export default function HashtagLayout({ children }) {
-  return children;
+  return <>{children}<ToolPageSupplement tool="hashtag" /></>;
 }

@@ -2083,7 +2083,7 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
           <div style={{textAlign:'center',marginBottom:'2rem'}}>
             <div className="p-label">⚡ Live Suite</div>
             <h2 className="p-title">PDF Tools</h2>
-            <p className="p-sub" style={{margin:'0 auto'}}>Upload a PDF — see its full preview instantly. Pick a tool, configure, and download.</p>
+            <p className="p-sub" style={{margin:'0 auto'}}>Upload a PDF, choose a tool, configure its options, and download the result.</p>
           </div>
 
           {/* Category Tabs */}
@@ -2171,12 +2171,12 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
           <p className="p-sub">No accounts. No watermarks. No server. Just tools that work.</p>
           <div className="p-feat-grid">
             {[
-              {icon:'👁️',title:'Live Page Preview',desc:'When you upload a PDF, every page renders instantly as a visual thumbnail — exactly like a real PDF viewer.'},
+              {icon:'👁️',title:'Live Page Preview',desc:'When you upload a PDF, the page renders its pages as visual thumbnails.'},
               {icon:'📄',title:'PDF → Word / Excel / PPT',desc:'Convert PDFs to DOCX, XLSX, CSV, and PPTX — all built manually with ZIP+XML, no external APIs needed.'},
               {icon:'🗑️',title:'Visual Page Removal',desc:'Click on actual page thumbnails to mark pages for removal or extraction. See exactly what you\'re deleting.'},
-              {icon:'🔒',title:'100% Private',desc:'Everything runs in your browser. PDF.js, pdf-lib, and JSZip are loaded from CDN. Your files never touch a server.'},
-              {icon:'⚡',title:'Instant Processing',desc:'No upload queue, no server wait. Your PDF is processed in milliseconds using browser-native JavaScript engines.'},
-              {icon:'🆓',title:'Truly Free',desc:'All 19 tools, unlimited files, no daily caps, no watermarks on output. No account needed. Ever.'},
+              {icon:'🔒',title:'Browser Processing',desc:'PDF.js, pdf-lib, and JSZip are loaded by the page for PDF operations in the browser.'},
+              {icon:'⚡',title:'Processing Options',desc:'Choose from the PDF operations and settings shown in the editor.'},
+              {icon:'🆓',title:'PDF Tools',desc:'The page lists PDF conversion, organization, editing, and additional tools.'},
             ].map((f,i)=>(
               <article key={i} className="p-feat-card">
                 <div style={{fontSize:'1.75rem'}}>{f.icon}</div>
@@ -2197,11 +2197,10 @@ ${slides.map(s=>`<Relationship Id="rId${s.num}" Type="http://schemas.openxmlform
           </div>
           <div className="p-faq-list">
             {[
-              {q:'Are my PDF files safe?',a:'Completely. PDF.js renders pages in your browser, pdf-lib manipulates bytes locally, and JSZip creates ZIP files on your device. Nothing is ever sent to a server. You can disconnect Wi-Fi after loading the page and every tool still works.'},
-              {q:'How does PDF → DOCX work without a backend?',a:'The tool now offers two DOCX modes. Visual Match renders each PDF page and places it into Word for near-original appearance, while Editable Text rebuilds paragraphs, size hierarchy, and some emphasis from PDF.js text data. Everything is packaged locally into a valid .docx using JSZip.'},
-              {q:'Why can some Word conversions still differ from Adobe/iLovePDF?',a:'Complex PDFs with tables, floating objects, scans, or multi-column magazine layouts are extremely hard to reconstruct as perfectly editable Word content in the browser. Visual Match mode keeps the look much closer, while Editable Text mode focuses on making the content easier to edit.'},
-              {q:'What does "Remove Pages" do exactly?',a:'After uploading, all PDF pages are rendered as visual thumbnails. You click the pages you want to delete — they get a red overlay. Then click "Remove Pages" and a new PDF is created without those pages using pdf-lib.'},
-              {q:'Is there a file size limit?',a:'There\'s no enforced limit, but very large PDFs (50MB+) may slow down rendering since everything runs in the browser\'s JavaScript engine. For best performance, keep files under 50MB.'},
+              {q:'Where is the PDF processed?',a:'PDF.js renders pages in the browser. The page also loads pdf-lib and JSZip for document operations.'},
+              {q:'Which output formats can I choose?',a:'The Convert to Images controls list JPG, PNG, and WebP.'},
+              {q:'Can I select particular pages?',a:'The page-range controls include All Pages, Custom Range, and Current Page.'},
+              {q:'What does Remove Pages do?',a:'Select page thumbnails for removal, then use Remove Pages to create a PDF without those pages using pdf-lib.'},
             ].map((f,i)=>(
               <div key={i} className="p-faq-item">
                 <div className="p-faq-q" role="button" tabIndex={0}>{f.q}<span className="p-faq-arrow">⌄</span></div>

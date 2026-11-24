@@ -697,7 +697,7 @@ export default function ImageGenPage() {
     function startMsgCycle() {
       state.msgIdx=0;
       if(shimmerTxt) shimmerTxt.textContent=LOAD_MSGS[0];
-      if(shimmerWait) shimmerWait.textContent = 'This may take 20–30 seconds…'; // ← ye add karo
+      if(shimmerWait) shimmerWait.textContent = 'Generating your image…';
       state.msgTimer = setInterval(()=>{
         state.msgIdx=(state.msgIdx+1)%LOAD_MSGS.length;
         if(shimmerTxt) shimmerTxt.textContent=LOAD_MSGS[state.msgIdx];
@@ -906,7 +906,7 @@ export default function ImageGenPage() {
         <div className="ig-hero-content">
           <div className="ig-badge">Image Engine Active</div>
           <h1>AI Image Generator Online | ToolVoid</h1>
-          <p className="ig-hero-sub">Describe anything — the image engine renders it in seconds. Realistic photos, anime, oil paintings, cinematic scenes and more.</p>
+          <p className="ig-hero-sub">Describe an image, choose its style and aspect ratio, and review the generated result.</p>
           <div className="ig-hero-actions">
             <a href="#ig-generator" className="ig-btn-primary"><span>🎨 Start Creating</span></a>
             <a href="#ig-features" className="ig-btn-ghost"><span>See Features ↓</span></a>
@@ -925,7 +925,7 @@ export default function ImageGenPage() {
           <div className="ig-gen-header">
             <div className="ig-label">🎨 Live Generator</div>
             <h2 className="ig-title">Generate Your Image</h2>
-            <p className="ig-sub">Describe what you want, pick a style — the image engine renders it in seconds.</p>
+            <p className="ig-sub">Describe an image, choose a style, and review the generated result.</p>
           </div>
 
           <div className="ig-gen-layout">
@@ -1066,8 +1066,8 @@ export default function ImageGenPage() {
               { icon:'🎨', title:'10 Art Styles',        desc:'From photorealistic renders to anime, oil paintings, watercolors, sketches and cinematic shots — one tool covers all.' },
               { icon:'💡', title:'Prompt Enhancer',      desc:'Type a basic idea and let AI expand it into a detailed, optimized prompt for dramatically better results.' },
               { icon:'📐', title:'4 Aspect Ratios',      desc:'Square, landscape, portrait, and standard — optimized for Instagram, YouTube, TikTok, and desktop wallpapers.' },
-              { icon:'⬇', title:'Instant Download',     desc:'Download your generated image as a high-quality PNG instantly with one click. No watermarks, ever.' },
-              { icon:'🔒', title:'Private by Default', desc:'Your prompts are never stored on our servers. Generated images are saved only in your browser locally for history.' },
+              { icon:'⬇', title:'Download', desc:'Use the download control to save the generated image as a PNG.' },
+              { icon:'🔒', title:'Prompt Request', desc:'The image description is sent to the ToolVoid image route for processing.' },
             ].map((f,i)=>(
               <article className="ig-feat-card" key={i}>
                 <div className="ig-feat-icon">{f.icon}</div>
@@ -1084,13 +1084,13 @@ export default function ImageGenPage() {
         <div className="ig-section-inner">
           <div className="ig-label">◎ Process</div>
           <h2 className="ig-title">How It Works</h2>
-          <p className="ig-sub">From idea to image in under 30 seconds.</p>
+          <p className="ig-sub">Enter an image description and choose the generation controls.</p>
           <div className="ig-hiw-steps">
             {[
               { n:'01', icon:'✍️', title:'Write Your Idea',    desc:'Describe the image you want — be as specific or as simple as you like.' },
-              { n:'02', icon:'🎨', title:'Choose a Style',     desc:'Pick from 10 art styles and set the mood, aspect ratio, and what to avoid.' },
-              { n:'03', icon:'🤖', title:'Engine Renders It',   desc:'The image engine processes your prompt and generates a high-quality image in seconds.' },
-              { n:'04', icon:'⬇', title:'Download & Share',   desc:'Download your image as PNG, regenerate variations, or share directly.' },
+              { n:'02', icon:'🎨', title:'Set the Image Controls', desc:'Choose a style, mood, aspect ratio, and optional negative prompt.' },
+              { n:'03', icon:'🤖', title:'Generate Image', desc:'Select Generate Image to send the prompt to the ToolVoid image route, which calls Pollinations for image generation.' },
+              { n:'04', icon:'⬇', title:'Review and Download', desc:'Inspect the preview, then use the PNG download control.' },
             ].map((s,i)=>(
               <div className="ig-step" key={i}>
                 <div className="ig-step-num">{s.n}</div>
@@ -1138,12 +1138,10 @@ export default function ImageGenPage() {
           </div>
           <div className="ig-faq-list">
             {[
-              { q:'How many free images do I get?',              a:`Pollinations gives ${POLLINATIONS_FREE_LIMIT} free images per day.` },
-              { q:'What generates the images?',                  a:'Pollinations generates images from your prompt.' },
-              { q:'Can I use generated images commercially?',    a:'Images generated are yours to use. However, verify compliance with the service terms for commercial usage in your specific case.' },
-              { q:'What\'s the difference between styles?',      a:'Each style changes the visual rendering: Realistic gives photographic results, Digital Art gives illustrated looks, Cinematic adds film-like lighting and composition, etc.' },
-              { q:'What does the Prompt Enhancer do?',           a:'It takes your basic description and uses AI to add artistic details, lighting descriptions, composition notes, and quality modifiers — resulting in significantly better images.' },
-              { q:'Are my prompts and images stored?',           a:'No. Prompts are sent to the API for generation only and not stored on our servers. Generated images are stored temporarily in your browser\'s localStorage and never uploaded anywhere.' },
+              { q:'How long can the image description be?', a:'The Image Description field has a 500-character maximum.' },
+              { q:'Which aspect ratios are available?', a:'The controls list 1:1, 16:9, 9:16, and 4:3.' },
+              { q:'Which provider generates an image?', a:'The /api/generate-image route calls Pollinations for image generation.' },
+              { q:'What daily image limit is defined in the code?', a:`POLLINATIONS_FREE_LIMIT and the image-generator entry in lib/quotaStore.js both set the limit to ${POLLINATIONS_FREE_LIMIT} per day.` },
             ].map((f,i)=>(
               <div className="ig-faq-item" key={i}>
                 <div className="ig-faq-q" role="button" tabIndex={0} aria-expanded="false">

@@ -7,7 +7,7 @@ export const metadata = {
   keywords: ["home loan EMI calculator India", "EMI calculator", "loan calculator India", "home loan calculator", "personal loan EMI"],
   openGraph: {
     title: "Home Loan EMI Calculator | ToolVoid",
-    description: "Calculate home loan, personal loan, and car loan EMI instantly. Compare rates and tenures free.",
+    description: "Calculate home loan, personal loan, and car loan EMI. Compare rates and tenures.",
     url: "https://toolvoid.com/emi",
   },
   ...createToolMetadata('emi'),
@@ -25,18 +25,18 @@ export default function Page() {
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "Is this EMI calculator free to use?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, completely free with no limits on usage. Calculate as many loan scenarios as you need without signing up." }
+            "name": "Which inputs calculate the EMI?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Enter Loan amount, Interest rate %, and Tenure in years. The calculator also has Extra EMI / month and Lump sum inputs." }
           },
           {
             "@type": "Question",
-            "name": "What types of loans can I calculate?",
-            "acceptedAnswer": { "@type": "Answer", "text": "You can calculate EMI for any type of loan — home loans, personal loans, car loans, education loans, or business loans. Just enter the amount, rate, and tenure." }
+            "name": "What appears in the result panel?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The panel shows the EMI, total interest, total payment, closure date, and interest saved." }
           },
           {
             "@type": "Question",
-            "name": "Does the calculator show a payment schedule?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, it generates a full amortization schedule showing the breakdown of principal and interest for each payment over the entire loan tenure." }
+            "name": "Can I view payment rows?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Select Open table to view the schedule. The schedule offers monthly or yearly views and CSV or JSON export controls." }
           }
         ]
       })}} />
