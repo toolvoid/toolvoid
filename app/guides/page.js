@@ -37,6 +37,13 @@ export default function GuidesPage() {
             <span className="guides-index-action">Read the guide →</span>
           </Link>
         </li>
+        <li>
+          <Link className="guides-index-card" href="/guides/passport-photo-size-india">
+            <span className="guides-index-title">Indian Passport Photo Size and Rules (4.5 x 3.5 cm)</span>
+            <span className="guides-index-description">Official passport photo size and rules from the Passport Seva booklet, and how to prepare your photo.</span>
+            <span className="guides-index-action">Read the guide →</span>
+          </Link>
+        </li>
       </ul>
     </main>
   );

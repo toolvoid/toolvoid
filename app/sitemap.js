@@ -12,6 +12,7 @@ export default function sitemap() {
     { path: '/guides', lastModified: '2026-11-22' },
     { path: '/guides/emi-calculation', lastModified: '2026-11-22' },
     { path: '/guides/photo-signature-size-rules', lastModified: '2026-11-22' },
+    { path: '/guides/passport-photo-size-india', lastModified: '2026-11-24' },
     { path: '/hashtag', lastModified: '2026-11-22' },
     { path: '/imagegen', lastModified: '2026-11-22' },
     { path: '/indian-forms', lastModified: '2026-11-22' },
